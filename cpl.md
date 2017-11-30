@@ -40,7 +40,7 @@ Examples of module systems:
 
 The JAR example is the scope we should look to.
 
-ML-based languages have a module system inside the language (contrary to, say, JARs, which are not part of the language).
+ML-based languages have a module system inside the language (contrary to, say, JARs, which are not part of the (Java) language).
 This is also the kind we will be focussing on.
 
 Note how interfaces (like in Java) is not a module system by itself, since it does not abide to the four criteria listed in the introduction of the presentation.
@@ -63,3 +63,46 @@ Dependencies of modules we use can be modelled in a dependency graph, in our lan
 
 Tricky part of module system implementation: when evaluating the expressions in a module, which environment do we do it in?
 **(Partial) answer:** We evaluate the first module in the empty environment, the second module in the resulting environment after having evaluated module 1, ...
+
+One level of abstraction in our language: module split up in an interface and an implementation.
+
+Module interface can provide additional information, such as a kind of formal JavaDoc (no one really does this, because it is so complex) or in our language: just provide type information.
+
+> Type of a module := the interface of the module. This allows us to integrate the module system in the type system we introduced in the previous chapter.
+
+What we do not yet have in our module system: the interface only says something about the type, i.e., a procedure `sort` doesn't actually have to sort.
+
+> module m1
+>   interface
+>     [ u : bool ]
+>   body
+>     [ u = 33 ]
+> from m1 take u
+
+The code above *runs*, but doesn't *type check*, remember how we talked about this in the chapter about type systems (where a type checker rejects working applications).
+
+**Opaque types** provide us with a lot more abstraction in the module system. **Transparent types** aren't really very powerful, they're just aliases/abbreviations for (expressible) types.
+
+If we would like to support **opaque types** we need to consider the opaque type as a primitive type (like int, bool, ...) since we cannot know the exact type, i.e., we have a primitive type `from m take t`.
+
+Opaque types are only an abstraction at compile-time, at runtime it is *always* "replaced" by a concrete type.
+
+We're not looking at the third extension of module systems, it is covered in the book however.
+
+Chapter 9: Objects
+----
+
+Dynamic dispatch is what differentiates a method from a function.
+
+> **Dynamic dispatch** := Run the implementation of the most concrete type/class the object is an instance of, not the implementation of a superclass.
+
+If we want dynamic dispatch in plain old functions, we would have to check the type of the argument and go to a specific implementation based on the type. This is not very nice, but the main disadvantage: it's not extensible! So it seems we cannot implement it extensibly in regular functions, making methods and functions fundamentally different (methods being more powerful).
+
+With methods we automatically have recursion for free, thanks to dynamic dispatch (in a function `f` we can always do `self.f(...)` or something similar).
+
+**Question:** "99% of the OO-languages still use inheritance", which means 1% doesn't, i.e., inheritance is not a requirement for the language to be object-oriented. Then what are the minimum requirements in order to be considered object-oriented?
+
+> **Field shadowing** := When a subclass has a field with the same name as a field of one of it's superclasses, the field of the subclass is the only one in scope for the subclass.
+
+Note how in Java there is no **"method shadowing"**, rather there is overriding, where both the superclass and the subclass go to the method implementation of the subclass.
+
