@@ -72,18 +72,54 @@ Solutions:
 - **Behavioral cloning:** Imitate some teacher. The teacher will perform actions based on some situations. Problem here: the model/student will never really become better than the teacher. We also need a way of cloning behavior (a policy that explains how to handle and generate policies).
 - **Reinforcement learning:** The learner is not guided and has to experiment. Based on experimentations it will be rewarded or punished, this guides it to become better. *This is the most difficult learning setting of the three listed here!*
 
-Reinforcement learning is a lot harder in computer science than in real life (parent - kid example) because the reward or punishement might be delayed.
+Reinforcement learning is a lot harder in computer science than in real life (parent - kid example) because the reward or punishement might be delayed, also, there are no learning examples!
 
-The maximization of $V^\pi(s_t)$ makes sure that we consider all the rewards in the future as well as the rewards in the near future (say in the next state). The discount factor $\gamma^i$ will define some weight to make sure that future states are less important than rewards in the near future (so usually $0 < \gamma < 1$?)
+The maximization of $V^\pi(s_t)$ (the value function) makes sure that we consider all the rewards in the future as well as the rewards in the near future (say in the next state). The discount factor $\gamma^i$ will define some weight to make sure that future states are less important than rewards in the near future (so usually $0 < \gamma < 1$?)
 
 The Bellman equation shows the relation between the state-value of the current state and the state-value of the next state.
 
-In the policy evaluation $V_{i+1}$ represents the $(i + 1)$st approximation for $V^\pi$. If we do this infinitely often, we get a closed form of the Bellman equation, which can be calculated.
+In the policy evaluation $V_{i+1}$ represents the $(i + 1)$st approximation for $V^\pi$. If we do this infinitely often, we get a closed form of the Bellman equation, which can be calculated. *Note: we do not need to do this infinitely often, because the algorithm converges to $V^{\pi}$.*
 
 The Bellman error provides us with a stop criteria: stop the moment the Belmann error falls below some threshold $\epsilon$.
+
+In the *policy iteration* algorithm example, the shortest path is taken because of the discount factor.
 
 **Greedy action selection** := we use a different policy in the first step (in the $argmax$). Yet we still use $V^\pi$, so all the other actions are found by using the older policy, but if we do this iteratively, we already know that all the previous steps are optimal (because we have maximimized them in a previous iteration).
 
 *Note: To get an idea of $V^\pi$ "the robot" needs to run experiments.*
 
 **Question:** Partial evaluation and value iteration is a cheaper variant of the previously seen greedy action selection?
+
+With **Q-learning** we don't know what's happening in advance, instead we update the Q-value as we go along (while the robot is performing actions).
+
+Note how in **Q-learning** we are also interested in the state we are getting at and the actions we can perform there (and the states we might be able to reach after that as well!) and not only in the (immediate) reward $r$ we are getting. Yet distant futures are less important for $Q$, except if the discount factor is 1 (or higher, which seems crazy).
+
+Boltzmann gives us a way of deciding when to use a certain action, gradually, when the Q-value for some $a$ has increased up to the point it is much greater than the rest, we will most likely choose that action. So we are slowly starting to use the information we've learned. If the Q-value for all actions are still pretty much the same, the probability of choosing some action is pretty much the same for all actions, i.e., we are still exploring.
+
+*Hint to recognize curse of dimensionality: try to visualize a table containing all information we are trying to learn, if the table size increases exponentially when adding some attribute, we have the curse.*
+
+**Question:** Generalization in reinforcement learning: assigning labels to examples: similar to classification or something similar?  
+**Answer:** It might be, yet in the lecture they are simply generating a model to represent the Q-function (rather than a table). Doing this is the cost we have to pay to get rid of the curse of dimensionality.
+
+13 Inductive Logic Programming
+-----
+
+Deduction proofs new stuff from existing information while preserving truth, induction tries to generalize (possibly making mistakes in the process).
+
+> **Multi-instance setting** := one example contains multiple "rows"/"data"/instances.
+
+The multi-instance setting is more complex than a simple attribute-value setting, example of more complex settings: examples are graphs, sets, ...
+
+**Question:** Is the setting where examples are graphs, sets, ... an example of the multi-instance setting? Or is this yet another setting?
+**Answer:** Yes? Because a graph can be represented as a list of tuples?
+
+Soccer example: using a table is not a very good representation because it doesn't generalize well, i.e., *it's hard to perform induction on it* (it's way too specific).
+
+If we can represent the examples in an attribute-value setting then we should do this, because there are some very powerful techniques in this setting.
+
+> **ILP** := learning a theory/"logic program" from data. We can also look at a logic program as a more expressive form of rule sets.
+
+**Slide 20:** In the example Y is universally quantified in the first part of the logical implication, this becomes an existential quantification if we consider $A \implies B \iff \neg A \lor B$.
+
+We can consider a theory of grounded horn clauses as a rule set, this would also mean that a theory of horn clauses can then represent a (possibly infinite) class of rule sets, which (pretty much) confirms that a theory of horn clauses is more expressive than rule sets (we can only know this for sure if we find a class of rule sets that cannot be expressed in a single rule set, this is trivially true if a rule set is finite, considering the class might be infinite). So part of the power of horn clauses is in the fact that they do not have to be grounded, i.e., in the use of variables.
+
