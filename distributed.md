@@ -78,3 +78,53 @@ Now, the moment they are all connected again, they can compare versions, if one 
 
 **Coda Version Vectors** is very lightweight compared to active and passive replication, since we do not need total-ordered multicast, i.e., we have no expensive primitives.
 We no longer need these complex primitives, since we no longer care about fault-tolerance.
+
+The industrial IoT
+----
+
+IoT-devices lack the awesome stuff, because they don't have the means to implement/support it.
+
+**Consumer IoT-devices:**
+
+- Thermostats
+- Baby monitors
+- ...
+
+**Industrial IoT:**
+
+- Metal presses
+- and other stuff that was always available, but never was connected to a network
+
+Moore's law does not consider battery capacity, heat created by CPU, etc. Which are all important factors on IoT-devices (you don't want your watch to have a fan or the battery to run out every few days).
+
+You want to keep IoT devices to be asleep as much as possible, that way we can get huge battery lifetime improvements.
+This idea has influenced the entire software stack build on top of IoT-devices.
+
+Storage is expensive because we cannot just use good old RAM-sticks (because they need to be constantly powered), something like flash storage does not require power, but it's more expensive to write to.
+
+LoRa works at 868Mhz.
+
+> **Spreading factor (SF):** A number that defines the amount of times a character is repeated in the lower-level (and is represented as a single character in the higher level). The higher this is, the more redundancy we have, but the slower. The lower this is, the faster, but we cannot receive weak signals.
+
+LoRa distributed architecture: Sensors send data to a LoRa gateway, the LoRa gateway supplies a nice high-level API (at the Backhaul IP stack) to which the network server can connect.
+
+All management of the LoRa network happens in the gateway. We can have LoRa-server that combines a bunch of gateways and provides the same API as the gateway to the end-user.
+
+> **Mesh routing:** use all nodes in the network to create a path to somewhere.
+
+LoRa networking can do mesh routing by using TDMA: every node is assigned to listen at a specific time slot, others can only send during specific time slots, if someone receives at some time slot, it will then later continue sending it higher up (up to the manager/gateway).
+
+Time slots in LoRa are 7ms!
+
+LoRa allows for receiving(?) windows: after a sensor transmits data, there is a short window to receive data. So if we want to send it something, we wait until it sends something and we know that immediately after it is done sending, it is listening.
+
+When to use mesh networking: when we do not have control on where to place nodes, or the size of the buildings around it, etc (i.e., when connections can be blocked completely). This is a lot more expensive though.
+
+TCP is not a good fit: 3-way handshake :(, connection might timeout when device is sleeping, congestion control in TCP is all confused because suddenly it can take several seconds before receiving a response.
+
+> **CoAP:** Pretty much HTTP on top of UDP.
+
+Performing a GET-request might be suboptimal because we cannot define when a response should be send back.
+
+> **OBSERVE:** PubSub system, so we do not need to keep sending GET-requests, but are always (immediately) updated when changes occur.
+
