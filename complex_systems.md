@@ -49,3 +49,17 @@ Note: every reasoning and proof ever made by any mathematician can be expressed 
 Semi-decidability theorem is easy to prove: every proof is finite, i.e., there is a countably infinite amount of proofs. We can (theoretically) construct an algorithm that iterates through this list of proofs, which will end in finite time. From this point-of-view it's already kind of intuitive that it's *only* semi-decidable and not fully decidable.
 
 Gödels incompleteness theorem tells us that $theory(\Nat) = \{\phi | \Nat \entails \phi\}$ is not recursively enumerable. This is why we call the natural numbers undecidable.
+
+The FO(.) Knowledge Base System project
+----
+
+Project conducted at KU Leuven (under guidance of prof. De Necker?)
+
+Is declarative knowledge not independent of the task? It should be, but in practice it isn't always the case, e.g., Prolog.
+
+We reduce expressivity of a language to increase tractability of tasks performed on them (deduction, induction, model expansion, ...). Even classical FOL is too expressive at the moment.
+
+Model checking is in $P$, model generation is in $NP$ however, so they are actually very different (computationally fundamentally different).
+
+The course selection example in the lecture is (a solution of) an "interactive configuration problem".
+
