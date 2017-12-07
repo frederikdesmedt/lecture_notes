@@ -123,3 +123,31 @@ If we can represent the examples in an attribute-value setting then we should do
 
 We can consider a theory of grounded horn clauses as a rule set, this would also mean that a theory of horn clauses can then represent a (possibly infinite) class of rule sets, which (pretty much) confirms that a theory of horn clauses is more expressive than rule sets (we can only know this for sure if we find a class of rule sets that cannot be expressed in a single rule set, this is trivially true if a rule set is finite, considering the class might be infinite). So part of the power of horn clauses is in the fact that they do not have to be grounded, i.e., in the use of variables.
 
+We try to define induction as the inverse of $|-$ (where $|-$ is a deductive proof procedure, e.g. Prolog's resolution).
+Based on the exact deductive proof procedure we get different kinds of inductive procedures.
+
+In $\theta$-subsumption a clause $c1$ is more general than another clause $c2$ if there exists a variable substituion \theta such that $c1\theta <= c2$.
+Note how we do not define $c1\theta |= c2$, this is because it would make it intractible, so not very useful.
+
+$\theta$-subsumption is not complete in respect to $|=$ (obviously, since not all proofs can be solved by only using variable substitution). So the generality lattice we form by only considering the $\theta$-subsumptions is incomplete, and the lattice itself can be infinite (constantly repeating the same variable substitution).
+
+With the "minimal specialization and minimal generalisation" we try to find specializations and generalizations *that do not skip any possible intermediate clause*. This is the real difficulty when defining the version space algorithm for logical induction.
+
+> **Term** := Literal | Variable | Functor [Term]
+
+> **Inverting resolution:** The inverse of resolution (as defined in Prolog), there are 4 operators for this (used in the version space algorithm).
+
+We need human help when performing inverse resolution, because the version space is too big, something like this is called **active learning**.
+
+**FOIL:** Start from the most general case (`P(x, y) :- true`) and keep on adding predicates to the right hand side, until we converge (or cannot learn more).
+
+In **FOIL** we should try to avoid useless clauses (say, tautologies).
+
+Introduction of new literals (by introduction of new variables) might not increase our rules, yet they might be important and can provide interesting benefits in the long run, yet they are most likely not chosen (since it doesn't introduce an immediate advantage). FOIL promotes this introduction by providing a bonus to those kind of clauses.
+
+In **Golem**, if the provided examples are in separate clusters, all examples in the area in between those two examples might be considered true, we do not want this, instead we want the example to be in the same cluster. We solve this problem by retrying with different examples a couple of times.
+
+**Abduction:** Introduce a fact that explains a given fact given the background knowledge.
+
+To reduce hypothesis space in Progol, we introduce types, e.g., if we have `Y < 18` we assume `Y` is a number.
+
