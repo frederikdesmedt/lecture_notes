@@ -151,3 +151,8 @@ In **Golem**, if the provided examples are in separate clusters, all examples in
 
 To reduce hypothesis space in Progol, we introduce types, e.g., if we have `Y < 18` we assume `Y` is a number.
 
+Exam
+----
+
+- Do not give pseudo-code about algorithms but explain how it works.
+- Can you interpret everything? I.e. do you understand it?
