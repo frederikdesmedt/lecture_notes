@@ -106,3 +106,24 @@ With methods we automatically have recursion for free, thanks to dynamic dispatc
 
 Note how in Java there is no **"method shadowing"**, rather there is overriding, where both the superclass and the subclass go to the method implementation of the subclass.
 
+Case study: Golang
+---
+
+No circular dependencies permitted in packages, i.e., the dependency graph is a DAG.
+
+Size of an array is part of its type.
+
+Pointers in Go have similar semantics as in C, yet there is less you can do with them, e.g., pointer arithmetic. This is nice because it allows us to easily understand Go-code and the semantics of language itself!
+
+Further simplifications are that you can get the fields of a struct using dot notation, both for the value itself and for the pointer.
+
+Providing a pointer as a receiver allows us to mutate the object the function is called on.
+
+**Question:** Can we mutate an object if we (only) have a value to it (not a pointer) in our receiver?
+
+The interface system is nice, but it can be annoying if you would like to figure out which interfaces some struct "implements" (or the opposite). We should expect the IDE to help us with this.
+
+If the **main routine** stops, all other goroutines are terminated as well.
+
+**Question:** When does the `for ... range ...` loop end? Does it end when the cannel is closed and all data is out of the buffer (if any)? Or does it loop until there is no immediate element in the channel?
+
