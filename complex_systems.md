@@ -63,3 +63,32 @@ Model checking is in $P$, model generation is in $NP$ however, so they are actua
 
 The course selection example in the lecture is (a solution of) an "interactive configuration problem".
 
+Chapter 8
+---
+
+> **DPLL algorithm** := Algorithm based on unit propagation. Decide some initial atom, then considering it is true, simplify your CNF theory (pretty easy to do), do this recursively. We get a kind of cascading this way.
+
+> **Conflict clause** := a clause that is false in the current (partial) structure, explains the unsatisfiability. This can further be simplified by some algorithm, like `ResolveYoungest(clause)`. Because of the formality of conflict clauses, it can be used for backjumping (overpowered backtracking) by returning to the "decision points" on which the atoms in the conflict clause are defined.
+
+Chapter 9: Model checking of CTL and LTL
+----
+
+CTL transition graphs can be huge, so we definitely need linear model checking for this (this exists, but is not mentioned in the course).
+
+LTL model checking is done by reducing it to CTL model checking.
+
+LTL model-checking algorithm:
+
+1. Label every label with the formula's that are satisfied, i.e., with formulas present in the theory or a negation of it.
+
+Exam
+----
+
+Forbidden to take former exams with you.
+
+Only 1 "main" question on the theoretical part! So a shorter exam.
+Yet also multiple smaller questions, which is nice.
+
+Type of questions will be the same as last year.
+
+This year exam will be shorter.
