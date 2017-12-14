@@ -106,6 +106,8 @@ With methods we automatically have recursion for free, thanks to dynamic dispatc
 
 Note how in Java there is no **"method shadowing"**, rather there is overriding, where both the superclass and the subclass go to the method implementation of the subclass.
 
+*Important: Know about the difference between field shadowing and dynamic dispatch!*
+
 Case study: Golang
 ---
 
@@ -127,3 +129,29 @@ If the **main routine** stops, all other goroutines are terminated as well.
 
 **Question:** When does the `for ... range ...` loop end? Does it end when the cannel is closed and all data is out of the buffer (if any)? Or does it loop until there is no immediate element in the channel?
 
+Chapter 9: Objects - continued
+----
+
+The CLASSES-language contains multi-declaration lets, this means that we can have multiple variable-value assignments within a single let. Note that this is a "parallel" let, i.e., none of the variables is available in any of the other variable expressions.
+
+Because of field shadowing (rather than "dynamic field dispatch") we cannot forget shadowed fields of parent classes, since any super-method will still require the fields of the super classes.
+So, when representing an object, we need to make sure that all fields are remembered (those of the subclass, and those of the parent classes). In actual OO-compilers these are stored in an array, and at compile-time "static indexing" occurs, i.e., when getting a field, they are replaced as lookups in the array, at compile-time! This is not how we will do it.
+
+`object->fields` contains our implementation of field shadowing. Concretely, we hold a single list of all fields of every class in the class hierarchy (i.e. the class of the object + all superclasses of it), we then put garbage names for the fields that are not of the subclass we are in, that way we will never call them, i.e., we will not be able to access the fields of the supers that are also fields in the subclass (because we rename those fields to garbage, temporarily).
+
+We handle overloading by having a list of methods in which the methods most down in the hierarchy are first in the list. We then just need to find the *first* method with the same method name in the list and we automatically have correct dynamic dispatch.
+
+In the CLASSES implementation: try to understand all the elements in the store, if you know this, you will probably know everything about the interpreter suitably well.
+
+Conclusion of the course
+----
+
+We learned all about the "atoms" and "molecules" of programming languages, try to recognize this actively in other programming languages (this is what gives value to this course!).
+
+Common on the exam: question about continuations, make sure you use the syntax/notation defined and used in the interpreters and lecture!
+
+It is not expected to know every case study language in-depth, only the parts specified in the conclusion slides of the course (i.e. Rust's memory-safety system, ...).
+
+Notes must be hand-written!
+
+Questions of the exam will be similar to the questions asked last years.
