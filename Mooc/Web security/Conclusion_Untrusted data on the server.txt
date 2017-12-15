@@ -1,0 +1,15 @@
+Injection attacks are a serious problem in web applications. Server-side injection attacks take first place in the OWASP top 10.
+As you have seen, these injection vulnerabilities follow from a lack of context. Due to the lack of context information, it becomes impossible to distinguish between data and code. As a result, untrusted data will be executed as code, with the predictable consequences.
+One concrete example of an injection attack is command injection. Such an attack allows the attacker to execute arbitrary commands on the server. 
+The good news is that the Java and .NET APIs already do this. So all you need to do is ensure that you do not re-introduce an injection vulnerability when constructing the command.
+For SQL injection, the story is a bit different. SQL injection occurs when you use untrusted data to construct a SQL query. Unfortunately, that is the case in almost all applications. The consequences of a SQL injection attack can be quite severe. One example is the destruction of the entire database. Other, maybe even worse examples are theft of the data and the modification of the data in the database.
+To defend against SQL injection attacks, you need to take care of how you construct the query. Using parametrized statements with variable binding is by far the best approach. This approach makes the context information explicit. It first processes the code of the query, and only then binds the data into the right locations.
+Unfortunately, variable binding does not work in all locations of a SQL statement. That is why we covered other defenses, such as whitelisting the value. We also talked about encoding, and how tricky it is to get right for a database system. That is why encoding should only be used as a last resort when no other defenses can be applied.
+
+Overview of best practices
+Defending against server-side injection attacks is not that complicated. Here are a couple of best practices to take into account.
+Execute system commands by using an API that separates the command and its arguments
+Never encode user input directly into a SQL query
+Use parameterized statements with variable binding where possible
+Use whitelisting when variable binding is not possible
+Only use encoding as the last resort

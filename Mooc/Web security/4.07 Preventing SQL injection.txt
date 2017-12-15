@@ -1,0 +1,46 @@
+SQL injection vulnerabilities have a similar cause as command injection vulnerabilities.
+At the moment of execution, a lack of context results in the failure to distinguish data from code.
+As you may expect, the defenses against SQL injection attacks
+are also similar to those against command injection attacks.
+A solid first line of defense is input validation.
+Enforcing strict constraints where possible already reduces potential attack vectors for SQL injection.
+For example, parsing numeric identifiers into an integer allows early rejection of invalid inputs.
+But make sure your input validation mechanisms are not too strict.
+For example, a developer from the US may decide to enforce that first and last names can only consist of letters.
+Unfortunately, this is going to make a lot of people angry.
+Think of the Irish, where single quotes are frequent, or the French, who use accents.
+These examples aptly illustrate the limitations of input validation.
+So remember that input validation alone is not enough.
+A proper defense addresses the cause of the problem.
+That is why you should use prepared statements with variable binding.
+Here, you see a code example that is vulnerable to SQL injection.
+The vulnerability occurs the moment we embed untrusted data in the SQL statement.
+Let's compare this with prepared statements and variable binding.
+As you can see here, a prepared statement contains all the SQL code, but no untrusted data.
+Instead, we put placeholders where the untrusted data needs to go.
+In the next step, we bind untrusted values to these placeholders.
+Do you see what is going on here?
+We provide the proper context information.
+This enables the database server to distinguish between data and code.
+Prepared statements with variable binding address the majority of SQL injection vulnerabilities.
+Unfortunately, variable binding does not work in all parts of a SQL statement.
+The names of tables and columns need to be specified up front, and cannot be bound later.
+But there are safe ways to handle untrusted data in these locations.
+One way is to use the untrusted input to select a value from a whitelisted set of values.
+Take a look at this code snippet.
+The explicit selection of a value ensures that untrusted data never ends up in the statement.
+If the untrusted data includes malicious input, the application will throw an error.
+When whitelisting is also not an option, there is always encoding.
+The encoding of special characters renders the untrusted data harmless.
+Note that encoding untrusted data for use in a SQL statement is complicated to get right.
+Every database has a particular set of special characters.
+Therefore, encoding should only be used as a last resort.
+Finally, keep in mind that untrusted data can come from anywhere.
+User input is only the most obvious candidate.
+Other examples are cookies or HTTP headers.
+For example, if your application keeps a log of all requests,
+SQL injection can follow from malicious data in the User-Agent header.
+In essence, the proper way to address SQL injection is to provide proper context information to the database server.
+The best way to achieve this is using prepared statements with variable binding.
+When variable binding is not possible, whitelisted variables are the next-best option.
+As a last resort, proper encoding mechanisms are also available.

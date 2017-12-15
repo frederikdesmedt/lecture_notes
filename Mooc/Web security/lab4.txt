@@ -1,0 +1,47 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter3_sessions branch from the Git repository (git checkout start_chapter3_sessions). Also check for the latest updates (git pull) command.
+Session hijacking on the network
+Stealing the session cookie from the network traffic
+First, let's configure the right starting point. make sure HSTS is disabled for the BeerSafe application. If you have HSTS still enabled, set the max-age value to 0 and reload the application. Also, set the HTTPS redirect to true.
+HSTS is disabled, but our BeerSafe application still runs over HTTPS. It seems that there is no way for the attacker to steal our session cookie.
+Let's see if that is true. We are going to use Wireshark, a network capturing tool, to listen to our network traffic. This is the same traffic an attacker would observe on a wireless network. Launch Wireshark, and follow the steps below.
+When you launch Wireshark, you see a box with the settings for the current capture. Here, you need to select the Loopback interface, which is used for network traffic to your local machine. To start the capture, click the Start button.
+
+By default, Wireshark captures and displays all types of network traffic. We are only interested in HTTP and HTTPS traffic, so you can apply a filter to ignore everything else. Setup the filter as shown below.
+
+Now, let's see if Wireshark captures our traffic. Point your Chrome browser to the BeerSafe application. If everything works as expected, you will see a bunch of HTTPS traffic in Wireshark. But, right before the HTTPS traffic, there is an HTTP request that went through in plain text.
+
+If you were already authenticated, you will see that the HTTP request that triggers the redirect already leaks the cookie on the network. If not, the attacker can always force your browser to make an HTTP request to the BeerSafe application.
+One example to do that is by loading an HTTP image from the BeerSafe domain in an unrelated page. To see this in action, navigate your Chrome browser to the following URL: http://example.com/evil/cookies.html
+As you can see, the page is entirely innocent and rather uninteresting. However, if you go back to Wireshark and take a look at the traffic capture, you will see that the attacker's page triggered an HTTP request to the BeerSafe application. Closer inspection of this request should reveal the session cookie in plain text.
+
+Now that the attacker has the session cookie, he can use it to perform a session hijacking attack. We will mimic such an attack by loading the hijacked session in a different browser. Launch the Firefox browser, and open the cookie manager extension, as shown below.
+
+First, remove any cookies you have for the BeerSafe application. Next, add the stolen session cookie with the right name, value and host.
+
+Once you have set the cookie, navigate the Firefox browser to the BeerSafe application. If everything works correctly, you should be logged into the same session as in the Chrome browser. Congratulations, you have just performed a network-based session hijacking attack.
+Preventing network-based session hijacking
+To prevent the theft of the session cookie on the network, you can use the Secure flag. Settting the Secure on the session cookie tells the browser to only attach the cookie to HTTPS requests, and not to HTTP requests.
+You can enable the Secure flag by modifying the sessions.txt configuration file in the src/main/webapp/_securitypolicies/ folder. The secure property controls the Secure flag.
+Now that you have modified the file, it's time to see the Secure in action. To avoid conflicts, remove all cookies of the BeerSafe application in Chrome. You can do that by opening Chrome's developer console, going to the Application tab and selecting the cookies in the menu on the left. Remove all entries.
+
+Once you have done that, open Wireshark and restart the capture by clicking on the green shark fin with a refresh arrow, as shown below.
+
+Now, open the BeerSafe application and log in as one of the users. Next, navigate your Chrome browser to the following URL: http://example.com/evil/cookies.html. If everything is configured correctly, the Wireshark capture should still show the HTTP request, but the cookie should no longer be present
+
+As you can see, marking the cookie as Secure prevents network-based session hijacking attacks.
+Note that you had to ensure that HSTS was disabled at the beginning of this lab. An HSTS policy tells the browser to only send HTTPS requests, even if the URL points to an HTTP resource. As a result, HSTS would have prevented the attack we carried out before. Of course, it still makes sense to explicitly mark the cookie as Secure, even if HSTS is used.
+Session hijacking from JavaScript
+Stealing the session cookie from JavaScript
+Eavesdropping on the network is only one attack vector for session hijacking. Another attack vector is by injection malicious code through a cross-site scripting vulnerability. We will cover XSS later in this course. Here, we will use the browser's developer console to illustrate how an XSS attack can lead to session hijacking.
+Load the BeerSafe application in Chrome, and make sure you are authenticated. Now, open the developer console, and select the Console tab, where you can type and execute JavaScript code. By calling the document.cookie property, as shown below, you can access the cookie store for the beersafe.eu domain.
+
+Now, you can use the "stolen" session cookie to transfer the session to another browser, just as in the previous scenario.
+Preventing script-based session hijacking
+To prevent the theft of the session cookie from JavaScript, you can use the HttpOnly flag. Settting the HttpOnly on the session cookie tells the browser to hide this cookie from JavaScript.
+Enabling the HttpOnly flag in the BeerSafe application is not too difficult. Next to the Secure flag, the cookie security filter in the application also supports the HttpOnly flag. Open the sessions.txt configuration filein the src/main/webapp/_securitypolicies/ folder, and modify it to enable the HttpOnly flag.
+Now that you have modified the file, it's time to see the HttpOnly in action. Again, remove all cookies in Chrome, and reload the BeerSafe application. After having authenticated, try grabbing the session cookie using the document.cookie property, like before. As you can see, the session cookie is no longer available.
+
+Note that the use of the HttpOnly flag prevents the theft of the session cookie. However, in a true cross-site scripting scenario, the attacker's code still runs in the page of the BeerSafe application. This capability still allows the attacker to perform arbitrary commands in the name of the user. In essence, the HttpOnly flag only limits the potential consequences a bit, but does not plug the original attack vector.
+Conclusion
+That concludes this lab session. By now, you know that cookie-based session management suffers from a couple of weaknesses. The right security settings can counter many of these attacks. The only problem is that most applications do not deploy these security measures by default. So remember that session cookies need to be protected with the Secure and HttpOnly flags.

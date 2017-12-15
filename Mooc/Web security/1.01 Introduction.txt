@@ -1,0 +1,44 @@
+Hi and welcome to the Web Security Fundamentals course on EdX.
+News coverage of security incidents paints a grim picture.
+It may even cause you to believe that web applications cannot be secure.
+But insecurity is not fundamental to the web platform.
+As a matter of fact, the modern web offers a variety of powerful security features that
+help stop a hacker.
+Unfortunately, few developers have the skills to unleash the full potential of these technologies.
+This course is imperative for understanding the fundamental security principles of the
+web.
+You will learn about common attacks and countermeasures.
+In essence, this course offers you the knowledge and skills to build better and more secure
+applications.
+Before we get started, let me introduce myself.
+I am Philippe De Ryck, and I will be your teacher for this course.
+I am a professional speaker and trainer on web security and software security.
+My goal is to help practitioners understand the threats and dangers in the modern web.
+Through training, I empower developers with secure coding practices.
+Let me give you a quick overview of the journey we will take together.
+This course consists of five chapters.
+We start by taking a look at the current state of affairs in web security.
+In this introduction, you will get familiar with the underlying security model of the
+web.
+In the first topic, we explore the communication channel between a browser and a web application.
+As you will see, the rise of wireless networks has had a significant impact.
+As a consequence, securing the communication channel is considered security priority number
+one.
+The second topic focuses on unauthorized access to your application and its data.
+Preventing unauthorized access requires careful attention to authentication, authorization
+and session management mechanisms.
+The third topic in this course focuses on the secure handling of untrusted data.
+Mishandling untrusted data results in server-side and client-side injection vulnerabilities.
+As you will see, preventing such vulnerabilities sounds easier than it is.
+By the time we get to the conclusion, we will have covered an enormous amount of content.
+Exactly the right moment for a brief overview of the course.
+Next, we will recap the best practices that are scattered throughout this course.
+This list of best practices can serve as a guideline for building secure applications.
+A final word about the format of the course.
+Most of the contents in this course are instructional videos.
+These videos explain attacks and defenses with visual aides and short demos.
+In the documented lab sessions you get hands-on experience with attacks and defenses.
+The assessments help you determine how well you have grasped the concepts.
+If you have any questions throughout the course, please post them on the discussion board.
+That's it for the introduction.
+I hope you are excited to get started!

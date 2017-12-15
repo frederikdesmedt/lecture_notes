@@ -1,0 +1,86 @@
+By now, there should be no doubt left in your mind about the dangers of Cross-Site Scripting.
+But if XSS is so dangerous, why do so many applications suffer from these vulnerabilities?
+Implementing proper defenses against XSS attacks is harder than it seems.
+Let’s take a look at several mitigation strategies.
+The code example shown here is the textbook illustration of an XSS vulnerability.
+As you can see, there are two places where untrusted data ends up into the HTML page.
+If the input is benign, the application works as expected.
+But when an attacker supplies malicious input, the XSS vulnerability becomes a reality.
+Can you think of an easy way to stop this attack?
+An easy way to mitigate this vulnerability is to apply input validation.
+Strict input validation can prevent the occurrence of dangerous characters or strings.
+Think about angle brackets or the script tag.
+If the output is free of such dangerous characters,
+there is no way for the browser to interpret the data as code.
+Input validation is a very intuitive mitigation strategy.
+Unfortunately, it only works well in the simplest cases.
+When we go back to the example from the before, you can see that there are two XSS vulnerabilities.
+In the first instance, the application expects an integer as input.
+Here, limiting the input to digits only would work well to mitigate the vulnerability.
+But the second instance is a bit more complicated.
+Here, the user can provide a chunk of text as input.
+As you can imagine, applying strict input validation on free-form text is a lot harder.
+Being too strict results in the rejection of legitimate input.
+Not being strict enough will allow XSS payloads to slip through.
+The XSS Filter Evasion Cheat Sheet lists a large number of XSS filter bypasses.
+You can imagine that it is next to impossible to stop XSS attacks with input validation alone.
+A better mitigation strategy is output encoding.
+With output encoding, dangerous characters are encoded to their harmless counterparts.
+Let’s see what this means in practice.
+Take the following input for example.
+If the browser encounters this data in an HTML page, it will execute the script code.
+But look what happens if we encode the angle brackets to their HTML representations.
+The browser now sees the script tag as data instead of code.
+The HTML representation ensures that the angle bracket is rendered instead of executed.
+As you can see, output encoding is a more robust way to mitigate XSS vulnerabilities.
+That is why many frameworks and languages offer functions
+that encode dangerous characters for an HTML context.
+Now, that was not that hard, was it?
+But there is more.
+Take a look at this more elaborate code example.
+Again, there are different locations where untrusted data ends up in the output.
+But every output passes through an encoding function.
+As discussed before, the encoding function converts dangerous characters into their HTML representation.
+Can you spot a problem here?
+Encoding dangerous characters into their HTML representation does not always make sense.
+Take a close look at where the input ends up in the page.
+Only one input is used to generate HTML code.
+The other inputs end up in an HTML attribute, as part of CSS code,
+or inside a block of JavaScript code.
+Here is an example of a dangerous input for each of these values.
+As you can see, none of these inputs depends on the use of dangerous HTML characters.
+The set of dangerous characters is different for each context.
+Dangerous characters in an HTML element context differ from those in a CSS or JavaScript context.
+That is why the proper mitigation technique is known as context-sensitive output encoding.
+Dangerous characters are still encoded.
+The difference is that the context now determines which characters are dangerous.
+Implementing mitigations based on context-sensitive output encoding seems like a daunting task.
+But don't worry.
+Libraries offer encoding functions for all kinds of contexts in an HTML page.
+Here, you see a few of the encoding functions provided by the OWASP Java Encoder library.
+Each of these functions takes a piece of untrusted data and makes it safe to use in the designated context.
+With this library, we can adapt our vulnerable example from before.
+Now, we decide based on the context with output encoding function needs to be applied.
+Context-sensitive output encoding is the best mitigation strategy against XSS vulnerabilities.
+The challenge is to apply context-sensitive output encoding consistently throughout the application.
+Missing one output is already enough to cause an XSS vulnerability.
+There is one more case to consider.
+What if the user-provided input is rich-text data, for example from an HTML editor?
+This data can contain legitimate, but harmless HTML tags.
+Examples are image tags, header tags or markup tags.
+Applying context-sensitive output encoding in this scenario breaks legitimate functionality.
+So how can we allow the use of a select number of tags, while still protecting against XSS attacks?
+The answer to this problem is sanitization.
+A sanitization library parses the input and analyzes its contents.
+It removes potentially dangerous parts but keeps the rest intact.
+Take a look at the sample input here, and the result if we pass it through a sanitizer.
+As you can see, the sanitizer has removed script tags, event handlers, and other dangerous HTML attributes.
+One last warning.
+Do not try to write your own sanitization library.
+Use a well-vetted library, such as the OWASP Java HTML Sanitizer.
+These libraries are well-tested and defend against a wide variety of bypass attacks.
+To conclude, remember that strict input validation only works as a first line of defense.
+The proper XSS mitigation strategy is context-sensitive output encoding.
+Based on the context, dangerous characters are replaced with their safe counterparts.
+However, in more complex scenarios, context-sensitive output encoding may be too restrictive.
+In those cases, sanitization can be used to filter dangerous parts out of a piece of untrusted data.

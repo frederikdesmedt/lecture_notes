@@ -1,0 +1,54 @@
+Imagine this.
+A journalist calls a multi billion dollar company to inform them he has access to all their customer data.
+The company is completely oblivious and has no idea what's going on.
+This is what happened to VTech in 2015.
+VTech is a major company selling children's toys.
+They not only sell physical products, such as toy tablets and phones, but also offer an online app store.
+On top of that, many of VTech's advanced toys are cloud-enabled.
+They support the storage of pictures and voice recordings on VTech's servers.
+As you can imagine, these technologies are a treasure trove of information.
+Unfortunately, VTech failed to secure all this information properly.
+A hacker discovered SQL injection vulnerabilities in VTech's web applications.
+By exploiting these vulnerabilities, the hacker gained root access to VTech's database servers.
+As a result, he had access to all the data on these servers.
+In total, we're talking about data on 5 million parents and 200,000 children.
+The hacker could have sold this data on the black market.
+Instead, he contacted a journalist at the online magazine Motherboard.
+In turn, the journalist reached out to VTech, alerting them of the problem.
+VTech alerted its customers and fixed the vulnerabilities.
+In an ironic plot twist, VTech also modified their terms and conditions.
+They now state up front that information transmitted or stored may not be secure.
+One conclusion you can draw from this story is that SQL injection attacks are quite powerful.
+But what causes a SQL injection vulnerability, or any other type of server-side injection vulnerability?
+Here you can see a code snippet that is vulnerable to SQL injection.
+This code snippet is from the BeerSafe application.
+It powers the search feature of the application.
+In the backend, the application uses the search term to construct a SQL query.
+This query is sent to the SQL server, and the results are processed.
+So, why is this a problem?
+Let's see where the provided data comes from.
+As you can see here, this data is passed as a parameter in the URL.
+But since a URL comes from the client, it can be manipulated by an attacker.
+What would happen if the attacker requests the following URL?
+The application uses the data to construct the query, which now looks like this.
+As you can see, the provided input has changed the structure of the SQL statement.
+It now contains a query, and an instruction to delete the database.
+This problem is known as SQL injection.
+Let's take another look at the code snippet.
+Take a few seconds to think about the root cause of this vulnerability?
+The chances are that you identified the construction of the query as the root cause.
+You're right, but the underlying problem is a bit more subtle.
+The real problem is that the database server lacks context information.
+The database server does not know which part of the statement is data and which part is code.
+And as we have seen before, the consequences of this mistake are disastrous.
+When the application constructs the statement, all the context information is available.
+In our code snippet, we have marked data as orange and code as gray.
+But as you can see, once the statement is sent to the database server,
+the context information is no longer available.
+As a result, the database server will see part of the data as code.
+SQL injection is only one example of such a vulnerability.
+Other injection vulnerabilities share the same root cause.
+A few examples are command injection, code injection, LDAP injection, XPath injection.
+In each of these cases, a lack of context causes confusion between untrusted data and code.
+Command injection and SQL injection are the most common server-side injection vulnerabilities.
+In the upcoming parts, we further investigate these two vulnerabilities and their defenses.

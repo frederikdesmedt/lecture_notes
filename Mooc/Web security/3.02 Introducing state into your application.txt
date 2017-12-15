@@ -1,0 +1,61 @@
+The best way to understand the architecture of modern web applications is to look at the early days of the web.
+The very first web applications provided information in the HTML format.
+The exchange of information happened over the HTTP protocol.
+The HTTP protocol use requests and responses.
+The browser requests a resource, and the server sends a response in return.
+In contrast with other protocols, subsequent requests are not related to each other.
+Requests do not have sequence numbers and do not even have to happen over the same TCP connection.
+In essence, HTTP is a stateless protocol.
+As you can imagine, authentication and authorization are challenging in a stateless protocol.
+If one request authenticates a user, how is that information propagated to the next?
+The response to these questions is HTTP Basic Authentication.
+Let's see how this works in practice.
+The first step the server takes is telling the browser that a resource is off limits.
+The server can do that by sending a response like the one you see here.
+When the browser encounters such a response, it will prompt the user to authenticate.
+Here, you can see an example of such an authentication prompt.
+With the user's credentials, the browser again tries to fetch the resource.
+The credentials are present in the Authorization header.
+The server can now verify the credentials and decide if the user can access the resource.
+If the answer is affirmative, the response has status code 200 and contains the resource.
+Otherwise, the server can send an error message with status code 403.
+Note that the Authorization header does not contain the cleartext credentials.
+The browser has base64-encoded them to ensure they can be safely used in an HTTP message.
+Base64 encoding is a straightforward text transformation which can easily be undone.
+Never mistake such encoding for a security measure such as encryption.
+One of the biggest drawbacks of Basic Authentication is that it only provides the identity of the user.
+There is no support to track additional properties between two independent requests.
+This limitation makes it hard to implement anything more than the simplest authorization checks.
+Transaction-based operations, consisting of multiple steps, are a perfect illustration of this limitation.
+But Basic Authentication suffers from other drawbacks as well.
+For one, the username and password are present in every request.
+All an eavesdropper needs to impersonate the user is to capture one request.
+A second drawback comes from the way the browser handles a stored username and password.
+Once entered by the user, the browser keeps using the credentials for that website.
+The only effective way for the user to log out is to close the browser.
+Another drawback impacts the user experience.
+The browser handles authentication in a popup window.
+As a consequence, the authentication form cannot be integrated into the application's UI.
+These drawbacks inspired the development of an alternative authentication and authorization mechanism.
+Today, most applications use a custom authentication form, in combination with session management.
+We will go into a lot more detail on session management later in this chapter.
+But here is the essence of what happens.
+The application uses a custom authentication form to request the user's credentials.
+The browser sends these credentials to the server in a request.
+The server verifies the credentials.
+It keeps track of this authenticated state using a server-side session object.
+The challenge is to ensure the presence of this session object on future requests.
+Therefore, the server gives the browser a cookie.
+The browser will attach this cookie to every outgoing request to the server.
+As a result, each request contains a reference to the server-side session object.
+Retrieving the session object gives the server information about the authenticated user.
+This schematic aptly illustrates the complexity of authentication and authorization in web applications.
+The stateless nature of HTTP forces the use of an explicit session management mechanism.
+Session management ensures the propagation of authentication information.
+This information, in turn, enables the application to make proper authorization decisions.
+Unfortunately, this complex configuration is prone to mistakes and misconfigurations.
+Many applications suffer from broken authentication and session management.
+These issues are quite severe, as they result in unauthorized access to the application.
+The OWASP top 10 even ranks them in second place.
+This chapter focuses on preventing unauthorized access.
+In the upcoming sections, we take a closer look at authentication, session management, and authorization.

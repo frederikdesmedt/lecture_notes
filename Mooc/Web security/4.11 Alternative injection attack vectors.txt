@@ -1,0 +1,73 @@
+We have been talking about injection vulnerabilities for a while now.
+So far, we have only considered cross-site scripting, where the payload is malicious JavaScript code.
+Unfortunately, that is only part of the story.
+HTML pages contain various other types of content as well.
+The injection of such content can also result in practical attacks.
+These alternative injection attacks use various types of content.
+Two typical examples are the injection of HTML code and CSS code.
+A bit more exotic is the injection of SVG code or vulnerable Flash files.
+In this part, we dive deeper into HTML injection and CSS injection attacks.
+Here, you can see an example of an HTML injection attack.
+As you can see, the attacker-provided data contains a piece of HTML code,
+which will end up in the generated page.
+We will talk about the consequences of HTML injection in a bit.
+For now, take a closer look at the code example.
+Does this seem familiar?
+You probably recognize this example from when we talked about cross-site scripting.
+The injection of a script tag is, in essence, a variation of an HTML injection attack.
+We have covered the consequences of script injection attacks in a lot of detail before.
+But preventing the injection of script tags alone is not enough.
+The injection of plain HTML elements can also have severe consequences.
+Let’s take another look at our initial example of HTML injection.
+As you can see here, the attacker has injected an image tag.
+A closer inspection reveals two things.
+First, the source attribute of the image tag uses a single quote.
+Second, the image tag is not closed at the end.
+Such an attack can result in the exfiltration of data.
+To be successful, the injection needs to happen in the right place in a page.
+Here, you see a snippet of the page that the browser will render.
+The colorization of the code already indicates the consequence of the attack.
+Remember, the source attribute of the image tag used a single quote, and the tag was open at the end.
+As a result, the browser considers everything up to the next single quote to be part of the source URL.
+When the browser fetches this image, it leaks a large chunk of the page as the parameter of the URL.
+This data can contain personal information about the user, or security tokens.
+Data exfiltration is only one example of an attack.
+Another example is the injection of a base tag.
+Setting the base tag allows the attacker to override all relative URLs in a page.
+Another attack abuses form functionality.
+By injecting hidden input fields, the attacker can overwrite legitimate form values.
+Even worse, by injecting form tags or buttons, the attacker can redirect an entire form.
+Again, these attacks can result in the disclosure of sensitive information.
+These examples show that plain HTML code can already be quite dangerous.
+So how can we defend against these HTML injection vulnerabilities?
+By ensuring that the browser does not confuse HTML in our data fields as code.
+Like before, we can apply context-sensitive output encoding to avoid this confusion altogether.
+Again, applying these defenses in a consistent manner is the real challenge.
+An alternative defense strategy is the use of sanitization.
+However, the effectiveness of sanitization against HTML injection attacks depends on the sanitizer.
+Some of these payloads use harmless HTML elements.
+As a result, a sanitizer may not see them as malicious or dangerous.
+The injection of HTML code is only one of many ways to abuse an injection vulnerability.
+Another way is the injection of seemingly harmless CSS code as part of a style element.
+But make no mistake, even the injection of plain CSS code can cause a lot of harm.
+Here are a few examples of what an attacker can do by injecting CSS code.
+One of the more obvious consequences is the defacement of a web page.
+A more extreme example is the execution of JavaScript code, right from within the CSS context.
+Sounds crazy, right?
+At a certain point in time, one particular browser supported this behavior.
+Fortunately, today, no modern browser still supports this.
+A more advanced attack scenario abuses CSS selectors.
+With CSS selectors, an attacker can probe the contents of individual HTML elements or attributes.
+The mechanism behind this attack is brute forcing selectors to match specific characters.
+The example you see here illustrates the idea behind the attack.
+This attack is not useful against elements with a lot of content.
+However, it can be quite effective against elements with limited input.
+Examples of such elements are input fields for passwords, or hidden fields containing security tokens.
+As before, the proper defense is context-sensitive output encoding.
+For sanitization, it again depends on the specific sanitizer.
+If style elements are considered harmful, sanitization will work as a defense.
+But if they are not, your application is probably vulnerable to CSS injection.
+Here's what you should remember from this part.
+Injection attacks are a lot more versatile than script injection alone.
+Nonetheless, the proper defense against injection attacks is context-sensitive output encoding.
+The true challenge is applying this in a consistent manner throughout the application.

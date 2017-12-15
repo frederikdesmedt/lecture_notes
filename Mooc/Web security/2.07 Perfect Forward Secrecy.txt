@@ -1,0 +1,71 @@
+HTTPS offers three important security properties: confidentiality, integrity, and authenticity.
+These three properties are essential to prevent eavesdropping and undetected traffic manipulation.
+In a classical HTTPS deployment, these properties depend on the secure exchange of the pre-master secret.
+The browser first encrypts the pre-master secret with the public key of the server.
+Next, the browser sends the encrypted secret over the insecure channel.
+Even if someone is listening, only the legitimate server can decrypt the secret.
+There is one important disadvantage with this type of key exchange.
+It cannot guarantee confidentiality towards the future.
+Imagine an attacker who records an entire HTTPS conversation, including the handshake.
+If the attacker comes in possession of the server's private key in the future, he can
+decrypt the pre-master secret.
+Having this secret enables the attacker to derive the shared keys, and decrypt the entire
+conversation.
+For long, nobody considered such an attack to be relevant.
+But the Snowden revelations changed this belief.
+The revelations made clear that state agencies record encrypted traffic on a massive scale.
+They store the encrypted traffic and wait until they get hold of the private key.
+Disclosure of the private key can happen by mistake, but also by stealing the key from
+the server.
+These type of attacks are the reason why this mode of operation is no longer recommended.
+Today, you should deploy a key exchange algorithm that supports perfect forward secrecy.
+The most common algorithm supporting perfect forward secrecy is the Diffie-Hellman key
+exchange.
+This algorithm is capable of establishing a shared secret over an insecure channel,
+without encryption.
+Even if an attacker is listening to the messages, he will never be able to reconstruct the shared
+secret.
+Only the parties directly involved in the communication can calculate the pre-master
+secret.
+Explaining Diffie-Hellman without diving into the mathematics may seem challenging.
+Funny enough, the Wikipedia page has a great analogy, using buckets of paint.
+Let’s take a look at the concepts behind the algorithm.
+Alice and Bob need to establish a shared secret, represented by a color of paint.
+First, they decide to start with a shared color, yellow.
+Note that this fact does not need to be kept a secret.
+Next, they both choose their secret color and mix it into the starting color.
+They exchange their mixed bucket of paint over an insecure channel.
+Now, they both add their secret color into the mixtures.
+As you can see, they both end up with the same shared secret color.
+In this example, the truck driver can see that Alice and Bob exchanged a bucket of green
+and orange.
+He also knows that they started out with yellow.
+But there’s no way to combine those three colors into the same brown color that both
+Alice and Bob have.
+As with every analogy, the comparison stops at some point.
+Here, it is not that hard to figure out what color Alice and Bob added when you know they
+started with yellow.
+In the actual Diffie-Hellman algorithm, separating colors means solving the discrete logarithm
+problem.
+Many mathematicians have worked on this, and they have yet to find an efficient algorithm
+to solve the problem.
+To increase the security of the algorithm, you should choose new private parameters,
+or private colors, for each connection.
+This mode of operation is known as ephemeral Diffie-Hellman.
+So in essence, the Diffie-Hellman key exchange algorithm allows the browser and server to
+agree on a shared secret over a public channel.
+An attacker listening on the network will not be able to derive that same shared secret.
+Even if the attacker records the entire conversation, he will not be able to obtain the shared secret.
+The only way to break the confidentiality is by solving the underlying mathematical
+problem.
+A final remark about perfect forward secrecy and the Diffie-Hellman key exchange.
+The plain Diffie-Hellman algorithm, which we illustrated with paint, is vulnerable to
+man in the middle attacks.
+To ensure authenticity, the Diffie-Hellman protocol is combined with an asymmetric key
+algorithm.
+In practice, the server generates a digital signature with its private key, and the browser
+verifies it with the server's public key.
+Of course, the browser still needs to validate the certificate.
+This type of key exchange offers both authenticity and perfect forward secrecy.
+To conclude, perfect forward secrecy is a desirable property for all encrypted communication.
+That is why almost all modern HTTPS deployments use the Diffie-Hellman key exchange.

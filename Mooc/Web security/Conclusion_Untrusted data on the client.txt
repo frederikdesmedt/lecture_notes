@@ -1,0 +1,20 @@
+We already mentioned that server-side injection attacks take the first place in the OWASP top 10. Client-side injection attacks are not far behind, on the third place.
+Examples of client-side injection attacks are HTML injection and cross-site scripting (XSS). The result of such an attack is the execution of arbitrary code in the victim's browser. 
+We spent quite some time on the different variations of a cross-site scripting attack. In a reflected XSS attack, the payload is present in the request and is reflected back in the response. In a stored XSS attack, the attacker distributes the payload through the application's data store. Both types of XSS are equally dangerous.
+The chapter on handling untrusted data covered various defenses against these injection attacks. The only effective mitigation technique is context-sensitive output encoding. In essence, you need to encode dangerous characters for a specific context. Doing so prevents the browser from confusing data and code. The proper application of context-sensitive output encoding eradicates these injection vulnerabilities.
+Sometimes, encoding all characters breaks legitimate functionality. Think about an HTML editor that allows the users to insert headers or images. In those cases, you can use a sanitization library. Such a library will parse the untrusted data, and filter out potentially dangerous constructs. Harmless code constructs are left untouched.
+As you will remember, we also covered a client-side variation of an XSS attack: DOM-based XSS. In a DOM-based XSS attack, the injection of the payload into the page happens in the browser, instead of on the server. In essence, DOM-based XSS attacks are not that different from their server-side counterparts. To counter DOM-based XSS attacks, you need to apply the same defenses, but on the client-side.
+The true challenge with defending against these injection vulnerabilities is consistency. You need to apply these defenses consistently throughout the application. Missing one output is enough to cause an injection vulnerability.
+Your first focus should be to implement proper defenses against these injection attacks. Afterward, you can think about deploying a second line of defense. The recent Content Security Policy (CSP) enables you to do that. CSP allows you to restrict the behavior of a page. For one, CSP disables inline code and styles, and only loads previously-whitelisted resources.
+As we have seen, CSP can become quite complex. In fact, CSP is a bit too advanced for this course. But since it is such a versatile security policy, we spent some time on it anyway.
+Another client-side security mechanism you can leverage is HTML5 sandboxing. By sandboxing pieces of untrusted content, you can enforce tight behavioral constraints. Examples are preventing the execution of scripts, the submission of forms or the navigation of the top-level context. 
+A sandbox also allows you to isolate untrusted content in a unique origin. This mechanism is well-suited to load untrusted data in a fully-isolated iframe.
+
+Overview of best practices
+Client-side injection attacks are a lot more versatile than server-side attacks. Following this list of best practices will take you a long way towards building secure applications. 
+Apply context-sensitive output encoding to all simple outputs in a page
+Use sanitization for output that requires the use of particular code constructs
+If you modify pages within the browser, apply the same set of defenses to mitigate DOM-based XSS attacks
+Leverage the isolation offered by the Same-Origin Policy to compartmentalize your application
+Enforce additional restrictions on untrusted content using the sandbox attribute
+Deploy Content Security Policy as a second line of defense. Note that CSP is quite complex, so focus on the other defenses first.

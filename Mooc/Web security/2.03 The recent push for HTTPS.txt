@@ -1,0 +1,74 @@
+Since a couple of years, the security world is buzzing about HTTPS.
+But already early in the life of the Internet, people realized that sensitive operations required extra security.
+In 1994, Netscape created the first version of SSL, the protocol that provides the security properties of HTTPS.
+It took them two tries to get it right, but in 1996, they released SSL version 3,
+which would remain secure until 2014.
+Even with this long history of HTTPS support, adoption has been slow.
+Everybody knew that networks were not secure and that HTTPS mattered,
+yet there was no substantial threat or danger.
+But then, the Snowden revelations happened.
+Edward Snowden, a private contractor, working for the NSA,
+revealed hidden surveillance programs carried out by state agencies.
+It turns out that they scoop up all unencrypted traffic they can get their hands on.
+The collected traffic serves purposes such as wide-scale surveillance programs.
+These revelations were a serious wake-up call for the tech industry.
+People realized that the security flaws in networks were being abused on a large scale, putting end users at risk.
+That’s when things started to change.
+Browser vendors and major tech companies launched various initiatives to increase the use of HTTPS.
+Google announced that they would favor HTTPS sites over HTTP sites in their search results.
+Tech companies joined forces to launch Let’s Encrypt, a free and automated certificate authority.
+And let's not forget about browsers starting to push the use of HTTPS in various ways
+Browsers are currently the primary driving force behind the push for HTTPS.
+One way they are doing that is by pointing out the insecurity of HTTP pages.
+First, they tackled login forms on HTTP pages.
+Chrome marks an HTTP page containing a login form as Not Secure.
+Firefox goes even further and shows a security warning right below the form fields.
+These measures aim to alarm users about this insecure behavior.
+In turn, this should trigger website owners to improve their security practices.
+It won’t be long before browsers decide to mark all HTTP pages as insecure.
+Unfortunately, there will always be people that miss the point.
+A striking example is a website called oilandgasinternational.com.
+The changes in Firefox resulted in a security warning on their HTTP login form.
+In response, the company opened a bug report asking to revert this behavior.
+Their argument was that their custom security system has never been breached in 15 years.
+Too bad that HTTPS was not part of that security system.
+Needless to say, Firefox did not comply with this request.
+But browsers are doing a lot more.
+Since 2016, browsers only allow secure contexts to use sensitive features.
+Examples of sensitive features are retrieving location information or accessing the webcam and microphone.
+To access these features from JavaScript, the requesting context must be a secure context.
+To be a secure context, the page and its opener chain must be delivered securely.
+In practice, this comes down to loading content over HTTPS, or from the local machine.
+For example, a simple page without parents or openers is secure if it is served over HTTPS.
+Similarly, loading the page from a file:// URL, or from localhost, is also considered secure.
+But if the opener chain contains an HTTP page, this no longer holds.
+An HTTPS page embedded in an HTTP page is not seen as secure.
+Thus, its script context will not have access to sensitive APIs.
+The same holds if an HTTP page opens a new tab or pop-up.
+Even if that page is served over HTTPS, it is not considered secure.
+Once everyone joined forces to push for an encrypted web, adoption rates skyrocketed.
+In the 18 months after its public launch, Let’s Encrypt has issued 100 million certificates.
+Because of Let’s Encrypt, wordpress.com was able to deploy HTTPS to all blogs hosted
+on custom domain names at once.
+That are over a million blogs, now served over HTTPS.
+When you take a wider perspective on the shift towards HTTPS, the numbers are even more astonishing.
+It took the web 20 years to get to a meager 40% deployment rate for HTTPS.
+But in the year after the launch of Let’s Encrypt, this number jumped to 50%.
+And in the first half of 2017, another 10% increase has been recorded.
+So the number of HTTPS deployments is booming.
+But what about the quality?
+The quality depends on the strength of the individual configuration options.
+A good way to measure the quality of any website is to scan it with the Qualys SSL Server Test.
+The scanner runs a battery of tests against the web server and reduces all the results into a single rating.
+The score, between an F and A+, gives a good sign of how secure the HTTPS deployment is.
+The SSL Pulse project uses the SSL Server Test to automate the scanning of a list of popular sites.
+It does so every month and keeps track of the results.
+As you can see, in January 2015, only 14% of sites had a secure HTTPS deployment.
+In July 2017, this number is approximately 60%, a massive improvement.
+On the right of the images, you can see that the sites with an F grade went from 28% to 14%.
+People have been dreaming about an encrypted web for a long time,
+but now this dream is closer to reality than ever.
+As we have seen so far, protecting data in transit has become almost mandatory for any website.
+In the rest of this module, we will dive into the particular security properties of HTTPS.
+We also debunk a few common misconceptions that stifle HTTPS adoption.
+During the hands-on sessions, you will deploy HTTPS yourself on our training application.

@@ -1,0 +1,50 @@
+So far, we have established that deploying a web application over HTTP is far from secure.
+Even partial HTTPS deployments are still susceptible to attacks.
+That’s why current best practices dictate the use of HTTPS for the entire application.
+But how do we do that?
+Can we simply turn off HTTP, or is there more to the story?
+Turning off support for HTTP is a straightforward way to force the use of HTTPS.
+If the server no longer listens to HTTP traffic, connection attempts will result in an error.
+From a security perspective, this seems like a good idea.
+But from a usability perspective, this approach has a significant impact on your application.
+For starters, all existing URLs that point to an HTTP page will stop working.
+So all your listings in search engines will break, as well as links from external websites.
+Definitely a good reason why existing applications should not turn off HTTP.
+But what about a new project?
+Even then, turning off HTTP will have an adverse effect your application.
+Remember how users only type the name of the application in the address bar of their browser?
+Instead of typing a full URL, they simply type “beersafe.eu”.
+Ironically, this short hand is one of the reasons why we cannot turn off support for HTTP.
+Modern browsers will transform the domain name into a URL by prepending “http://”.
+If we turn off HTTP, this feature will stop working, which will annoy our users.
+So what can we do instead?
+We can use a redirect mechanism to send all traffic from the HTTP version of our application to the HTTPS version.
+Let’s take a look at how that works in practice.
+Here, the user visits the BeerSafe application by typing “beersafe.eu” in the address bar.
+The browser transforms this domain name into an HTTP request and sends it to the server.
+But instead of serving the contents, the server instructs the browser to load the HTTPS version of the page.
+The mechanism to send these instructions to the browser is a redirect.
+The HTTP response from the server has status code 301 and a Location header.
+The status code indicates that the requested resource has moved permanently.
+The Location header contains the new URL for the resource.
+In our example, the header points to the HTTPS version of the application.
+When the browser follows the redirect, a secure channel will be established.
+The browser can now load the page over HTTPS.
+This sample configuration illustrates how to configure a web server to support such redirects.
+Notice how the configuration aims to keep the entire URL intact.
+This setting ensures that existing URLs, which may include query parameters, remain intact.
+To see the redirect process in action, you can take a look at the network tab in the browser’s developer console.
+You can see the HTTP request going out, and the redirect response coming back from the server.
+The structure of the URL is intact, and only the scheme has been changed to HTTPS.
+The next request fetches the actual page over HTTPS.
+In essence, you should not disable HTTP for your application.
+Instead, you should redirect all traffic to the HTTPS version.
+You may be wondering why browsers do not use HTTPS to send the first request.
+This is a common suggestion, but a hard one to address.
+Not all applications support HTTPS out of the box, so the first request over HTTPS may result in error.
+Of course, the browser can try again over an insecure HTTP connection.
+But if that is the default behavior, how can the browser tell the difference between a legitimate error and an attack?
+An attacker on the network can always force an error on the HTTPS request to trigger a downgrade to HTTP.
+So no, it is not likely that browsers will start sending the first request over HTTPS by default.
+But there is a new security policy that you can use to further improve your HTTPS deployment.
+Find out about Strict Transport Security next.

@@ -1,0 +1,70 @@
+CSP in more depth
+In the previous part, you learned about the basics of Content Security Policy (CSP). Since CSP is one of the most important security policies of the future, we elaborate a bit on a few more advanced features.
+Keep in mind that this brief overview serves as a teaser, and not as a complete guide. Going into the full detail of CSP would require a couple of hours, and is far beyond the scope of this course. Nonetheless, with the pointers from this part, you will be set to discover these CSP features on your own.
+The unsafe keywords
+One of the legacies of the web is the ability to mix all kinds of code into one environment. Almost every HTML page contains HTML, JavaScript and CSS code. All this code is mixed together and can be specified in an inline manner. Below is an example containing both inline JavaScript code and inline CSS code.
+<script>
+    console.log("loaded website");
+</script>
+<p style="color: red;">Hello!</p>
+Other than being sloppy, there is not much wrong with this example. But take a minute to think about content injection attacks. What is the difference between the previous example and the example below?
+<script>
+    document.write("Hacked. Lolz");
+</script>
+<p style="color: red;">Hello!</p>
+The difference is that the second example is an XSS attack, while the first example is legitimate code. But without that context information, there is no way to distinguish both. And that is the reason why CSP prevents such inline code from being executed.
+Unfortunately, many applications depend on inline style and script code. They break when CSP is deployed, because of this limitation. That is why CSP supports an unsafe-inline keyword. Adding that keyword to the script-src, style-src or default-src directive re-enables inline style or code. 
+Below is an example policy re-enabling inline scripts and styles.
+script-src 'self' 'unsafe-inline'
+Of course, when inline code or style is enabled, CSP will not be able to protect your application against injection attacks. That is why you should never use unsafe-inline for scripts. Alternatives, such as hashes and nonces are better suited to enable certain behavior. We will cover them momentarily.
+Styles are a bit less dangerous, so there, you could choose to allow inline styles by adding the unsafe-inline keyword. However, hashes and nonces apply to styles as well.
+CSP also supports a second unsafe keyword: unsafe-eval. This keyword re-enables the use of JavaScript's eval function. Going into details takes us too far. Just keep in mind that the use of eval is dangerous if it consumes untrusted data.
+Hashes and nonces
+CSP level 1 only supported whitelisting of script files. So if an application had inline code blocks, it had to be modified before a CSP policy could be deployed. As you can imagine, such a restriction was harmful to any potential CSP adoption. That is why CSP level 2 introduced hashes and nonces.
+We will dive into hashes and nonces in a minute. First, you need to know that hashes and nonces replace the use of unsafe-inline. As a result, if a policy uses both unsafe-inline and hashes/nonces, the browser will only use one of them. A modern browser will use the hashes and nonces, and ignore unsafe-inline. An older browser does not know about hashes and nonces, so it will ignore them, and use unsafe-inline. In essence, this mechanism supports backwards compatilibity with older browsers, while offering better security features to newer browsers.
+Let's discuss hashes first. Hashes are calculated on the contents of a script block, and uniquely identify a piece of code. By whitelisting a code block with a specific hash, you can re-enable inline scripts. Below is an example of a CSP policy with a hash.
+script-src 'self' 'sha256-7lS4+z1ue7x2tJxi6fTmlcEMU94gdPr8sR+dDLf+vPg='
+In this example, the hash corresponds to the code snippet shown here.
+<script>
+    console.log("loaded website");
+</script>
+Note that the use of hashes in a CSP policy is secure because the hash is directly correlated to the contents of the script block. EVen if the attacker can inject script code, he can only inject code that is already whitelisted.
+Hashes are well-suited to whitelist static code blocks in a page. But if part of the code block is dynamically generated, hashes become almost impossible to use. That is why CSP level 2 supports a second mechanism: nonces.
+A nonce is a random and unique value. Here's an example of a CSP policy with a nonce.
+script-src 'nonce-Saik14t9sjq24'
+And here is an example of a script block being allowed to run, because of the presence of the nonce.
+<script nonce="Saik14t9sjq24">
+    console.log("loaded website");
+</script>
+As you can see, both the script block and the policy contain the nonce. If they match, the browser allows the script block to execute. The essence of using nonces is that attacker-injected code does not contain the nonce. Hence, it will not be executed. 
+But for nonces to be secure, they need to be unpredictable. An attacker cannot learn the nonce or predict the next value. Therefore, every response from the server should contain a different nonce. To avoid predictability, nonces should be derived from a secure random number generator. If these two conditions are met, then the attacker will never succeed in injecting a script block with a valid nonce.
+A final note about nonces. They can also be used to whitelist remote scripts. They are used in the same way as before. Below is an example of loading a remote script with a nonce.
+<script nonce="Saik14t9sjq24" src="https://example.com/beersafe.js>
+    console.log("loaded website");
+</script>
+Beyond whitelisting
+Building a CSP policy requires you to whitelist a lot of resources. Once you have external dependencies, your whitelist starts growing rapidly. As a result, it is common to start whitelisting entire hosts, as shown in the example below. 
+script-src 
+    'self'
+    https://www.google-analytics.com/
+    https://platform.twitter.com/ 
+    https://cdn.syndication.twimg.com 
+    https://syndication.twitter.com 
+    https://*.disquscdn.com
+Unfortunately, research from Google has shown that host-based whitelists can result in bypass attacks. Talking about the specifics would lead us too far. The essence of these attacks is that if you whitelist a CDN, you whitelist all resources on that CDN. If one of these resources can be used to execute code, your CSP policy contains a bypass.
+Google put the knowledge from their paper into a tool to evaluate a CSP policy. Feeding a policy to the tool gives you feedback about potential bypasses.
+CSP sure seems broken, but keep reading. There are two concrete things you can do to fix the problems with whitelists.
+The first solution is to whitelist up to the file level. If you only whitelist explicit script files on a CDN, there’s no way to include potentially dangerous scripts. There is, however, one caveat to this approach. In many scenarios, whitelisting explicit files is next to impossible to get right, and to maintain over time.
+An alternative solution is to use the strict-dynamic in combination with hashes and nonces. strict-dynamic was introduced in 2016 and is part of the upcoming level 3 specification of CSP. The strict-dynamic keyword tells the browser that already-trusted scripts are allowed to load their own resources.
+Here's an example of a policy using strict-dynamic. 
+script-src ‘nonce-Saik14t9sjq24’ ‘strict-dynamic’
+Let’s break down what the policy above actually means. The first part defines a nonce that can be used to include inline and remote scripts. The second part of the policy is the strict-dynamic keyword. This is where the magic happens. When you add strict-dynamic to the policy, the browser is instructed to trust scripts that are allowed to run (by using nonces). By definition, that trust extends to additional scripts that are loaded. Sounds complicated, but let me take you through an example.
+
+If you want to include a Twitter timeline, you include a snippet of code you get from Twitter. You inherently trust this piece of code by putting it in your page
+That code will load additional files from Twitter. strict-dynamic allows this behavior. But before strict-dynamic, you would have whitelisted them as well, since you want the Twitter code to be able to run in your page 
+The newly loaded Twitter script needs to load even more resources, which would again need to be whitelisted. But just as before, the browser allows this to happen, because of strict-dynamic
+
+In essence, strict-dynamic simply propagates trust that was already there. 
+A final word about strict-dynamic. It only applies to non-parser-inserted scripts. This means that it only works for script elements that are being added to the page by using DOM APIs, not by triggering the parser (e.g., through innerHTML). This is to ensure that the developer intended to add script elements to the page, instead of becoming the victim of an injection attack through a text-to-code sink.
+For more information about the reasoning behind strict-dynamic, I can highly recommend the presentation where strict-dynamic was first introduced. 
+A few concluding remarks on CSP. CSP is a rather new, but quite elaborate security policy. However, CSP is gaining more and more traction, and new security features are being integrated into CSP. It might very well be one of the most important security policies of the future. Just keep in mind that it is intended as a second line of defense, so focus on traditional defenses first, before diving into CSP. 

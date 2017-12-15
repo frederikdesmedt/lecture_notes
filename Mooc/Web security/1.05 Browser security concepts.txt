@@ -1,0 +1,50 @@
+Throughout this course, we will see various examples of browser-based security policies.
+The URL and its derivatives play an important role in these policies.
+That is why this introductory chapter covers a few essential browser security concepts.
+Every resource in the browser has a URL.
+Here, you can see a familiar example of a URL.
+But a URL can have a lot of different formats, as you can see from these examples.
+Note that we talk about URLs here, but that you may also have heard people talk about URIs or even URNs.
+To be honest, digging into the differences between each confuses almost everybody.
+That’s also why the W3C has issued a document stating that these terms can be used interchangeably.
+But back to the technical aspects of URLs.
+In this course, we are only concerned about the web aspects of URLs.
+Here, you can see the most relevant aspects of a URL, with each of the parts highlighted.
+You can see that the URL indicates how to connect, where to connect to, and what resource to retrieve.
+There’s also a part where parameters can be passed to the server.
+The final part can contain client-side parameters.
+This part is the fragment, and you should remember that this part of the URL is never sent to the server.
+URLs play a major role in the security decisions made in the browser.
+But for these decisions, the browser rarely uses the entire URL.
+Instead, most security decisions rely on a derivative of the URL, known as the “origin”.
+The origin is a triple consisting of the scheme, the host, and the port.
+Every context in the browser has an associated origin, which is derived from the URL of its contents.
+One of the most significant security policies that uses the origin is the Same-Origin Policy, or SOP in short.
+About 20 years ago, every browser implemented the Same-Origin Policy as the default security policy.
+It states that contexts from the same origin can freely interact with each other,
+while contexts from different origins are isolated from each other.
+In the browser here, you can see three different windows.
+The origin of the blue windows has the scheme “https”, the host “beersafe.eu” and the port “443”.
+For the orange window, the origin has the scheme “http”, the host “example.com” and port “80”.
+The blue windows have the same origin, so they can freely interact with each other.
+When a blue and orange window try to interact, the Same-Origin Policy kicks in.
+It will prevent direct access to the contents of the window, and only exposes a very limited API.
+Because of the Same-Origin Policy, a browsing context is protected against undesired access.
+Such access can lead to information extraction or undesired modifications.
+Note that the boundary is the origin.
+So two sibling applications with different paths still share the same origin.
+In essence, these applications are not isolated within the browser.
+Therefore, an attack on one application can easily spread to the other application.
+The original goal of the Same-Origin Policy was regulating interactions between different browsing contexts.
+But when browsers started adding new features,
+they chose to enforce the same restrictions of the Same-Origin Policy.
+Take browser-provided storage mechanisms for example.
+Each origin has an isolated data store, and access from another origin is restricted.
+In the example you see here, both browsing contexts have a different origin.
+If they try to access their data store in the browser, they both have access to their own data store.
+There is no mechanism for the blue context to access the data store of the orange context, and vice versa.
+Another example is found in user-granted permissions to access sensitive features.
+They are granted to an origin, and every context with the same origin can use these permissions.
+As you can see, the origin plays a central role in security decisions within the browser.
+Funny enough, cookies, used by almost every application, use a different set of rules.
+We will cover the peculiarities of cookies next.

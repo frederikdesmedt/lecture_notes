@@ -1,0 +1,52 @@
+HTTPS is one of those topics surrounded by strong opinions, controversy, and misconceptions.
+Remember, SSL and TLS stem from a different time.
+Back then, active network attacks were a theoretical problem.
+So it should not come as a surprise that this 20-year old technology is surrounded by old
+convictions.
+Particularly in the fast-paced context of the web.
+A common misconception is that HTTPS is only relevant for sensitive content, such as login
+forms or online payments.
+This is no longer true.
+The moment your application sends an HTTP request, your users become vulnerable to a
+variety of attacks.
+We will cover some of these attacks later in this module.
+That is why today, all traffic must be sent over an HTTPS channel, no excuses.
+That conclusion leads us to the second common misconception.
+HTTPS has a significant performance impact, and your servers will not be able to handle it.
+From a historical point of view, there is some merit to that argument.
+But we’re long past that.
+Modern CPUs come with support for AES, the encryption algorithm used in almost all HTTPS
+deployments.
+On top of that, the TLS protocol has undergone significant performance tuning.
+Maybe you’re frowning right now, and that’s OK.
+The performance aspect of HTTPS has long been the primary argument to weasel out of security
+obligations.
+Let me show you a few numbers.
+Google is using TLS for all their services.
+On production frontend machines, TLS accounts for less than 1% of the CPU load.
+Memory consumption is less than 10 kilobytes of memory per connection.
+And network overhead is limited to 2 percent.
+The volume of the data doesn’t matter much either.
+Netflix has been running all their streaming services over HTTPS for quite some time.
+And to be clear, Netflix accounts for more than one-third of traffic during peak hours
+in the US.
+These numbers illustrate that the performance impact of TLS is minimal.
+So this popular belief holds no merit.
+Another misconception states that certificates are expensive, and a nightmare to configure.
+Again, this may have been true in a long-lost past, but not anymore.
+Today, services like Let’s Encrypt offer free certificates for everyone.
+Let’s Encrypt even provides you with the tool support to automate the whole process.
+One command takes care of requesting, installing and renewing certificates.
+This makes setting up HTTPS a five-minute job, as we will see later in this module.
+And even if Let’s Encrypt is not the right choice for you, plenty of CAs offer affordable
+certificates nowadays.
+The configuration is not all that complex once you understand what’s going on.
+It also used to be true that you could only run one HTTPS application per IP address.
+Today, almost every client supports a TLS extension called Server Name Indication,
+or SNI in short.
+SNI addresses this restriction, as we will see in more detail towards the end of this module.
+There are a lot more misconceptions, but you get the idea by now.
+There is almost no valid excuse to hold off on deploying HTTPS.
+Granted, it may demand some effort, depending on the size of your existing application and
+the type of content.
+But you better start with the transition to HTTPS sooner rather than later.

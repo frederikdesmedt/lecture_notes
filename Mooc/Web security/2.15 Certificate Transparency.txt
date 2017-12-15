@@ -1,0 +1,66 @@
+As we have discussed before, the security of every HTTPS connection hinges on the legitimacy of the server certificate.
+Unfortunately, incompetence and misconduct by certificate authorities can result in fraudulent certificates.
+The problem with the existence of fraudulent certificates is twofold.
+First, since a legitimate CA issues the certificate, all browsers accept it.
+Second, it can take several weeks or months before a fraudulent certificate is detected.
+These problems not only challenge the trustworthiness of certificates.
+They also weaken the security of all HTTPS deployments.
+To address these issues, Google has proposed Certificate Transparency, also known as CT.
+CT aims to protect users from fraudulent certificates by requiring that all issued certificates are listed in a public log.
+By consulting the log, a domain owner can detect fraudulent certificates when they are issued.
+Let’s take a look at how certificate transparency works, using our BeerSafe application as an example.
+The administrator requests a certificate for beersafe.eu from a CA.
+When the CA creates the certificate, it first submits it to a certificate transparency log service.
+The log service publishes the certificate and returns a signed certificate timestamp, or SCT.
+The CA sends the certificate to the administrator, who uses it to enable HTTPS.
+As soon as the certificate is listed in the log, a log monitoring service notifies the administrator.
+The notification shows a new certificate for beersafe.eu.
+If this certificate is requested by the attacker, the owner can immediately revoke the certificate.
+If the certificate is legitimate, nothing needs to happen.
+Now when a user visits our application over HTTPS, the browser and server will set up an HTTPS connection.
+The server sends the browser the certificate and the SCT, to prove that the certificate is listed in a log.
+The browser checks the validity of the certificate and the SCT.
+When both are valid, then the browser knows that the certificate is likely not fraudulent,
+since everyone can verify its existence in the log.
+From this scenario, we can observe that certificate transparency depends on two assumptions.
+Domain owners need to setup log monitoring so that they can detect fraudulent certificates.
+Browsers also need to mandate the presence of an SCT, to force CAs to publish their certificates in a log.
+Currently, Chrome already requires the presence of SCT information for extended validation certificates.
+From April 2018, they will expand this requirement to all certificates.
+Monitoring certificate transparency logs is easier than you might expect.
+Plenty of logs offer a manual query feature, where you can see all the logged certificates for a domain.
+Here, you can see a query for kuleuven.be, the domain of the university offering this course.
+Of course, you will not be querying your domain every day.
+Instead, you can setup automatic monitoring tools that you integrate into your security dashboard.
+But you can also use public log monitoring services.
+One example is Facebook’s CT monitoring tool, as you can see here.
+You can subscribe to events for a domain, and Facebook will notify you when it finds new certificates.
+There is one more thing left to discuss.
+The browser needs to check the validity of the SCT along with the validity of the certificate.
+But how does the server send the SCT to the browser?
+There are three supported ways to send SCT information along with a certificate.
+The first way is the easiest: the CA can embed the SCT information into the certificate.
+This mode of operation changes nothing on the server side but requires more effort on the side of the CA.
+The CA now needs to generate a precertificate, submit that to the log to get the SCT
+and generate the final certificate with the embedded SCT.
+The second way uses a TLS extension to deliver the SCT information to the browser.
+In practice, the administrator needs to submit the certificate to the log to receive the SCT.
+The server, in turn, sends the SCT during the TLS handshake.
+This mode of operation makes the process a lot more complicated.
+It is unlikely that this mode will see widespread adoption.
+The third way is to send SCT information along with stapled OCSP responses.
+We’ll explain how this works in combination with certificate transparency.
+Note that we will not go into detail on revocation and OCSP.
+Most servers already support a TLS extension that sends the browser an OCSP response during the handshake.
+This process is called OCSP stapling and proves to the browser that the certificate has not been revoked.
+With OCSP stapling, the server fetches an OCSP response from the CA.
+Such a response only remains valid for a few days, after which it needs to be refreshed.
+Since many servers already support OCSP stapling, it makes perfect sense for the CA to embed
+SCT information into these OCSP responses.
+This mode of operation requires little extra effort by any of the involved parties.
+That is why it is likely to become the preferred way of sending SCT information to the browser.
+Let’s Encrypt has already announced plans to support this mode of operation.
+As you can see, certificate transparency addresses several weaknesses in the certificate ecosystem.
+Nonetheless, keep in mind that certificate transparency is a detective measure, not a preventive one.
+To leverage the full potential of certificate transparency,
+you need to setup log monitoring for your domains.

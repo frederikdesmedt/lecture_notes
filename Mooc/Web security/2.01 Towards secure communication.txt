@@ -1,0 +1,32 @@
+We have become dependent on internet access everywhere.
+Coffee shops, bars, and restaurants even use free Wifi as a selling point.
+But have you ever wondered how this evolution impacts security?
+Recall the last time you connected to a public wireless network.
+Did you reflect on the trustworthiness of the network?
+If you are honest, the answer is probably "no."
+Don't feel bad; you are not alone.
+Studies have shown that most users do not think twice about connecting to open wireless networks.
+But what does this mean for your application?
+Can you offer any security guarantees if your users are on an insecure network?
+In this module, you will find out that you actually can.
+But getting it right may be harder than you imagine.
+The rise of insecure networks is the reason that HTTPS is now the baseline for secure
+applications.
+The correct use of HTTPS prevents many network-based attacks and helps keep your users safe.
+In fact, HTTPS is so important that browsers have started chastising plain HTTP websites.
+Not only are these sites explicitly marked as insecure, but they are no longer able to
+access new and sensitive APIs.
+In this module, you will get a thorough understanding of the security properties that HTTPS offers.
+We will analyze why the handshake to establish an HTTPS connection is the most crucial step.
+And we go even further.
+We elaborate on the importance of certificates to ensure the security properties of HTTPS.
+When we talk about certificates, we also need to discuss the fragility of the underlying
+ecosystem.
+An ecosystem designed over 20 years ago and still in active use today.
+Granted, over the past few years, additional security technologies have expanded this ecosystem.
+Therefore, we will explore the most significant weaknesses and the technologies that address them
+During the assignments, you will get hands-on experience with deploying and configuring HTTPS.
+Serving a brand new application over HTTPS is not that hard.
+However, you will see that transitioning a legacy application from HTTP to HTTPS is a different story.
+At the end of this module, you will have gained the knowledge and skills to ensure your applications
+are following current best practices for deploying HTTPS.

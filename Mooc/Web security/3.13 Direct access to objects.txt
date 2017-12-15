@@ -1,0 +1,55 @@
+From a distance, it does not look that hard to get authorization right.
+But the devil is in the details.
+In this part, we take a look at one such detail: the use of insecure direct object references.
+So, what are direct object references, and what makes them insecure?
+Let's take a look at an example.
+In our BeerSafe application, we use direct object references to refer to tasting notes.
+Upon creation, every note is assigned a numerical identifier in the database.
+This identifier is used throughout the application to refer to this particular note.
+Here, you see how the identifier is part of the URL to display this particular tasting note.
+Here's a code snippet of how the backend handles these requests.
+As you can see, it uses the identifier to fetch the note from the database and returns that information.
+This looks pretty straightforward.
+But as you can see in the example here, the identifier of the note is 42.
+This makes it very likely that identifiers 1 to 41 exist as well.
+So, what happens if the attacker modifies the parameter in the URL to fetch the other notes?
+The application would simply return the data of the note.
+This vulnerability enables the attacker to retrieve all notes in the application.
+This is a security problem because some of the notes are marked as private.
+Yet, all it takes to access them is having the right identifier.
+At this moment, you may be a bit surprised about the simplicity of the attack.
+But make no mistake, insecure direct object references are a real problem.
+They rank fourth in the OWASP top 10, and they do occur in real life systems.
+Major websites and companies have suffered from such vulnerabilities in the past.
+The most obvious solution to this problem is to put proper authorization checks in place.
+In our BeerSafe example, this comes down to the following checks.
+First, the application should check the visibility of the note.
+If the note is public, it can be returned.
+If not, then the application should check ownership of the note.
+If the user requesting the note is the owner of the note, access can be granted.
+In all other cases, access should be denied.
+Before we go on, let's summarize the problem.
+Insecure direct object references occur under two conditions.
+First, the direct reference to a server-side object is used in requests.
+Second, the application lacks proper authorization checks on operations that use this identifier.
+The solution we have discussed before addresses the second part of the problem.
+By implementing proper authorization checks, the application can prevent unauthorized access.
+In some scenarios, a second mitigation strategy also works well.
+Instead of exposing direct object references to the client, you can use indirect object references.
+The server has a map that relates these indirect object references to their direct counterparts.
+Here is an example of how this would work.
+The user requests a list of notes to view.
+The application fetches a list of notes for the user from the database.
+It stores this list as an array in the user's session.
+In the response page, the application refers to each note using its position in the array.
+These are the new, indirect object references.
+When a request comes in, the application retrieves the list of notes from the user's session.
+Using the identifier, the application retrieves the right note from the list and performs the requested operation.
+Manipulating the identifier in the request will not expose tasting notes.
+By design, an attacker can only gain access to notes that are already in the list and are accessible anyway.
+This pattern works well because it makes the authorization more explicit.
+Compiling the list of notes for a user will trigger the need for authorization.
+To conclude, this vulnerability looks surprisingly simple but is often overlooked.
+Many applications using direct object references are vulnerable to this problem.
+Make sure that you implement the proper authorization checks on operations using direct object references.
+Alternatively, you can use indirect object references to sidestep the problem altogether.

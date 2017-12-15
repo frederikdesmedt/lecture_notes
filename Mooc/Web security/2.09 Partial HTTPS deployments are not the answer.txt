@@ -1,0 +1,29 @@
+A common misconception is that HTTPS only matters for sensitive parts of the application.
+Websites often deploy their public pages over HTTP but switch to HTTPS once the user needs to authenticate.
+If you take a look at the evolution of the web, you can understand where this idea originated.
+For long, attackers were eavesdropping on the communications to steal sensitive information.
+They did not care about information on public pages.
+Today, the landscape has undergone a notable evolution.
+Active network attacks, where content is manipulated, are no longer hard to execute.
+So they pose a significant threat for all the websites with only a partial HTTPS deployment.
+Let’s take a look at the problem in a bit more detail.
+As you can see here, the user opens the application by typing “beersafe.eu”.
+The landing page is running on HTTP since it is a public page.
+But for sensitive operations, the application will switch to HTTPS.
+This should be enough to prevent eavesdropping on sensitive information.
+Is this indeed secure?
+When the user loads the public page over HTTP, an attacker can manipulate the response
+before it reaches the browser.
+These modifications do not need to be visible to the user.
+Here, the attacker has inserted a piece of code, which runs in the background.
+Everything looks normal, but look closely.
+The malicious code prevents the upgrade to HTTPS for the login form.
+Such an attack is as easy as rewriting all HTTPS URLs in the page to HTTP URLs.
+This scenario is a perfect illustration of the danger of a public HTTP page.
+It allows an attacker to get a foothold within the application.
+Preventing the upgrade to HTTPS is only one example of an attack.
+Other examples are launching phishing attacks or other social engineering attacks
+from within the application.
+As you can see, partial HTTPS deployments hardly make an application more secure.
+Besides, if you’re going through the trouble of configuring HTTPS anyway,
+why not deploy your entire application over HTTPS?

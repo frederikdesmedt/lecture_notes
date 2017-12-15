@@ -1,0 +1,76 @@
+Once we have configured our server to support HTTPS, we can load our application over a secure channel.
+All we need to do is add "https://" to the URL.
+As you can see, the browser establishes a secure connection to load the application.
+But the UI looks horrible.
+A closer look at the developer console reveals a bunch of warnings and error messages.
+So, what is going on here?
+And more importantly, how can we fix this?
+What you see here is called “mixed content blocking.”
+The browser protects a secure page by refusing to load scripts and styles over an insecure HTTP connection.
+Even though this breaks our application, this behavior makes a lot of sense.
+We have loaded the main page of our application over an HTTPS connection.
+This means that an attacker on the network cannot manipulate the traffic between the browser and the server.
+The moment we start loading resources over HTTP, these security guarantees no longer hold.
+In the worst case, the attacker can inject custom code,
+giving him full control over what happens in the browser.
+In essence, HTTP resources compromise the security of an HTTPS page.
+Browsers have been aware of mixed content for quite some time.
+Initially, the browsers only displayed warnings about mixed content.
+You may remember Internet Explorer 6 showing this dialog,
+to ask if you wanted to include insecure resources into a secure page.
+Modern browsers today make a distinction between passive and active mixed content.
+Passive mixed content is content that is only displayed, and thus only pose a limited threat.
+Examples are images, audio files, and video files.
+For now, passive mixed content is still loaded, but the developer sees a warning.
+Active mixed content is another story.
+Active mixed content has full access to the page, and thus poses a significant risk.
+Examples include scripts, styles, iframes, and objects.
+Because of its dangerous nature, the browser blocks active mixed content.
+The developer sees an error in the console.
+On a technical level, fixing mixed content is straightforward.
+Make sure all resources on the page are loaded over HTTPS.
+Of course, this means that all the servers where you include resources from need to support HTTPS as well.
+Even though the solution to mixed content problems seems so simple,
+pulling this off in practice may be hard.
+In the course of 2016, many major websites started moving towards HTTPS.
+They discovered first-hand that dealing with mixed content can be quite painful.
+Two examples are Wired and The Guardian, both news outlets with a large content base.
+It turns out that finding all occurrences of mixed content in years’ worth of archives
+is harder than it seems.
+Both Wired and The Guardian shared their experience of transitioning to HTTPS.
+The best piece of advice in there is to take it slow.
+Perform the transition to HTTPS gradually, and learn how to deal with problems along the way.
+This graph from The Guardian illustrates this very well.
+They started with one section of the site and kept adding more and more.
+The entire process took about six months to complete.
+These stories illustrate that you need to get an idea of the size of your mixed content problem
+before addressing it.
+For this, you can leverage Content Security Policy, or CSP in short.
+CSP is a security policy that allows you to control what content can be loaded on your pages.
+The server gives the browser a policy configuration that the browser enforces on the page.
+We will go into more detail on CSP later in this course.
+For now, we are interested in CSP’s capability to send reports when a given policy is violated.
+Here, you can see the configuration of CSP that we will use to find HTTP content on a page.
+We specify that the default source for all content is any URL that starts with HTTPS.
+This means that if the browser finds a resource with an HTTP URL, it will trigger a violation of this policy.
+You can ignore the meaning of the two unsafe keywords in gray for now,
+as they will be explained later in the course.
+Obviously, we do not want to break our application.
+Therefore, we need to configure CSP to run in report-only mode.
+This means that the browser will trigger a policy violation, but will not prevent the loading of the resource.
+So now we will see a violation every time an HTTP resource is found on the page.
+Finally, we need to tell the browser to send reports about violations,
+instead of only showing a message in the developer console.
+We do that by specifying the report-uri directive.
+You can either deploy your own reporting endpoint
+or use the freely available report-uri.io service, as we did in our example here.
+Let’s see this in action.
+We are going to detect potential mixed content problems before making the full transition towards HTTPS.
+We have already added this policy to our application.
+As you can see, everything still works as before.
+But if you take a closer look, you will see that the browser is detecting the presence of HTTP resources.
+You can also see the reports being sent to the reporting endpoint.
+By running the application for some time with this CSP header enabled,
+we can extract a list of HTTP resources from the violation reports.
+If these HTTP resources contain active content, our application will break when we move to HTTPS.
+But now, we know what we need to fix before we can make the transition happen.

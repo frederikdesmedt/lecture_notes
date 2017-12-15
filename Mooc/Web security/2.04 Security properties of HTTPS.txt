@@ -1,0 +1,86 @@
+Until now, we have only talked about HTTPS as the secure variant of HTTP.
+But why is HTTPS more secure, and where does that security come from?
+On the highest level, HTTP and HTTPS are the same protocol.
+The difference is that with HTTPS, an additional protocol is added to the network stack.
+The protocol we are talking about is SSL, which stands for "Secure Sockets Layer".
+An alternative name for the protocol is TLS, or “Transport Layer Security”.
+Having two names for a protocol sure is confusing, but this is a historical artifact.
+Netscape created the first version of the protocol in 1994 and called it SSL.
+When it became an open standard in 1999, Microsoft demanded a name change, resulting in the name TLS.
+This confusion continues until today, as the protocol is known under both names.
+Instead of worrying about the name of the protocol, let’s take a look at how the protocol works,
+and what it has to offer.
+Because of the way TLS fits into the network stack,
+it is transparent to the applications using it.
+But let's first take a look at the insecure HTTP protocol.
+Before an HTTP message is sent on the network, it traverses the network stack.
+Each layer in the network stack adds extra information to the packet.
+Note that in the example the final packet still contains the HTTP message.
+This means that the contents of the message are transmitted in plain text.
+This process becomes visible when you analyze a network capture.
+Here you can see all the information added throughout the different layers.
+At the heart of the packet, you can find the plain text data of the HTTP message.
+With HTTPS, the network stack incorporates the TLS protocol.
+This protocol fits between the application and transport layer.
+The TLS record now encapsulates the HTTP message and ensures confidentiality and integrity.
+This TLS record is then passed along the network stack and sent on the network.
+As you can see in the network capture, the data from the different layers is still present.
+The difference is that the HTTP message is now replaced by encrypted data.
+The beauty of this layered design is that TLS is suitable for other protocols as well.
+Typical examples are the mail-related protocols, such as SMTP, POP, and IMAP.
+Now that we know where TLS fits in, we can dive into the security properties TLS brings
+to the table.
+TLS offers confidentiality, integrity, and authenticity.
+Confidentiality ensures that unauthorized parties cannot read the data transmitted over the network.
+A side-by-side view of the traffic captures we have seen before illustrates this well.
+The HTTP message in the packet is no longer readable when sent over HTTPS.
+But confidentiality alone is not enough.
+The attacker may not be able to read the data, but can still tamper with the encrypted data.
+Such tampering can cause all kinds of unpredictable effects.
+That is why we have integrity.
+Integrity ensures that when the data is tampered with, the receiver can detect this.
+When this happens, the receiver no longer trusts the message and discards it.
+Under the hood, the TLS protocol consists of several sub-protocols.
+For us, the handshake protocol and the record protocol are most relevant.
+The record protocol ensures the confidentiality and integrity of the transmitted data.
+Under the hood, it uses TLS records, as we have seen before.
+The handshake protocol handles establishing a new connection.
+During this phase, browser and server negotiate the algorithms and parameters that will be used
+later on.
+But the handshake protocol also ensures authenticity.
+In an HTTPS context, the browser verifies the identity of the server
+before establishing a secure channel.
+This step is crucial to avoid man in the middle attacks,
+where the attacker impersonates a legitimate server.
+A successful impersonation attack renders confidentiality and integrity useless.
+That is why the browser takes authenticity problems so serious.
+The browser will not establish a connection to the server
+and shows a big scary error page to the user instead.
+In this traffic capture, you can see the different messages of the handshake protocol.
+The browser and server first negotiate the parameters and algorithms,
+and then establish a secure channel.
+As you can see, the messages of the handshake protocol are sent in plain text.
+This is not a real problem since these messages do not contain sensitive information.
+During the handshake, authenticity ensures that an attacker cannot get a man in the middle position.
+We conclude this introduction to the security properties of TLS with a summary
+of what TLS can and cannot do.
+The correct use of TLS ensures confidentiality, integrity, and authenticity.
+In essence, an attacker on the network cannot read messages, manipulate any messages, or
+impersonate a legitimate server without detection.
+There are however a few limitations to the power of TLS.
+Even though the contents of the messages are confidential, an attacker can still observe
+the communication.
+From the network data, the attacker can derive which server you are connecting to.
+So TLS does not ensure privacy about the communication.
+But that’s not all.
+Even encrypted messages are subject to traffic analysis techniques.
+Researchers have shown that traffic analysis of encrypted data can leak information
+about the unencrypted contents.
+They illustrated their approach on the video streams sent by Netflix.
+By analyzing the amount of data sent in the HTTPS stream, they could determine which stream
+was being watched.
+Of course, the content of a video stream is predictable, and the number of options limited.
+Nonetheless, this is a limitation of TLS that you should be aware of.
+With all that said, the benefits of HTTPS are crucial in the modern web.
+Under no circumstances are the limitations we discussed here an argument to abstain from
+deploying HTTPS.

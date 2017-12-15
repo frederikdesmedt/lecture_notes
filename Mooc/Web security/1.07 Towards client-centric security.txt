@@ -1,0 +1,54 @@
+In the last decade, the web has undergone a radical evolution towards a client-centric platform.
+Modern web applications push a lot of responsibilities to the client.
+These applications consist of an independent frontend application, complemented with backend services.
+Such backend services are usually provided as an API.
+This evolution of the web has impacted a lot of aspects, including security.
+The security landscape in the early Web was vastly different from what we see today.
+Attackers focused their attention on server-side services.
+Example attacks are SQL injection and command injection.
+Both attacks aim to get control over the server machine or its services.
+As the web evolved, attackers started widening their focus as well.
+They discovered the potential of the browser and started using it as a conduit for their attacks.
+Examples are cross-site scripting and cross-site request forgery.
+Both attacks where the attacker exploits server-side flaws from within the victim's browsers.
+In the meantime, browsers continued on their journey towards full-fledged application platforms.
+A modern browser supports multimedia features, client-side data storage, offline operations, and a lot more.
+These capabilities were much needed to build the modern applications we use every day.
+Unfortunately, all these client-side features also offer an attractive attack surface.
+One example is stealing data from the browser through a cross-site scripting flaw.
+Another example is abusing offline capabilities to launch a persistent cache poisoning attack.
+But, as promised earlier, this course takes an optimistic approach towards security.
+So let's take a look at how mitigation techniques coped with this evolution towards a client-centric web.
+Earlier, we talked about the Same-Origin Policy.
+The Same-Origin Policy has been the default security policy in the browser for almost 20 years.
+As we have seen, it has evolved into an inclusive security policy for a lot of browser-based features.
+Access to local storage facilities and permissions are all regulated by the origin of the context.
+But modern browsers support a plethora of security features besides the Same-Origin Policy.
+One example are cookie security flags that restrict the default behavior of cookies.
+The server attaches such a flag when a new cookie is set.
+When the browser encounters the flag, it restricts the accessibility of the cookie.
+Examples of such cookie flags are the "HttpOnly" and "Secure" flag.
+These cookie flags have been around for a while, and may not seem that unusual.
+But if you take a step back, you can see that they were the precursor of a new movement in web security.
+They offer a security feature that is enforced by the browser, yet they can be controlled by the server.
+This is a remarkable evolution.
+Before these cookie flags, the Same-Origin Policy was the only security mechanism in the browser.
+The transition of the browser into an application platform sparked the need for more client-side security mechanisms.
+This need drove the rise of a new line of security policies.
+Like the cookie flags, these policies are under control of the server, but enforced by the browser.
+These policies are known as "server-driven browser-enforced security policies".
+Two examples of such policies are Content Security Policy and HTTP Strict Transport Security.
+Don't worry about what they do for now, as we will cover them extensively in the coming chapters.
+These server-driven browser-enforced security policies offer the server additional defense mechanisms.
+Combining these policies with existing defenses enables building a layered defense strategy.
+Throughout this course, we will see how these policies complement traditional mitigation techniques.
+Note that most of these new security policies are intended as a second line of defense.
+They are not suited as a sole replacement for traditional defenses.
+Therefore, you should focus on traditional defenses first.
+Afterwards, you can start working on deploying these new client-side security features.
+The conclusion of this overview of the evolution of web security is twofold.
+First, the browser has evolved into an application platform.
+In such a platform, client-side security features are much needed.
+Second, these server-controlled policies extend security into the frontend application.
+They offer a flexible way to enforce application-specific security constraints.
+Throughout this course, we will cover these new security policies in plenty of detail.

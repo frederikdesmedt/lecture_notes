@@ -1,0 +1,60 @@
+With what we have seen so far,
+you might get the impression that cross-site scripting is a server-side problem.
+But is that really true?
+Unfortunately not.
+JavaScript running in the browser can also modify the contents of a page.
+This JavaScript code can also use untrusted data, and insert it into the page in an insecure way.
+So this JavaScript code will also need to provide the proper context information to the browser.
+Such client-side XSS attacks are known as DOM-based XSS.
+Before we dive into the details of DOM-based cross-site scripting,
+let's see what the flow of this attack looks like.
+First, the victim's browser loads a page from the BeerSafe application.
+Here, the page only contains legitimate data and code.
+The browser renders the page and executes the script code.
+A DOM-based cross-site scripting attack occurs when legitimate code modifies the DOM in an insecure way.
+Here, the code will take a piece of data from the URL and insert it into the page.
+But because the attacker can control the data in the URL, he can trick the application
+into injection script code into the page.
+When the legitimate script code injects the data into the page, the browser processes it.
+The browser encounters the injected script code and executes it.
+Why would legitimate script code take untrusted data and insert that into the page?
+Take a look at the following code example.
+The page contains a component with three tabs.
+To enable linking to a particular tab, script code uses the identifier in the fragment of the URL.
+As you can see on the right, the identifier is used to by the script code to display the correct tab.
+To exploit the vulnerability, an attacker simply needs to attach a payload to the fragment in the URL.
+The legitimate script will pick it up and insert it into the page.
+Note that this example is a reflected DOM-based XSS attack.
+But make no mistake, stored DOM-based XSS attacks exist as well.
+What's even more special in this scenario is that the payload is part of the fragment of the URL.
+The fragment is intended for client-side use only, and is not sent to the server as part of the URL.
+This means that the server never sees the payload of the attack.
+Server-side defenses are useless against DOM-based XSS attacks.
+So then how can we eliminate DOM-based cross-site scripting vulnerabilities?
+The best way to prevent DOM-based cross-site scripting vulnerabilities is to use the proper DOM APIs.
+These APIs offer safe functions to create and insert elements.
+They offer a way to put data inside an element, without the risk of causing a confusion between data and code.
+Take a look at the example here.
+The left shows a string containing both data and code.
+When the browser parses this string, there is no context information, so we have an XSS vulnerability.
+The snippet on the right uses the proper DOM APIs.
+In every step, the browser gets implicit context information.
+Creating an element generates code.
+Setting a value as the "textContent" of an element is generates data.
+Because of this context information, the browser cannot be tricked into interpreting a piece of data as code.
+Of course, using the proper DOM APIs is not always possible.
+In those cases, you can fall back on traditional XSS defenses.
+Untrusted data can be encoded for the right context before inserting it into the page.
+Various client-side encoding libraries support encoding of data for different contexts.
+Alternatively, client-side sanitization libraries transform untrusted HTML code into safe code.
+One of the best client-side sanitization libraries out there is DOMPurify.
+You may think that DOM-based cross-site scripting vulnerabilities look strange and exotic.
+But make no mistake, they are prevalent and dangerous.
+A recent study of the Alexa top 5000 websites has shown that at least 9.6 percent are vulnerable
+to DOM-based cross-site scripting.
+And if these major sites already fail to prevent DOM-based XSS vulnerabilities,
+then imagine what this means for the rest of the web.
+To conclude, cross-site scripting is a widespread and common vulnerability.
+XSS occurs when untrusted data is inserted into a web page without the proper context information.
+Here, we have seen how payloads can be injected on the client-side, a problem known as DOM-based XSS.
+The best defense against DOM-based XSS is using the proper context-aware DOM APIs.

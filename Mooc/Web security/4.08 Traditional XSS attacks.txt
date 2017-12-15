@@ -1,0 +1,73 @@
+Cross-Site Scripting, or XSS in short, is one of the most dangerous attacks on the web.
+XSS vulnerabilities are prevalent in many applications.
+Also, the impact of an attack on the application is quite severe.
+Here, we investigate two common XSS attack scenarios.
+But before we dive into the details, let's take a look at the consequences of a cross-site scripting attack.
+An XSS vulnerability allows an attacker to get a foothold in the application's browsing context.
+The typical demonstration of a vulnerability is popping up an alert dialog.
+Ironically, this is one of the most harmless consequences of an XSS attack.
+The alert box only visualizes the presence of an attack vector.
+In reality, the consequences of an XSS attack are a lot more dangerous.
+One example is the defacement of a page, a technique often used by politically-motivated hackers.
+Another example is the theft of sensitive information stored in cookies or browser storage mechanisms.
+Such theft can even escalate into a session hijacking attack.
+These examples are scary, but the attacker possesses the full power of JavaScript.
+So nothing prevents him from injecting a more elaborate payload.
+Examples are keyloggers, network scanners, or well-crafted social engineering attacks.
+And then there's BeEF, the browser exploitation framework.
+This framework offers a command-and-control interface.
+Once the attacker has hooked a browser, he can execute all kinds of commands with the click of a button.
+So far, we have established the significant danger of cross-site scripting attacks.
+Let's take a closer look at how these attacks work in practice.
+Earlier, we already discussed an example of a script injection attack.
+In the attack, the payload is sent to the server as part of the request data.
+The server incorporates the payload into the HTML page of the response.
+When the browser processes the page, it sees the payload data and mistakes it for code.
+This mistake results in the execution of malicious code.
+This type of attack is known as "reflected cross-site scripting".
+At first, this attack scenario seems irrelevant.
+Users are unlikely to attack themselves.
+But when the attacker manages to send this request from the victim's browser,
+then the malicious code will be executed there.
+Using such a reflected XSS attack, the attacker can run code in the victim's browser.
+This gives him full control over the application's browsing context.
+As a result, the attacker can steal or manipulate information, and even impersonate the victim.
+Let's take another look at how this works in practice.
+The attacker embeds a hidden iframe in the unrelated page.
+By setting the URL of the frame, the attacker can trigger a request
+to the search feature of the BeerSafe application.
+The attack payload is part of the search query sent to the server.
+The application responds with a page with the search results.
+The top of the page displays the string that the user searched for.
+As you can see, it also includes the payload that the attacker injected.
+When the browser renders the page in the iframe, it interprets the payload as code and executes it.
+Using this XSS vulnerability, the attacker can run arbitrary script code in the BeerSafe context.
+This code runs in the user's browser, using the user's session with the BeerSafe application.
+As you can see, the fundamental property of a reflected cross-site scripting attack
+is the presence of the payload in the request.
+This scenario is where the name "cross-site scripting" originated.
+A request with a payload going from one site to another,
+resulting in the execution of the injected script code.
+Today, the name XSS covers a lot more.
+The best example is a stored cross-site scripting attack.
+In this scenario, the attacker injects the payload into the application's database.
+Whenever a user visits a page that displays this data, the payload will be embedded in the page.
+When the user's browser renders this page, it also executes the attacker's code.
+Here's a practical scenario of a stored cross-site scripting attack.
+The attacker can use the BeerSafe application to submit tasting notes.
+But here, the attacker embeds a piece of script code into one of the tasting notes.
+The BeerSafe application stores these notes in the database, including the injected script code.
+The actual code injection happens when another user requests these tasting notes.
+The BeerSafe application queries the database to retrieve a list of tasting notes.
+With this list, it builds the HTML page to send as the response.
+As you can see, the HTML page contains the legitimate tasting notes, but also the injected code.
+Like before, when the browser encounters the code in the notes,
+it mistakes it for legitimate code and executes it.
+The defining property of a stored cross-site scripting attack is the presence of the payload
+in the application's data store.
+Note that this attack does not involve a cross-site request, and is executed entirely within the targeted application.
+Each of these scenarios has a different approach, but the result is the same.
+Both enable the execution of the attacker's code in the victim's browser, inside the application's context.
+These attacks succeed because the browser lacks the context to distinguish between data and code.
+So how can we defend our application against these script injection attacks?
+That's what we will cover next.

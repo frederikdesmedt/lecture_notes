@@ -1,0 +1,31 @@
+Preventing unauthorized access to your application and data is easier said than done.
+Consider the authentication procedure in your application.
+Would you know if an attacker impersonates a user?
+But authentication is only the first step.
+How do you keep track of this authentication state during the user's session?
+And did you know that many applications accept fraudulent operations in the user's name?
+These questions highlight various challenges with preventing unauthorized access.
+In this module, we will show how to get access control right.
+We will untangle authentication, session management and authorization piece by piece.
+Authentication in web applications is one of these topics with a long history.
+Everybody has their idea of how to do it, and most of these ideas are antiquated.
+That is why we will investigate common misconceptions about storing credentials
+You will learn the proper way to store credentials.
+We also explore the benefits of deploying multi-factor authentication.
+On top of that, we will see how enumeration attacks are a nasty stepping stone to brute
+force attacks.
+The second part of this module focuses on what happens after authentication.
+Many applications keep track of the user's authenticated state in a session object.
+Sadly most of them fail to get the details of secure session management right.
+The third piece of the puzzle is authorization.
+The requirements for authorization are twofold.
+On the one hand, the application needs to enforce proper permissions on access to data
+or operations.
+But on the other hand, the application also needs to ensure that actions carried out in
+the user's name are intentional.
+Unfortunately, these are not straightforward tasks in a web application.
+We will see how an attacker can trick an application by abusing legitimate behavior.
+At the end of this module, we will have untangled this puzzle.
+You will understand the challenges with secure authentication, authorization and session
+management.
+You will also be able to prevent unauthorized access using a set of best practices.

@@ -1,0 +1,188 @@
+Hi! Before we dive into the first technical chapter of this course
+I wanted to set the scene a bit. I have invited Mathy Vanhoef to join us.
+Mathy has a PhD on the security of wireless networks and he is still working on
+breaking them. In fact his work was partially responsible for browsers
+deprecating RC4, one of the most used algorithms in HTTPS.
+So, I could not think of anyone better to paint a scary picture.
+Hi Mathy, thank's for joining us.
+It's a pleasure to be here.
+So, you're working on wireless security? So, let me
+open... Well first of all, Wi-Fi networks are essentially everywhere so everybody
+is using Wi-Fi, but is security really that different in a wireless network
+than compared to a wired network?
+Yes, it is, because if you look at a wired
+network and you want to gain access to a wired network as an attacker, you would
+need physical access to the cable, which generally means you need access to the
+building. You need to get inside and somehow find the cable in order to plug
+into it. However with a wireless network you simply have to be nearby. So you can
+park your car on the parking lot and try to access the wireless network from
+there. Or there are even techniques that you can access a wireless network from
+up to a kilometer or two away. So, it becomes much easier for an attacker to
+access your wireless network. So, it definitely increases the risks.
+Really, two kilometers away to access a wireless network?
+Yes, they pulled that off. In one case they even used Pringles cans
+to enhance the wireless signal so it can even be done quite cheaply.
+Ok, that's definitely a big change compared to
+wired networks. So, with wireless networks we have all these different types.
+We have an open network but you also have networks with passwords and things.
+Can you elaborate a bit on the differences between those?
+Yes, so you have an open
+network which of course means that there is no security. So, anyone can connect to
+this network and all the data you transmit over it can also be intercepted
+by people. So, they can read what you send over that network. You also
+have networks where you have to use a password and that is of course more
+secure, at least if no one else has the password. So for example, if you are at a
+hotel or at a conference or maybe at a coffee shop,
+everyone knows the password to this network and that would still be a risk.
+And then you also have more professional networks where you have a username and a
+password and I would say those are the most secure ones.
+Okay, that's good to hear.
+so everybody talks about: "yeah you can
+listen to a wireless network blah blah..." but nobody really knows how that
+works. So, when people talk about this, this is a hypothetical problem and it
+seems like hard to do and only a few people know how to do it. But you
+prepared a demo when you came here, right? So, we're gonna actually do it
+right here in the studio and we're gonna see how eavesdropping on the network
+works. So, what I'm gonna do is: I'm going to visit the demo application for
+this online course and you're gonna have to see if you can grab the signal
+from my cellphone.
+What's gonna happen now?
+So, here I'm just using my
+normal laptop and basically every laptop with a Wi-Fi card you can use for this.
+So, anyone can do this. They just need to install Linux and then can they can do
+the same things as I'm going to do now. So, what I did here, I took my laptop and
+I configured my wireless chip to listen to all the nearby traffic and now I'm
+going to listen to our network only, so we don't intercept other traffic
+and we're going to try to intercept your requests that you make.
+Yeah, OK, so our network is called "open network", kind of obvious what what the thing is
+supposed to do and my cell phone is already connected to it.
+OK, so let's now start the capture here. So, we have our wireless interface. We're going to
+start monitoring packets and I now have it set so we only see the traffic
+that you transmit. So currently, we don't see anything. So, if you now visit for
+example just any HTTP website, we should be able to capture it and see the website
+you are visiting. - OK, let's try this out.
+Let me go to the training
+application for this online course. - OK, we already see the requests here
+So apparently, you visited BeerSafe?
+Yes, indeed beer safe is the application
+that we're gonna run the labs on during the course. So, it's an application
+to keep track of tasting notes for beer.  - Interesting
+You might be interested in that.
+Yeah, of course! - We're Belgians of course.
+So yes, can you explain a bit
+what you see here in a request? - So, here we see the request being made to
+the website. We have HTTP requests. They are unencrypted and because they
+are sent over the unencrypted wireless network, we can intercept all these
+requests. For example, here we see the HTTP request. We can see that it is
+indeed to beersafe.eu. We can see the cookies being sent and all other
+kinds of information - So, you can see the actual information. So, if I log into this
+application, you will be able to see the username and password - Yes, we should be
+able to capture that, yeah. - Let me try if that works
+I'm obviously not gonna use
+my real use my real username and password. Let's see what... - And here, we already see it.
+We have the post request here, which submits your password and username to the
+website. So, let's try to find it here. Here, we have the data that you have sent.
+Well, it should be in here. So, as you can see your username was
+'hello' and the password in this case was 'Mathy'. So, we got it.
+Wow, that's amazing. So it's really not that hard. Well, probably the hardest
+part is installing Linux, right? Yeah, exactly. I mean you can Google for this
+how to capture unencrypted wireless traffic and you will just see a
+step-by-step guide and if you have a laptop you can do this yourself. It's
+really easy. - Wow okay, and actually in practice it can be even more easy.
+I brought a device here. It's called a Wi-Fi Pineapple you probably know what this does
+So this is a... well maybe you should explain it - Well, I know the basics
+about it. So, the interesting thing here is that here the user had to actively
+connect to our network, but this Wi-Fi Pineapple, it can see the networks that
+you previously connected to and it can
+imitate those networks. - So, if I'm connected to the library network
+occasionally, I come here where the library is way too far away, this thing will be able
+to mimic that network? Yeah, exactly! Or if you used to connect to an open
+network at an airport or at a coffee shop it will see the name of the network
+that you used and it will basically clone this network and your device will
+automatically connect to it. And then we can intercept traffic like we have just shown.
+Okay, wow, and it can do a lot more than simply listening to the traffic, right?
+You can start manipulating and modifying things. - Exactly, because the
+Pineapple, because it sets up its own network, it can not only just intercept
+traffic it can also modify the request you make and inject content into
+websites you visit. So for example, it can inject ads. That's done a lot, but it can
+also inject viruses or malware to try to really attack your PC specifically.
+Wow, okay so wireless networks are less secure then wired networks. - Yes, you should
+not use open networks. - Open networks, okay, I'm gonna try but as you said:
+"airports". They only have open networks and of course you need
+internet access, so... - So, a lot of people do it, yeah. And it's a problem.
+You mentioned wireless networks with passwords before, but those are a bit
+more secure but if everybody knows the password then that security goes
+away, of course. - Yes, exactly! So, if your password is secure and no one
+else has it and then that's a good solution as long as you have a complex
+password. Otherwise, you can still guess it, but let's say that you're at
+a hotel or at a conference or maybe at some kind of coffee shop where everyone
+knows the password. Well, in that case, the attacker can simply set up an exact copy
+of the network with that password as well. So, an attacker can still intercept
+everything that you send. It can still monitor all the traffic and it can
+even inject content into websites. So, if someone else knows the password, it's
+basically the same as running an open network. You don't have any security.
+Okay, that's really surprising. Well indeed, that's not a good thing, but
+between us even if you have a password that nobody else knows, you'll be able to
+find it, right? - There are some techniques to still do it. So, you can automatically try
+to guess a lot of passwords. So, if you use a weak one,
+we can crack that. Even though, if you use a strong one, it's still possible to
+attack it. For example, there was a flaw in Wi-Fi Protected setup, WPS
+and that can sometimes be abused to still gain access to the network.
+Okay, that's very good to know. I don't think many people realize that.
+They think: "oh, I have a password that must be safe". And you can go even further, right?
+You're doing research on breaking even more complex security systems in
+wireless networks? Yes, exactly. We recently found a flaw in the Wi-Fi
+standard itself and this allows you to attack most devices even though they are
+fully secured and used all the recommended practices. So, configuring a
+Wi-Fi network on Wi-Fi devices to be fully secure, it's a very difficult task.
+I can imagine and most users have no, they just plug it in, hope it works
+and if it doesn't then they're already stuck so it's a nightmare.
+But to be honest this course is not about setting up wireless networks.
+This course is about building secure web applications. So, my main question is...
+Well, a lot of people know that HTTPS actually helps against these kind of things.
+So, would HTTPS help in this scenario? What does it offer and how can it help
+remediate insecure networks? Yes, HTTPS would definitely help here.
+The reason that is the case, is because when you visit a website using HTTPS,
+the HTTPS protocol makes sure you are talking to this website and nothing else.
+So, you are sure that you are communicating to the website that you
+want and on top of that it, also encrypts your traffic. So, no one can see what you
+are sending and it also authenticates your traffic, which basically means that
+no one can modify data or inject content into a web page. So, let's say you are
+connected to an open network, if you then use HTTPS to,
+for example, log into a website or send your credit card information.
+Then an attacker would not be able to attack you, because HTTPS takes care of all the
+security risks. So, that would definitely help defend you. - Alright,
+thanks! So even if you're on an insecure Network, if you see the green
+lock icon and the green URL bar even, in some cases, then you're probably sure
+that it's the right website. - If you use a protected Wi-Fi network, your data is
+essentially protected until it goes to the access point. In other words, it's
+only protected on the first hop of the internet, but everything beyond that,
+it's still unencrypted. HTTPS however ensures end-to-end encryption, meaning it's
+protected all along the way when your traffic goes over the internet.
+Yeah, so essentially, it protects the traffic from the browser till the server and
+everything in between is not able to read or modify the traffic without
+being detected. - Yeah so, with HTTPS you know that it's
+always protected until it reaches the server. With Wi-Fi only the first
+step is protected and beyond that it can... It probably is still unencrypted.
+Of course, and we talked about websites, but I had a phone before and mobile apps,
+they use HTTP traffic as well, but you just don't see it, right? So, you don't know
+whether they using HTTPS, is that correct?  - Yes, that's indeed one disadvantage.
+If you are using an app, you don't know whether it's using HTTPS or not. So, you might be
+at risk if you use apps. - Thanks a lot for the explanation. Thanks a lot for the
+demo. I think that's going to be an eye-opener for a lot of people. How easy
+it actually is to capture this traffic. Before we say goodbye, do you
+have a key take-away message? So, what can you recommend developers across the
+world and users of websites to remain secure, even when using open networks
+when they have no choice? - Yeah, so I would say the best option here is to use HTTPS
+and to properly configure it of course, but that's the best defense that we have.
+Because as we mentioned, sometimes you're at an airport, you only have an open
+network to use and you want to be secure even in that case and then HTTPS is one
+of the best options you can use. So, I would
+definitely recommend developers to make sure that their
+website is accessible over HTTPS. - Yeah OK. Thanks for the practical advice and
+that's exactly what we're gonna cover in the remainder of this chapter. So,
+hopefully after people have attended this course or followed this course, they
+will be able to deploy HTTPS for everything. Thanks for being here!
+You're welcome! - So, as I said in the remainder of this chapter, we will look
+at how to configure HTTPS correctly and how to make sure that your entire
+website runs over HTTPS.

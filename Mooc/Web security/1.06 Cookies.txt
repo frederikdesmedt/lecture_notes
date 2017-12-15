@@ -1,0 +1,55 @@
+With cookies, a server can send information to the browser,
+and the browser returns it on subsequent requests.
+As we will see later in this course, cookies are used to keep track of session information,
+such as the authenticated state of the user.
+Here, we zoom in on the specific properties of cookies.
+In essence, a cookie is nothing more than a key-value pair, separated by the equals sign.
+The application is free to determine both the name and value of the cookie,
+except for a few reserved characters.
+The server can instruct the browser to set a cookie using the Set-Cookie header.
+As you can see in the example here, a response can contain multiple Set-Cookie headers.
+Each header defines a cookie, with a name and value.
+A header can also specify extra cookie attributes, which we will cover later.
+The browser processes incoming Set-Cookie headers.
+If the headers are valid, the browsers stores the cookies in its internal storage, known as the cookie jar.
+Cookies belong to a domain, and the browser consults the cookie jar for every outgoing request.
+If there are cookies belonging to the destination of the request, the browser automatically attaches them.
+Requests contain cookies in the Cookie header.
+As you can see here, the Cookie header can contain multiple cookies, separated by a semicolon.
+Cookies are typically exchanged through HTTP headers.
+But cookies can also be accessed from JavaScript.
+Reading the “document.cookie” property returns the cookies from the cookie jar.
+The property only returns the cookies that belong to the domain of the browsing context.
+Cookies can also be set from JavaScript.
+Setting a cookie requires an assignment to the “document.cookie” property.
+Cookies set from JavaScript will also be present on outgoing requests.
+Of course, the destination of the request has to match the domain of the context that set the cookie.
+The server can use specific cookie attributes to control how the browser handles it.
+One such attribute is an expiration date.
+The server can control the expiration date by setting the “Expires” attribute to a particular value.
+When set, the cookie remains present in the browser until it expires.
+If the expiration date is not set, the cookie is only stored as long as the browser session lives.
+A long time ago, this was a short timespan.
+But on modern computers and phones, browser sessions can span many days or even weeks.
+A second cookie attribute is the “Domain”, which determines the scope of the cookie.
+By default, cookies are only sent back to the host that sets them.
+But by setting the “Domain” attribute, the server can instruct the browser to send it
+to all subdomains of a particular domain.
+For security reasons, a host can only set a cookie for its registered domain and its subdomains.
+Here are a few examples of setting the “Domain” attribute for a request to www.beersafe.eu.
+The first cookie will only be present on requests to www.beersafe.eu.
+The second cookie will be present on every request to beersafe.eu or any of its subdomains.
+The third cookie is ignored, as its “Domain” attribute points to a different registered domain.
+A third cookie attribute is the “Path” attribute, which also defines the scope of the cookie.
+By specifying this attribute, the server instructs the browser
+to only attach the cookie to requests to a resource within this path.
+If not specified, then the browser does not enforce any path-based restrictions.
+Note that the “Path” attribute helps prevent collisions between cookies from sibling applications.
+It is, however, not a security feature.
+Both applications share the same origin.
+Hence there is no isolation within the browser.
+Even if the applications cannot access each other’s cookies, they can still access each other's contents.
+This brief introduction to cookies offers enough background
+for what we are going to cover in the rest of this course.
+Remember that cookies belong to domains, and not on origins.
+We will see later how this causes several security problems in web applications.

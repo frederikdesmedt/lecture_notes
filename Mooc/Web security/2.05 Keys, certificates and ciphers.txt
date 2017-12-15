@@ -1,0 +1,68 @@
+HTTPS gets its security properties from cryptographic building blocks such as encryption, HMACs,
+and digital signatures.
+We will not go into detail on each of these components.
+Instead, we discuss how these building blocks contribute to the security properties of HTTPS.
+Each version of the TLS specification introduces new cryptographic algorithms.
+These algorithms are essential to achieving the security properties of HTTPS.
+The browser and server negotiate which algorithms they will use during the handshake.
+Each algorithm serves a particular purpose, and the combination is referred to as a cipher suite.
+Confidentiality is achieved using a symmetric-key algorithm.
+Such an algorithm encrypts the message using a specific key.
+Since the algorithm is symmetric, decrypting the message only works with the same key.
+For HTTPS, this means that both the browser and the server need to use the same shared key.
+So as long as this key remains secret, and the algorithm is secure,
+an attacker will not be able to decrypt the messages.
+For integrity, the story is very similar.
+In TLS, integrity comes from using an HMAC function.
+Such a function uses a secret key to calculate a checksum for a specific message.
+To verify a checksum, the receiver recalculates the checksum on the received message
+using the same key.
+By comparing both checksums, the receiver can be sure that the message has not been
+tampered with.
+Note that integrity does not prevent tampering, but ensures that tampering is detectable.
+To avoid detection, the attacker needs to recalculate the checksum,
+which requires possession of the secret key.
+As you can see, both confidentiality and integrity depend on the use of secret keys.
+In TLS, these keys come from a cryptographic secret called the pre-master secret.
+Note that both browser and server need to have access to the same keys, hence the same
+pre-master secret.
+That is why the handshake contains a step called the key exchange,
+where browser and server share this pre-master secret.
+Exchanging such a secret over the network is harder than you might think.
+The key exchange takes place during the handshake, but at the time, a secure channel is not yet
+available.
+Let’s break it down step by step, and see what challenges both parties face on an untrusted network.
+A very naïve browser would send the pre-master secret to the server during the TLS handshake.
+But exchanging the pre-master secret in plain text exposes it to an eavesdropper.
+With the pre-master secret, the attacker is capable of breaking confidentiality and integrity.
+In TLS, we can use asymmetric-key algorithms to send the pre-master secret in a secure way.
+Asymmetric-key algorithms use a key pair, that consists of a private and a public key.
+As the name indicates, the private key belongs to the owner, while the public key can be shared.
+Messages encrypted with the public key can be decrypted with the private key and vice versa.
+So back to our TLS handshake.
+The browser encrypts the pre-master secret with the public key of the server.
+So only the holder of the private key will be able to decrypt the message.
+An attacker that intercepts the encrypted pre-master secret will not be able to decrypt it.
+Protecting the pre-master secret this way suffices to ensure confidentiality and integrity.
+But now the browser needs get the server’s public key.
+Knowing all the keys for all the websites up front is not very practical.
+That’s why the server sends the browser his public key during one of the first steps
+of the TLS handshake.
+Of course, we need extra security measures to prevent man in the middle attacks.
+Preventing such attacks is achieved by the third security property of TLS: authenticity.
+Within the TLS protocol, authenticity is ensured using certificates.
+A certificate associates a specific public key, and hence the associated private key,
+with a specific domain.
+So during the handshake, the server sends his public key along with the certificate.
+The browser verifies the validity of the certificate and checks if the domain matches the certificate.
+If everything succeeds, the browser knows that he is talking to a legitimate server.
+The pre-master secret can now be exchanged using the public key of the server.
+Once the handshake is completed, the secure channel can be established.
+At this stage in the course, don’t worry too much about how the generation
+and validation of certificates happens
+We will come back to that later in this module.
+Have you observed that the introduction of certificates has completely redefined the problem?
+The security of an HTTPS connection now depends entirely on the authenticity property.
+Only a legitimate server can present a valid certificate, and only that server knows the
+corresponding private key.
+To impersonate a legitimate server, the attacker needs a valid certificate and the associated key pair.

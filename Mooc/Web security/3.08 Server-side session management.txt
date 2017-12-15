@@ -1,0 +1,49 @@
+The introduction of this chapter already taught us that server-side session management is the de facto standard.
+This traditional way of keeping state in a web application depends on storing information in a session object on the server.
+Each session object has a unique identifier, which is shared with the client.
+When the browser includes this identifier in every request,
+the server can tie multiple requests together in a session.
+That is why this identifier is referred to as the session identifier, or SID.
+There are several strategies for including the session identifier in every request.
+The most common strategy is to store the session identifier in a cookie.
+The browser automatically attaches the cookie on every request.
+The use of cookies results in a robust session management mechanism.
+An alternative strategy is to include the identifier in every URL in every page.
+While this approach works in practice, it is less recommended.
+Reasons are a higher level of complexity, and a higher risk of leaking the session identifier to third parties.
+Let’s take a closer look at traditional cookie-based session management mechanisms.
+When the user first opens the application, there is no session.
+So when the server receives the first request, it generates a new session object.
+A session object is assigned a session identifier.
+The server sends this session identifier back to the browser.
+From now on, every request from the browser to the server will include this identifier.
+The server uses this identifier to look up the right session object and access its data.
+For example, when the user logs in to the application, the session object is updated.
+It now contains the user’s authenticated state, as well as the user's account information.
+The information stored in the session object is crucial for making authorization decisions throughout the application.
+So far, we omitted the details of how the session identifier is stored in the cookie.
+The server sets the session cookie by sending the Set-Cookie response header.
+The header contains the name of the cookie, and the session identifier.
+There is no predefined name for a cookie containing a session identifier.
+Commonly used names are SESSIONID, PHPSESSIONID, JSESSIONID and so forth.
+The same cookie name and value will be present in the Cookie header,
+which the browser attaches to outgoing requests to the same domain.
+The security of this session management mechanism depends on the secrecy of the session identifier.
+If an attacker obtains the user's session identifier, he can take control of the session.
+Having control over the session means full access to the application in the name of the user.
+In that light, there are two common weaknesses that can result in the disclosure of the session identifier.
+A first weakness follows from the insecure generation of a new session identifier.
+If a session identifier is predictable in some way, an attacker can calculate past and future identifiers.
+This attack is known as brute-forcing the session identifier.
+Applications that use a custom algorithm to generate session identifiers are often vulnerable to this attack.
+The proper way to generate session identifiers is to use a secure random number generator.
+Most frameworks that offer built-in session management do this correctly.
+A second weakness is the insecure transmission or storage of the session identifier.
+Sending the session identifier in clear text over the network allows interception by an eavesdropper.
+Another potential attack vector is cross-site scripting.
+We will cover cross-site scripting in more detail later.
+For now, you should know that a cross-site scripting vulnerability enables the theft of the session identifier.
+Implementing additional security measures for the session cookie addresses both weaknesses.
+We will cover these security measures in detail in the next part.
+Remember, the secrecy of the session identifier is crucial.
+Most applications store the session identifier in a cookie, so this cookie will need to be adequately protected.

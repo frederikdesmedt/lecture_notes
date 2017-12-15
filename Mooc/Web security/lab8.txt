@@ -1,0 +1,7 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, continue your work on the XSS branch. You can checkout the start_chapter4_xss branch from the Git repository (git checkout start_chapter4_xss). Also check for the latest updates (git pull) command.
+Exploring CSP
+
+You can use the CSP.txt file in the src/main/webapp/_securitypolicies/ folder to configure a CSP policy
+Start by configuring the script-src directive
+Use Google's CSP Evaluator (https://csp-evaluator.withgoogle.com/) to evaluate your CSP policy

@@ -1,0 +1,71 @@
+Session hijacking is one of the most critical threats against cookie-based session management.
+By stealing the user’s session identifier, the attacker takes control of the session.
+In essence, the attacker can access the application in the user’s name and has every permission of the user.
+Let’s take a closer look at specific attack vectors, and how you can defend your application.
+One attack vector for a session hijacking attack is eavesdropping on the network.
+If the application uses HTTP, it exposes the session cookie on the network.
+Unfortunately, this scenario is more common than you may think.
+Many applications consider authentication to be sensitive and protect the login form with HTTPS.
+But after authentication, they switch back to using HTTP.
+These applications fail to identify the session identifier as a sensitive piece of information.
+As a result, they make themselves vulnerable to session hijacking.
+In the previous chapter, we discussed that these partial HTTPS deployments are a bad idea.
+The best practice today is to deploy your entire application over HTTPS.
+That solves the problem, right?
+Well, not really.
+Take a look at the following scenario.
+We have deployed the BeerSafe application over HTTPS.
+As a result, the cookie with the session identifier is only sent over the secure channel.
+In this scenario, the cookie is out of reach of an attacker listening to the network traffic.
+But remember, HTTP traffic can be observed and manipulated by the attacker.
+So when the user opens any other web page over HTTP, the attacker can alter the response.
+Here, he inserts an image tag to trigger an HTTP request to the BeerSafe application.
+The browser sends a request to load the image from the BeerSafe application.
+This request will contain the cookies for our application.
+Even though the BeerSafe application responds with a redirect to HTTPS, it’s already too late.
+The session identifier has been sent over HTTP and has been stolen by the attacker.
+Deploying the application over HTTPS is a step in the right direction.
+But to stop these session hijacking attacks, the server needs to implement an additional security mechanism.
+The server can mark the session cookie as secure, which tells the browser that it should only be sent over HTTPS.
+In practice, the server can mark a cookie as secure by attaching the “Secure” flag to the Set-Cookie header.
+Here, you can see two headers.
+The first header sets a cookie without extra security properties, allowing session hijacking attacks.
+The other header sets the cookie with the “Secure” flag,
+marking the cookie valid for HTTPS connections only.
+For our attack scenario from before, this means that the attacker can still trick the browser to send an HTTP request.
+The difference is that because of the "Secure" flag, the session cookie will no longer be present.
+Thus, the “Secure” flag stops network-based session hijacking attacks.
+As you can see, the “Secure” flag matters for session cookies.
+But take a step back from session management, and look at cookies in general.
+If your application follows the best practice of using HTTPS only,
+then why not add the “Secure” flag to all cookies?
+Doing so improves the security of all cookies, without impacting the functionality of the application.
+A final note about session hijacking by eavesdropping on the network.
+If the application is using HTTPS in combination with a Strict Transport Security policy,
+this attack would also not have been possible.
+Even if the attacker instructs the browser to make an HTTP request,
+the Strict Transport Security policy will cause the request to be sent over HTTPS anyway.
+So far, we have covered network-based session hijacking attacks.
+But there is a second common attack vector: stealing the cookie from JavaScript.
+When the attacker can control a piece of JavaScript running on a page of the application,
+he can abuse this to access the cookies.
+Here is a practical example of how to steal the cookies of our BeerSafe application.
+The attacker has exploited a Cross-Site Scripting flaw to inject the code snippet shown here.
+The first part of the code retrieves the cookies for our BeerSafe application from the browser.
+Next, the code generates a URL that contains the cookie names and values as a parameter.
+The URL points to the attacker’s server, so when the browser fetches it,
+the attacker can extract the cookies.
+To prevent session hijacking from JavaScript, the server can set another cookie flag, the “HttpOnly” flag.
+Similar to the “Secure” flag, the “HttpOnly” flag is added to the Set-Cookie header.
+This flag marks a cookie as valid for network requests, but not for script-based access.
+So a session cookie set with the “HttpOnly” flag is attached to HTTP and HTTPS requests,
+but is not returned when accessing the “document.cookie” property.
+Session cookies should always be set with the “HttpOnly” flag enabled.
+In fact, it is a good idea to set the “HttpOnly” flag on all cookies that do not need to be accessed from JavaScript.
+Before we conclude, a small remark about JavaScript-based session hijacking.
+The use of the “HttpOnly” flag helps to prevent the escalation of Cross-Site Scripting to session hijacking.
+But as we will see in the next chapter, the attacker can still use the same Cross-Site Scripting flaw
+for all kinds of other attacks as well.
+To conclude, a brief recap of the best practices to protect session cookies.
+Session cookies should always have both the “Secure” and “HttpOnly” flags enabled.
+This ensures that they will only be sent on HTTPS requests, and cannot be accessed from JavaScript.

@@ -1,0 +1,18 @@
+We spent quite some time talking about the communication channel. Everyone has a gut feeling that wireless networks are less secure than their wired counterparts. But in the interview with Mathy Vanhoef, this gut feeling became something else.  Eavesdropping on wireless communications is child's play. Intercepting traffic is not that much harder.
+In such a scene, providing any security is an actual challenge. That is why securing the communication channel is the most fundamental steps towards security. For web applications, this means deploying your application over HTTPS. 
+As we have seen throughout this course, deploying HTTPS is not as hard as it used to be. Deploying HTTPS is a topic surrounded by a lot of misconceptions and myths, which are no longer valid. However, to guarantee a secure deployment, you do need to take care of a few extra steps.
+For one, an HTTPS application should only use HTTPS resources. In fact, modern browsers refuse to load potentially dangerous mixed content resources. 
+Another example of such an additional step is helping the browser reach the HTTPS version of the application. To that end, you need to install a redirect mechanism on the server, so that every URL is translated to its HTTPS counterpart. Doing so ensures that the user will always end up on the HTTPS version of the application.
+Well, not always. We have seen how an attacker on the network can abuse this initial redirect, and prevent the upgrade to HTTPS. The only solution against such attacks is deploying HTTP Strict Transport Security (HSTS). HSTS is a straightforward policy to deploy. However, ensuring compatibility across all subdomains may be quite a challenge.
+Towards the end of the chapter, we dove a bit deeper into the topic. We talked about the underlying trust model and the fragility of the certificate ecosystem. Unfortunately, there are a few weaknesses in the system, which is over 20 years old by the way. Most of these issues come down to an attacker trying to obtain a valid certificate for your domain. Over time, additional security mechanisms have been introduced to remediate these vulnerabilities.
+We covered two examples: Certificate Authority Authorization (CAA) and Certificate Transparency (CT). 
+CAA is a security mechanism implemented by CAs, to ensure they are authorized to issue certificates for your domain. You can configure this mechanism by setting the proper DNS records.
+CT is a mechanism that enables you to detect when a CA issues a certificate for your domain. You can get an alert when that happens so that you can inspect if the certificate is legitimate or not. Browsers will start enforcing that every certificate is published in a log. But keep in mind that for CT to work, you need to monitor those logs. Fortunately, you can use freely available monitoring services to take care of this.
+
+Overview of best practices
+Here, at the end of the course, it makes sense to condense everything we have covered before into a list of a few best practices. Following the practices on this list will give your applications a major security boost.
+Deploy every application entirely over HTTPS
+Configure TLS to support only new protocols, and prefer ciphers that ensure Perfect Forward Secrecy
+Enable HTTP Strict Transport Security (HSTS) with a long max-age. 
+Setup Certificate Transparency (CT) log monitoring and investigate how your CA will support CT
+Configure Certificate Authority Authorization (CAA) records to limit the CAs that can hand out certificates for your domain

@@ -1,0 +1,56 @@
+In the last few years, various security incidents made the news.
+Plenty of stories covered high-profile attacks with dreadful consequences.
+Think about the disclosure of terabytes of sensitive data or the disruption of essential services.
+These stories often create the impression that a group of elite hackers carries out sophisticated attacks.
+However, the current state of affairs is quite a bit different.
+Let's take a closer look at the incidents behind these stories.
+Recently, a couple of massive data breaches led to the disclosure of a few terabytes of sensitive information.
+Personal user information, sensitive details, credit card information
+and a lot more have ended up in the hands of hackers.
+You might expect that the theft of such a large amount of data must involve a complicated attack.
+Instead, many of these databases were sitting on the Internet, completely unprotected.
+The database server required no authentication, so everyone who connected had full access to the database.
+As it turns out, these databases were not deliberately configured to be insecure.
+Instead, they used an insecure default configuration, instead of a modified, secure version.
+Wide open databases are a silly problem to have.
+But even a well-secured database is subject to attacks.
+Attackers can use a technique called SQL injection to trick the database into executing malicious SQL code.
+Such an attack can result in the extraction or unauthorized modification of data.
+We have been battling SQL injection vulnerabilities for about 20 years now.
+So SQL injection can be considered as a well-known vulnerability.
+Today, we still see web applications suffering from SQL injection vulnerabilities.
+Here are a couple of entries from 2017 in the SQL injection hall of shame.
+As you can see, major companies and widely used software products all suffer from SQL injection.
+Now that we're talking about unauthorized access to data, here's another dead-simple attack.
+Abusing insecure direct object references.
+Many applications use an identifier to refer to a particular data object.
+But unfortunately, many applications also fail to implement proper access control checks.
+As a result, the knowledge of an identifier suffices to access the data that it refers to.
+By itself, this does not need to be a problem.
+But when an application uses predictable identifiers, it does become a problem.
+A typical example is the use of incremental numerical identifiers.
+In such a case, the attacker only needs to enumerate over possible values for this identifier.
+Another common vulnerability in web applications is cross-site scripting or XSS.
+In such an attack, the attacker injects malicious JavaScript code into the application.
+When this code executes in the victim's browser, it gives the attacker a lot of power.
+For example, the attacker can impersonate the victim to the application, with the same privileges.
+Imagine the consequences of a successful XSS attack against administrator accounts.
+These cases are not about newly discovered zero-day attacks.
+These are well-known security problems in web applications.
+And there is an even more shocking observation hiding underneath.
+All these issues can be mitigated using secure coding guidelines.
+There is not a single technical limitation that prevents us from building secure web applications.
+Unfortunately, the lack of security is a widespread problem.
+In the time you have been watching this video,
+someone probably built an application that contains one of these vulnerabilities.
+In the current landscape, these problems exist because of a lack of security knowledge.
+It is easy to find an enormous amount of information about building web applications, using a variety of technologies.
+Unfortunately, these tutorials and introductions rarely mention security.
+As a consequence, many developers unconsciously grow a blind spot for security.
+This course aims to contribute to remediating this problem.
+The course explores common threats against web applications, looking for their root causes.
+It explains how mitigation techniques work, and which are considered a current best practice.
+Remember that most security incidents are caused by well-known vulnerabilities.
+Mitigating these vulnerabilities often comes down to sticking to a set of best practices
+and secure coding guidelines.
+And that is exactly what you will get out of this course.
