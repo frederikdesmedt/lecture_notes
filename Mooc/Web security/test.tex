@@ -1,0 +1,810 @@
+\documentclass[titlepage]{article}    
+    \usepackage{dingbat}
+    \begin{document}
+    \begin{titlepage}
+        \centering
+        {\scshape\large KULeuven \par}
+        \vspace{0.5cm}
+        {\scshape\Large Development of secure software\par}
+        \vspace{2cm}
+        {\scshape\Large Mooc\par}
+        {\Large Web security\par}
+        {\Large Intermediate Test\par}
+        \vspace{10cm}
+        {\Large\itshape Kevin Loonen\par}
+    \end{titlepage}
+    \section{Securing the communication channel}
+    \subsection{Key concepts of HTTPS}
+    \paragraph{Quetion 1} Which of these statements about TLS is not true?
+    \begin{itemize}
+        \item TLS can be used for all kinds of traffic, including HTTP, POP, IMAP, SMTP, ...
+        \item The security properties that TLS offers are confidentiality, integrity and authenticity
+        \item \textbf{TLS ensures that an eavesdropper cannot observe the messages being exchanged} \checkmark
+        \item HTTPS is nothing more than the HTTP protocol over a TLS-secured connection
+    \end{itemize}
+    \paragraph{Question 2} Confidentiality and integrity are achieved by algorithms that depend on a shared key. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 3} Authenticity depends on the use of a certificate. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 4} What happens if there is a problem establishing the authenticity of an HTTPS connection?
+    \begin{itemize}
+        \item The connection is aborted, and the browser shows a network error
+        \item The connection is established as usual, but the browser marks it as insecure (no lock icon)
+        \item \textbf{The connection is aborted, and the browser shows a warning explaining the problem} \checkmark
+        \item The connection is established, because the browser falls back to a less secure protocol
+    \end{itemize}
+    \subsection{Perfect forward secrecy}
+    \paragraph{Question 1} Which of these statements are false when Perfect Forward Secrecy is enforced?
+    \begin{itemize}
+        \item \textbf{The private key belonging to the server's certificate changes every connection} \checkmark
+        \item An attacker with possession of the private key belonging to the server's certificate can impersonate a legitimate server
+        \item \textbf{An attacker can decrypt a recorded session if he obtains the private key belonging to the server's certificate} \checkmark
+        \item \textbf{Perfect Forward Secrecy replaces authenticity} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} The use of a public/private key pair and a certificate to exchange the pre-master secret ensures Perfect Forward Secrecy. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 3} The plain Diffie-Hellman algorithm is not sufficient to setup a secure TLS connection with Perfect Forward Secrecy. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark (Does not offer authenticity)
+        \item False
+    \end{itemize}
+    \subsection{HTTPS in your application}
+    \paragraph{Question 1} Which of the following statements about mixed content are true?
+    \begin{itemize}
+        \item Mixed content is always blocked by modern browsers
+        \item Mixed content is HTTPS content being included in HTTP pages
+        \item \textbf{The only way to address mixed content is by rewriting all URLs} \checkmark
+        \item \textbf{Mixed content is technically an easy problem, but becomes hard in a large content base} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} What is the biggest problem with partial HTTPS deployments?
+    \begin{itemize}
+        \item It can easily result in mixed content problems
+        \item It allows the attacker to break the security properties of the HTTPS traffic
+        \item \textbf{It allows the attacker to compromise the application before the upgrade to HTTPS happens} \checkmark
+        \item It undermines the performance of the website
+    \end{itemize}
+    \paragraph{Question 3} Which statements become true if you turn off support for HTTP on a webserver?
+    \begin{itemize}
+        \item \textbf{The server will never serve an insecure HTTP resource} \checkmark
+        \item Browsers detect the error and upgrade the connection to HTTPS
+        \item \textbf{Existing links to the HTTP version of the application will break} \checkmark
+        \item A network attacker can no longer attack a user trying to connect to the HTTP version of your application
+    \end{itemize}
+    \paragraph{Question 4} The most user-friendly and secure way to deploy HTTPS is to redirect all HTTP URLs to their HTTPS counterparts. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \subsection{HTTP Strict Transport Security}
+    \paragraph{Question 1} If you enable HSTS, browsers will never send an HTTP request to your server. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} Which statements are true if you consider the following HSTS configuration: "max-age=432000;preload"?
+    \begin{itemize}
+        \item \textbf{The HSTS policy is valid} \checkmark
+        \item If the user visits the application again within the next 7 days, every request will be sent over HTTPS
+        \item The HSTS policy applies to all subdomains as well
+        \item The domain sending the HSTS header can be added to the preload list
+    \end{itemize}
+    \paragraph{Question 3} What is the biggest drawback of the "includeSubdomains" flag
+    \begin{itemize}
+        \item The browser needs to visit the top-level domain to receive the HSTS policy
+        \item \textbf{The HSTS policy may make legacy HTTP services running on any subdomain unavailable} \checkmark
+        \item There is no easy way to disable the HSTS policy
+        \item The "includeSubdomains" flag can only be set on the top-level domain
+    \end{itemize}
+    \subsection{The trust model of HTTPS}
+    \paragraph{Question 1} If you request a legitimate certificate for your besite, it will be signed by a root CA. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} Which statement most accurately describes the biggest weakness in the HTTPS ecosystem
+    \begin{itemize}
+        \item CAs fail to provide adequate security, and get hacked frequently
+        \item Users have no idea what a certificate is, and cannot correctly assess insecure situations
+        \item \textbf{Browser accept certificates from hundreds of different root CAs} \checkmark
+        \item Certificates are too error-prone, and errors are often false positives
+    \end{itemize}
+    \paragraph{Question 3} There are multiple levels of certificate validation. Which level of certificate unlocks the most powerful cryptographic features?
+    \begin{itemize}
+        \item Extended validation certificates
+        \item Organization validation certificates
+        \item Domain validation certificates
+        \item \textbf{All of the above} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Which statements are true with regard to domain validated certificates?
+    \begin{itemize}
+        \item Domain validation requires a manual sign-off by the CA, so it cannot be automated
+        \item \textbf{Domain validation checks if the requester controls the domain} \checkmark
+        \item Domain validation checks if the requester is also the official registrant of the domain
+        \item \textbf{Domain validation is enough for the browser to show a (green) padlock} \checkmark
+    \end{itemize}
+    \subsection{The fragility of certificates}
+    \paragraph{Question 1} Which of the following problems is solved by Certificate Authority Authorization (CAA)?
+    \begin{itemize}
+        \item A browser accepting any valid certificate for a website, regardless of which CA signed it
+        \item A CA issuing a certificate to someone that does not control the domain
+        \item \textbf{The fact that any CA can issue certificate for any domain} \checkmark
+        \item The lack of a connection between DNS records an certificates
+    \end{itemize}
+    \paragraph{Question 2} Which of the following problems is solved by Certificate Transparency (CT)?
+    \begin{itemize}
+        \item The lack of a catalog of all issued certificates
+        \item \textbf{The fact that it is hard to detect a fraudulent certificate being used} \checkmark
+        \item The fact that a browser cannot determine if a certificate is legitimate
+        \item The lack of transparency about which CAs have been compromised
+    \end{itemize}
+    \paragraph{Question 3} Certificate Transparency by itself does not prevent anattacker from using a fraudulent certificate. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 4} Which of these mechanisms is not a valid way to transport SCT information to the browser?
+    \begin{itemize}
+        \item Embedding the SCT information into the certificate
+        \item Adding the SCT information to an OCSP response
+        \item \textbf{Adding the SCT in a dedicated DNS record} \checkmark
+        \item Sending the CT information during the TLS handshake
+    \end{itemize}
+    \subsection{Securing the communication channel}
+    \paragraph{Question 1} Which of these statements about HTTPS are true?
+    \begin{itemize}
+        \item Authenticity follows from confidentiality and integrity
+        \item \textbf{Confidentiality and integrity are useless without authenticity} \checkmark
+        \item \textbf{Authenticity is useless without integrity} \checkmark
+        \item Authenticity is useless without confidentiality
+    \end{itemize}
+    \paragraph{Question 2} Confidentiality and integrity is achieved by algorithms that depend on a shared key. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 3} Which of these statements are false when Perfect Forward Secrecy is enforced?
+    \begin{itemize}
+        \item \textbf{An attacker can decrypt a recorded session if he obtains the private key belonging to the server's certificate} \checkmark
+        \item \textbf{The private key belonging to the server's certificate changes every connection} \checkmark
+        \item An attacker with possession of the private key belonging to the server's certificate can impersonate a legitimate server
+        \item \textbf{Perfect Forward Secrecy replaces authenticity} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Browsers block mixed content because an attacker can eavesdrop on the HTTP request. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark (block for malicious code in the HTTP responses)
+    \end{itemize}
+    \paragraph{Question 5} The most user-friendly and secure way to deploy HTTPS is to redirect all HTTP URLs to the homepage of the HTTPS application. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark 
+    \end{itemize}
+    \paragraph{Question 6} A website's public pages are served over HTTP, but from the moment you need to login, it switches HTTPS. In which cases can this be considered to be secure?
+    \begin{itemize}
+        \item When the TLS configuration ensure Perfect Forward Secrecy
+        \item When the HTTPS pages do not contain mixed content
+        \item When the HTTPS pages are deployed on a different domain and HSTS is enabled on this domain
+        \item \textbf{Never. They will always be insecure} \checkmark (Attacker can prevent the upgrade to HTTPS)
+    \end{itemize}
+    \paragraph{Question 7} A university has one registered domain, and each faculty administers their own subdomain, under which numerous applications are hosted. Which of these actions should the university take right now to start working towards the mandatory use of HTTPS and HSTS?
+    \begin{itemize}
+        \item \textbf{Enable an HSTS policy, without the includeSubdomains flag, on the main university website, which already runs over HTTPS} \checkmark
+        \item Enable an HSTS policy, with the includeSubdomains flag, on the registered domain of the university
+        \item \textbf{Enable an HSTS policy, without the includeSubdomains flag, on each application running over HTTPS} \checkmark
+        \item Enable an HSTS policy, with the includeSubdomains and preload flag, on the registered domain of the university, and add the domain to the preload list
+    \end{itemize}
+    \paragraph{Question 8} Certificate Transparency (CT) will achieve its goal, but only if every domain administers monitors the logs. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 9} Which of these consequences is an unexpected side-effect of Certificate Transparency (CT)?
+    \begin{itemize}
+        \item Every website needs to update their certificate to become compliant with CT
+        \item Browsers need to be forced to enforce the presence of an SCT
+        \item Administrators will have to jump to extra hoops to configure HTTPS on their servers
+        \item \textbf{The registration of all certificates in a log leaks information about the existence of a website or host} \checkmark
+    \end{itemize}
+    \paragraph{Question 10} The CA will request proof of your identity, investigate your business and check if your business has the right to use the domain name you're requesting a certificate for. Which level of validation corresponds with this statement?
+    \begin{itemize}
+        \item Domain validation
+        \item Organization validation
+        \item \textbf{Extended validation} \checkmark
+        \item None of the above
+    \end{itemize}
+
+
+
+    \newpage
+    \section{Preventing unauthorized access}
+    \subsection{Passwords}
+    \paragraph{Question 1} Which of these statements about a password manager are true?
+    \begin{itemize}
+        \item A password manager is always more secure, even if you use it to store your old passwords
+        \item \textbf{A password manager allows youo to use a unique password for each site} \checkmark
+        \item A password manager prevents phishing by looking at the visual elements in a website
+        \item \textbf{If you use a password manager as recommended, a data breach in one application will not result in the compromise of your account in a second application} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} Why is it so easy to break MD5/SHA1 hashes?
+    \begin{itemize}
+        \item Because MD5 and SHA1 are weak algorithms. SHA256 or SHA3 hashes are not easy to break.
+        \item Because of implementation errors by the developer.
+        \item \textbf{Because hashingg algorithms are designed to be fast, so brute forcing is also really fast.} \checkmark
+        \item Because the passwords were not salted
+    \end{itemize}
+    \paragraph{Question 3} If you use a dedicated password hashing algorithm, you no longer need to use a salt. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} What is the best approach to gradually improve the strength of your password storage algorithm over time?
+    \begin{itemize}
+        \item Reset all paswords, and have them choose a new password when they login
+        \item Keep the old hashes, but have the user choose a new password when they login
+        \item \textbf{Keep the old hashes, but upgrade the hash when a user logs in} \checkmark
+        \item Use the current hashes as input for the new algorithm
+    \end{itemize}
+    \subsection{Enumeration attacks}
+    \paragraph{Question 1} Which statement most accurately describes an enumeration vulnerability?
+    \begin{itemize}
+        \item An enumeration vulnerability allows an attacker to collect information about valid users
+        \item \textbf{An enumeration vulnerability leaks information about the existence of objects in the system} \checkmark
+        \item An enumeration vulnerability is the enabler of a brute force attack
+    \end{itemize}
+    \paragraph{Question 2} Which of the following scenarios indicates an enumeration vulnerability in the application?
+    \begin{itemize}
+        \item The registration form tells the user that an email has been sent to the given address
+        \item \textbf{The registration form asks the user to choose a username and a password} \checkmark
+        \item The account recovery form tells the user that an email has been sent to the given address
+        \item The authentication form informs the user that the username and password are invalid
+    \end{itemize}
+    \paragraph{Question 3} Both locking an account and slowing down authentication attempts are valid defenses against a brute force authentication attack. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \subsection{Cookie-based session management}
+    \paragraph{Question 1} To which naming scheme do cookies containing a session identifier have to adhere?
+    \begin{itemize}
+        \item \textbf{Any name goes, as long as it uses characters that are allowed in a cookie} \checkmark
+        \item Any name goes, as long as it contains the word "SESSIONID"
+        \item Any name goes, as long as it contains the word "SESSION"
+        \item Only one of the following names is allowed: SESSION, SESSIONID, PHPSESSIONID, JSESSIONID
+    \end{itemize}
+    \paragraph{Question 2} Without the Secure flag, the cookie will not be attached to requests to an HTTPS page. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 3} If the application does not use cookie flags, how can an attacker obtain the victim's session identifier?(Indicate all valid responses)
+    \begin{itemize}
+        \item \textbf{The attacker can guess the session identifier} \checkmark
+        \item \textbf{The attacker can predict the session identifier based on his own session identifier} \checkmark
+        \item \textbf{The attacker can steal the session identifier by eavesdropping on HTTP requests on the network} \checkmark
+        \item \textbf{The attacker can steal the session identifier by executing malicious JavaScript code in the application's browsing context} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} The HttpOnly and Secure flag are only relevant to protect the cookie with the session identifier. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \subsection{Common authorization problems}
+    \paragraph{Question 1} Which statement most accurately describes a CSRF attack?
+    \begin{itemize}
+        \item The attacker sends a request from an unrelated browsing context in his browser to the server, to perform an operation in the user's name
+        \item \textbf{The attacker sends a request from an unrelated browsing context in the victim's browser to the the server, to perform an operation in the user's name} \checkmark
+        \item The attacker sends a request from the application's browsing context in his browser to the server, to perform an operation in the user's name
+        \item The attacker sends a request from the application's browsing context in the victim's browser to the server, to perform an operation in the user's name
+    \end{itemize}
+    \paragraph{Question 2} Which security property oes a CSRF mitigation technique using hidden form tokens depend upon?
+    \begin{itemize}
+        \item The fact that cookies are associated with a domain, not an origin
+        \item The fact that an HttpOnly cookie cannot be read from JavaScript
+        \item \textbf{The fact that the browser prevents the attacker from reading the token} \checkmark
+        \item The fact that the browser removes the token from the request
+    \end{itemize}
+    \paragraph{Question 3} An insecure direct object reference vulnerability only occurs with identifiers generated by the database. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} In essence, an insecure direct object reference vulnerability is nothing more than a missing authorization check. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \subsection{Preventing unauthorized access}
+    \paragraph{Question 1} Using a salt makes the password unique, yet password reuse across applications remains a problem. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 2} Which of these statements about storing passwords is true?
+    \begin{itemize}
+        \item Running a large number of iterations of SHA3 is just as good as using a password-based hashing function
+        \item \textbf{The benefit of a password-based hashing function is its expensiveness to execute} \checkmark
+        \item Brute forcing of MD5 and SHA1 hashes is only possible because the algorithms are weak
+        \item Brute forcing bcrypt hashes is slow because they use a long salt
+    \end{itemize}
+    \paragraph{Question 3} An application is currently using plaintext passwords in the database. Which upgrade strategy would you advise?
+    \begin{itemize}
+        \item Delete all passwords, and have each user reset their password
+        \item Modify the authentication procedure, so that it will update the stored hash when a user logs in
+        \item Use the MD5 hash of these passwords as input for bcrypt, and update the hashes when the user logs in
+        \item \textbf{Calculate bcrypt hashes from the passwords, and change the verification procedure during login} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Which of these statements about enumeration attacks make no sense?
+    \begin{itemize}
+        \item \textbf{An enumeration attack allows an attacker to steal user credentials from the database} \checkmark
+        \item Advanced enumeration attacks can triage responses on other criteria than visible error messages
+        \item \textbf{Enumeration attacks are irrelevant if you deploy strong brute force defenses} \checkmark
+    \end{itemize}
+    \paragraph{Question 5} An American airline currently uses the following authentication scheme: a username and password in combination with the answer to a secret question. Is this two-factor authentication?
+    \begin{itemize}
+        \item Yes
+        \item \textbf{No} \checkmark (Both are knowledge based)
+    \end{itemize}
+    \paragraph{Question 6} Which of these statements most accurately describes most security challenges with session management?
+    \begin{itemize}
+        \item \textbf{Cookies are attached to every outgoing request to a particular domain} \checkmark
+        \item Not every application uses HTTPS by default
+        \item Cookies are not always set with the Secure flag
+        \item Server-side sessions can be taken over by simply stealing an identifier
+    \end{itemize}
+    \paragraph{Question 7} Using the HttpOnly and Secure flag for the session cookie prevents all session hijacking attacks. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark (guessing/predicting the identifier, ...)
+    \end{itemize}
+    \paragraph{Question 8} Client-side sessions are different from server-side sessions. Which of the following statements are true?
+    \begin{itemize}
+        \item \textbf{Client-side session data requires additional integrity checks before it can be used} \checkmark
+        \item \textbf{Client-side sessions are also vulnerable to session hijacking} \checkmark
+        \item Client-side session object are not limited in size
+        \item Client-side sessions do not work well with cookies
+    \end{itemize}
+    \paragraph{Question 9} Switching to HTTPS does not make it more difficult to execute a CSRF attack. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 10} Which of these strategies can be used to mitigate insecure direct object reference vulnerabilities?
+    \begin{itemize}
+        \item Only exposing SHA3 hashes of the numerical identifier to the client
+        \item \textbf{Only exposing randomly generated identifiers to the client} \checkmark
+        \item \textbf{Only exposing indirect object references to the client} \checkmark
+        \item Implementing rate limits on requesting different objects of the same type
+    \end{itemize}
+
+
+    \newpage
+    \section{Securely handling untrusted data}
+    \subsection{Command injection}
+    \paragraph{Question 1} What is the most accurate cause of a command injection attack?
+    \begin{itemize}
+        \item The dynamic construction of a command string before executing it
+        \item The use of user input in the command string
+        \item \textbf{The use of untrusted data to construct the command string} \checkmark
+        \item The execution of a command from within another program
+    \end{itemize}
+    \paragraph{Question 2} How would you most accurately describe the result of a successful command injection attack?
+    \begin{itemize}
+        \item The attacker takes full control over the server
+        \item \textbf{The attacker executes a command with the privileges of the script that executed the system command} \checkmark
+        \item The attacker executes a command as the root user
+        \item The attacker executes a command with the privileges of the web server
+    \end{itemize}
+    \paragraph{Question 3} Command injection problems only exist in web applications. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Which defense can not be used to mitigate command injection attacks?
+    \begin{itemize}
+        \item \textbf{Preventing the submission of dangerous characters when validating the form in the browser} \checkmark (Client-side defenses are easy to bypass)
+        \item Use an API that separates the command from its parameters, if supported by the language
+        \item Encode untrusted data before appending to the command string
+        \item Input validation on the server, before using the data
+    \end{itemize}
+    \paragraph{Question 5} What is the best defense against command injection attacks?
+    \begin{itemize}
+        \item Preventing the submission of dangerous characters when validating the form in the browser
+        \item Preventing the use of the semicolon (;)
+        \item \textbf{Use an API that separates the command from its parameters, if supported by the language} \checkmark
+        \item Encode untrusted data before appending to the command string
+        \item Input validation on the server, before using the data
+    \end{itemize}
+    \paragraph{Question 6} Why are Java and .NET not vulnerable to command injection attacks?
+    \begin{itemize}
+        \item The Java/.NET standard libraries escape dangerous characters before running the command in a shell
+        \item The Java/.NET virtual machine executes bytecode, and not low-level binary code
+        \item The Java/.NET virtual machine has no privileges to run system commands
+        \item \textbf{The Java/.NET standard libraries do not execute the command in a shell, but invoke it directly} \checkmark
+    \end{itemize}
+    \subsection{SQL Injection}
+    \paragraph{Question 1} What is the most accurate description of the cause of a SQL injection vulnerability?
+    \begin{itemize}
+        \item The application uses dynamically created SQL statements
+        \item The application uses user input to create a SQL statement
+        \item The application creates the statement and the database server executes it
+        \item \textbf{The application does not provide enough context information to distinguish data from code} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} In which of the following SQL statements would this payload result in a successful SQL injection attack: "OR 1=1--
+    \begin{itemize}
+        \item "SELECT * FROM " + table + "WHERE visibility = 1"
+        \item \textbf{"SELECT * FROM users WHERE username = " + username + " AND password = " + password} \checkmark
+        \item \textbf{"SELECT * FROM notes WHERE owner = " + userId} \checkmark
+        \item "SELECT id, title, " + column + " FROM notes"
+    \end{itemize}
+    \paragraph{Question 3} Which one of these application features is least likely to be vulnerable to SQL injection
+    \begin{itemize}
+        \item The authentication procedure
+        \item \textbf{Retrieving a list of all notes} \checkmark
+        \item Creating a new tasting note
+        \item Deleting a note from the database
+    \end{itemize}
+    \paragraph{Question 4} What is the best practice mitigation strategy against SQL injection vulnerabilities?
+    \begin{itemize}
+        \item Strict input validation
+        \item \textbf{Using prepared statements with variable binding} \checkmark
+        \item Encoding user data before adding it to the statement
+        \item Using prepared statements
+    \end{itemize}
+    \paragraph{Question 5} Which mitigation strategies apply if you want to build a SQL statement where the table name comes from an untrusted value?
+    \begin{itemize}
+        \item \textbf{Selecting a value from a whitelist based on the input} \checkmark
+        \item Using prepared statements with variable binding
+        \item \textbf{Encoding the untrusted data for the right DBMS system} \checkmark
+        \item Putting the table name between double quotes
+    \end{itemize}
+    \subsection{Cross-Site Scripting}
+    \paragraph{Question 1} Which most accurately describes the result of the successful exploitation of a cross-site scripting vulnerability?
+    \begin{itemize}
+        \item The attacker can execute arbitrary commands on the server
+        \item The attacker has full control over the browser
+        \item The attacker can execute arbitrary commands on the client
+        \item \textbf{The attacker has full control over the application's browsing context} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} A cross-site scripting attack always involves one site sending malicious code to another site. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 3} Which statements are correct regarding the difference between a reflected and stored XSS attack?
+    \begin{itemize}
+        \item Reflected XSS attacks happen on the client, and stores XSS attacks happen on the server
+        \item Reflected XSS attacks give the attacker less capabilities than stored XSS attacks
+        \item \textbf{It is harder to make a lot of victims with a reflected XSS attack than with a stored XSS attack} \checkmark
+        \item \textbf{Reflected XSS attacks can be stopped by the browser, and stored XSS attacks cannot} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Which of the following mitigation strategies are effective to prevent cross-site scripting vulnerabilities?
+    \begin{itemize}
+        \item Always put JavaScript code in seperate files
+        \item \textbf{Sanitize untrusted data before using it as output} \checkmark
+        \item Validate all input against a list of known script injection attack vectors
+        \item Encode all HTML characters in untrusted data
+        \item \textbf{Encode dangerous characters in untrusted data, based on the context where it will be used} \checkmark
+    \end{itemize}
+    \paragraph{Question 5} Which of the following statements are true?
+    \begin{itemize}
+        \item XSS defenses are only relevant for rich-text output, not for simple strings
+        \item XSS payloads can only come from user input
+        \item \textbf{It is better to encode data for a specific context than to encode all dangerous characters, regardless} \checkmark
+        \item The mitigation strategies for reflected XSS are different than those for stored XSS
+        \item \textbf{Output encoding applies to all pieces of code, regardless of whether it is benign or malicious} \checkmark
+    \end{itemize}
+    \paragraph{Question 6} In which case is sanitization the best mitigation strategy?
+    \begin{itemize}
+        \item When the untrusted data contains a large piece of text
+        \item When the untrusted data does not contain user input
+        \item \textbf{When the untrusted data needs to contain benign code} \checkmark
+        \item When the untrusted data is composed from different sources
+    \end{itemize}
+    \subsection{DOM-based XSS}
+    \paragraph{Question 1} Which definition most accurately describes DOM-based XSS
+    \begin{itemize}
+        \item DOM-based XSS occurs when the injected JavaScript modifies the DOM
+        \item \textbf{DOM-based XSS is an XSS vulnerability caused byt client-side modifications of the DOM} \checkmark
+        \item DOM-based XSS is an XSS vulnerability that is neither reflected or stored
+        \item DOM-based XSS attacks occur because the application uses untrusted data from the DOM
+    \end{itemize}
+    \paragraph{Question 2} DOM-based vulnerabilities cannot occur if you do not have dynamic server)generated pages. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 3} Which mitigation strategies are effective against DOM-based XSS?
+    \begin{itemize}
+        \item \textbf{Using safe DOM APIs to create new content} \checkmark
+        \item \textbf{Applying context-sensitive encoding to untrusted data before putting it into the page} \checkmark
+        \item \textbf{Applying sanitization to untrusted data before putting it into the page} \checkmark
+        \item Using client-side libraries such as jQuery for all DOM modifications
+    \end{itemize}
+    \paragraph{Question 4} DOM-based vulnerabilities are as powerful as traditional XSS vulnerabilities. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \subsection{Advanced attacks and defenses}
+    \paragraph{Question 1} Cross-site scripting, HTML injection and CSS injection are all caused by the same vulnerability. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 2} Which mitigation strategies are effective against various types of content injection attacks (XSS, HTML injection, CSS injection, ...)?
+    \begin{itemize}
+        \item Server-side sanitization
+        \item Client-side sanitization
+        \item Input validation
+        \item \textbf{Context-sensitive output encoding} \checkmark
+    \end{itemize}
+    \paragraph{Question 3} For which scenarios would a sandboxed iframe be a good mitigation strategy?
+    \begin{itemize}
+        \item \textbf{To isolate a block of untrusted content from the main application} \checkmark
+        \item \textbf{To isolate untrusted content without having to deploy your application across multiple origins} \checkmark
+        \item To prevent harmful consequences from CSS injection attacks
+        \item \textbf{To enforce behavioral restrictions on the content loaded in the iframe} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} Which of the following statements is true?
+    \begin{itemize}
+        \item Isolating content in an iframe with a different origin offers weaker isolation as a sandbox with a unique origin
+        \item \textbf{Isolating content in an iframe with a different origin offers the same isolation as a sandbox with a unique origin} \checkmark
+        \item Isolating content in an iframe with a different origin offers stronger isolation as a sandbox with a unique origin
+    \end{itemize}
+    \paragraph{Question 5} Which of the following sandbox configurations fails to isolate malicious script content?
+    \begin{itemize}
+        \item sandbox
+        \item sandbox="allow-same-origin"
+        \item \textbf{sandbox="allow-same-origin allow-scripts"} \checkmark
+        \item sandbox="allow-scripts"
+        \item sandbox="allow-scripts allow-top-navigation"
+    \end{itemize}
+    \subsection{Content Security Policy}
+    \paragraph{Question 1} Which defenses does CSP offer that help mitigate script injection attacks?
+    \begin{itemize}
+        \item \textbf{CSP prevents the execution of inline scripts} \checkmark
+        \item CSP sanitizes inline scripts before executing them
+        \item CSP prevents the loading of external scripts
+        \item \textbf{CSP only loads external scripts if they are whitelisted} \checkmark
+    \end{itemize}
+    \paragraph{Question 2} If a CSP policy contains a default-src directive and an img-src directive, then the following rules will be applied to images in the page:
+    \begin{itemize}
+        \item Only the default-src directive applies
+        \item \textbf{Only the img-src directive applies} \checkmark
+        \item The default-src directive and the img-src directive both apply
+        \item The img-src directive applies first, and if no match is found, the default-src directive applies
+    \end{itemize}
+    \paragraph{Question 3} If CSP is deployed in report-only mode with a report-uri directive, and the browser encounters an injected script block, it will:
+    \begin{itemize}
+        \item Block the script from being executed
+        \item Block the script from being executed and send a report to the reporting endpoint
+        \item Execute the script
+        \item \textbf{Execute the script and send a report to the reporting endpoint} \checkmark
+    \end{itemize}
+    \paragraph{Question 4} If a CSP policy contains a hash, as well as the \textit{unsafe-inline} keyword. What happens when a browser supporting CSP Level 2 encounters an inline script block?
+    \begin{itemize}
+        \item It prevents the script from executing
+        \item It allows the script block to execute
+        \item \textbf{It allows the script block to execute if it matches the hash} \checkmark (The 'unsafe-inline' keyword is ignored when hashes are used, te script block needs to match the hash)
+        \item It allows the script block to execute if it uses the proper DOM APIs
+    \end{itemize}
+    \paragraph{Question 5} What is the most accurate description of the new \textit{strict-dynamic} keyword?
+    \begin{itemize}
+        \item It instructs the browser to only trust scripts that have a valid nonce
+        \item It instructs the browser to let trusted scripts load additional resources
+        \item It instructs the browser to let trusted scripts load additional resources, if they have a valid nonce
+        \item \textbf{It instructs the browser to let trusted scripts load additional resources, if they use the proper DOM APIs} \checkmark
+    \end{itemize}
+    \subsection{Securely handling untrusted data}
+    \paragraph{Question 1} What is the most accurate description of the root cause of injection attacks?
+    \begin{itemize}
+        \item Combining untrusted data and code
+        \item Failure to properly encode untrusted data
+        \item \textbf{The lack of context information to distinguish between data and code} \checkmark
+        \item The lack of input validation on untrusted data
+    \end{itemize}
+    \paragraph{Question 2} Which of these statements about command injection are true?
+    \begin{itemize}
+        \item \textbf{The best defense against command injection is using a context-aware API} \checkmark
+        \item The best defense against command injection is input validation and output encoding
+        \item Higher-level languages do not suffer from command injection because they run in a bytecode VM
+        \item Low-level languages have command injection vulnerabilities because they are inherently insecure
+    \end{itemize}
+    \paragraph{Question 3} Which of these statements most accurately describes the effect of using parametrized statements with variable binding?
+    \begin{itemize}
+        \item \textbf{They separate data and code, so that the data can be handled securely} \checkmark
+        \item The count the number of variables, and report an error if more variables are detected in the statement
+        \item They enforce type safety on the parameters, so that they cannot be interpreted as code
+        \item They force the developer to think about SQL injection
+    \end{itemize}
+    \paragraph{Question 4} Cross-site scripting attacks can be defined as follows: one site uses the victim's browser to inject script code into another site. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 5} Which of these statements about XSS does not make sense?
+    \begin{itemize}
+        \item A good way to prevent XSS vulnerabilities is to use statically generated pages
+        \item XSS allows the attacker to launch attacksagainst the victim's browser
+        \item \textbf{XSS allows the attacker to violate the Same-Origin Policy in the victim's browser} \checkmark (SOP prevents XSS attacks from different origins, not the same.)
+        \item XSS allows the attacker to remotely control the compromised browsing context
+    \end{itemize}
+    \paragraph{Question 6} What is the most accurate description of the effect of this sandbox attribute: sandbox="allow-scripts"?
+    \begin{itemize}
+        \item Code in the iframe does not run
+        \item \textbf{Code in the iframe runs, but is isolated from the rest of the page} \checkmark
+        \item Code in the iframe runs, but can still access its parent page
+        \item The use of allow-scripts void any protection guarantees
+    \end{itemize}
+    \paragraph{Question 7} Blocking the execution of JavaScript is insufficient to prevent an attacker from abusing an injection vulnerability. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 8} What is the use of the default-src directive?
+    \begin{itemize}
+        \item To specify commonparts for all types of resources
+        \item \textbf{To specify a policy for content types that are not specified in the CSP policy} \checkmark
+        \item As a complementary policy to enforce on all types of resources
+        \item As a shorthand to setup a CSP policy
+    \end{itemize}
+    \paragraph{Question 9} Defining a strict CSP policy is a good replacement for traditional defenses against content injection attacks. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark (It's a second line of defense)
+    \end{itemize}
+    \paragraph{Question 10} Which of these problems with CSP are addressed by the introduction of hashes?
+    \begin{itemize}
+        \item The blocking of inline event handlers
+        \item \textbf{The blocking of inline code blocks} \checkmark
+        \item The blocking of additional resources required by whitelisted scripts
+        \item The need to specify overly long whitelists
+    \end{itemize}
+
+
+
+    \newpage
+    \section{Final Exam}
+    \subsection{Securing the communication channel}
+    \paragraph{Question 1} What will happen if a page contains mixed content from its own domain, but the application has an HSTS policy configured?
+    \begin{itemize}
+        \item \textbf{The browser refuses to lead HTTP resources, so it does not even check if HSTS is enabled} \checkmark
+        \item The browser will prompt the user to ask if it should attempt to load the resources securely
+        \item The browser will upgrade the URLs to HTTPS and load the resources securely
+        \item Mixed content is only relevant for other domains, not for your own domain
+    \end{itemize}
+    \paragraph{Question 2} Supporting the older SSL is only acceptable if you need to support legacy clients. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \paragraph{Question 3} Which of these statements is false, assuming the browser has an active HSTS policy for the application?
+    \begin{itemize}
+        \item If the user does not type a protocol in the address bar, the browser defaults to HTTPS
+        \item \textbf{If the user explicitly types http:// in the address bar, the browser does not upgrade the URL to HTTPS} \checkmark
+        \item If an external page links to the application with an HTTP URL, the browser upgrades it to HTTPS
+        \item If the application sends a redirect to an HTTP resource, the browser upgrades it to HTTPS
+    \end{itemize}
+    \paragraph{Question 4} Deploying TLS using a third-party service such as Cloudfare offers the same or better security properties than deploying it yourself. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark (third party has access to the plain text traffic, so it's weaker for full end-to-end encryption)
+    \end{itemize}
+    \paragraph{Question 5} In which of these scenarios is Certificate Transparency useful? Assume Certificate Transparency is used correctly.
+    \begin{itemize}
+        \item \textbf{An attacker obtaining a valid certificate that is not published in a log} \checkmark
+        \item An attacker obtaining a valid certificate for a phishing site with an unrelated domain name
+        \item \textbf{An attacker obtaining a certificate by circumventing domain validation} \checkmark
+        \item \textbf{An attacker obtaining a certificate by hacking a CA} \checkmark
+    \end{itemize}
+    \subsection{Preventing unauthorized access}
+    \paragraph{Question 6} What should you do to upgrade the cost factor of your bcrypt algorithm over time?
+    \begin{itemize}
+        \item Reset all passwords, and have them choose a new password when they login
+        \item Keep the old hashes, but have the user choose a new password when they login
+        \item \textbf{Keep the old hashes, but upgrade the hash when a user logs in} \checkmark
+        \item Use the current bcrypt hashes as input for the new hash with a higher cost factor
+    \end{itemize}
+    \paragraph{Question 7} An application offers two-factor authentication. The two factors are a username/password combination, and a verification code sent over SMS. Which of these statements are false?
+    \begin{itemize}
+        \item Mobile phone numbers are easy to compromise, so the site should refrain from using them
+        \item \textbf{Mobile phone numbers are easy to compromise, so users should not enable the second factor} \checkmark
+        \item \textbf{Mobile phone numbers are easy to compromise, so the site should send the code via email instead} \checkmark
+    \end{itemize}
+    \paragraph{Question 8} The HttpOnly and Secure flag are only relevant to protect the cookiewith the session identifier. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 9} Which of the following statements about CSRF do not make sense?
+    \begin{itemize}
+        \item \textbf{A CSRF attack cannot be used to perform transactions that require multiple steps} \checkmark
+        \item CSRF allows the attacker to perform actions in the user's name
+        \item \textbf{Every session management mechanism suffers from CSRF vulnerabilities} \checkmark
+        \item \textbf{CSRF allowsthe attacker to transfer the user's session to a different browser} \checkmark
+    \end{itemize}
+    \paragraph{Question 10} In essence, an insecure direct object reference vulnerability is nothing more than a missing authorization check. True or false?
+    \begin{itemize}
+        \item \textbf{True} \checkmark
+        \item False
+    \end{itemize}
+    \subsection{Securely handling untrusted data}
+    \paragraph{Question 11} In which of these injection attacks does the server inject the malicious code into the context where it is executed?
+    \begin{itemize}
+        \item \textbf{SQL injection} \checkmark
+        \item \textbf{Command injection} \checkmark
+        \item \textbf{Traditional cross-site scripting} \checkmark
+        \item DOM-based cross-site scripting
+    \end{itemize}
+    \paragraph{Question 12} How would you most accurately describe the result of a successful command injection attack?
+    \begin{itemize}
+        \item The attacker executes a command as the root user
+        \item \textbf{The attacker executes a command with the privileges of the script that executed the system command} \checkmark
+        \item The attacker executes a command with the privileges of the web server
+        \item The attacker takes full control over the server
+    \end{itemize}
+    \paragraph{Question 13} Which of the following statements is true?
+    \begin{itemize}
+        \item \textbf{Isolating content in an iframe with a different origin offers the same isolation as a sandbox with a unique origin} \checkmark
+        \item Isolating content in an iframe with a different origin offers stronger isolation as a sandbox with a unique origin
+        \item Isolating content in an iframe with a different origin offers weaker isolation as a sandbox with a unique origin
+    \end{itemize}
+    \paragraph{Question 14} Which of the following statements are true?
+    \begin{itemize}
+        \item \textbf{It is better to encode data for a specific context than to encode all dangerous characters, regardless of the context} \checkmark
+        \item \textbf{Output encoding applies to all pieces of code, regardless of whether it is benign or malicious} \checkmark
+        \item XSS defenses are only relevant for rich-text output, not for simple strings
+        \item XSS payloads can only come from user input
+        \item The mitigation strategies for reflected XSS are different than those for stored XSS
+    \end{itemize}
+    \paragraph{Question 15} Which features in CSP do hashes and nonces override?
+    \begin{itemize}
+        \item \textbf{The use of 'unsafe-inline'} \checkmark
+        \item The use of 'unsafe-eval'
+        \item The use of whitelists
+        \item The use of 'self'
+    \end{itemize}
+    \subsection{Course overview}
+    \paragraph{Question 16} Which of these statements with regard to the Same-Origin Policy (SOP) are true?
+    \begin{itemize}
+        \item The use of HTTPS ha nothing to do with the SOP
+        \item \textbf{The CSRF defense using hidden tokens relies on the protections offered by the SOP} \checkmark
+        \item The sandbox attribute inherently modifies the way SOP works
+        \item If the SOP would be stricter, applications would not suffer from XSS
+    \end{itemize}
+    \paragraph{Question 17} Because of common vulnerabilities in popular libraries, it's better to write your own defenses. True or false?
+    \begin{itemize}
+        \item True
+        \item \textbf{False} \checkmark
+    \end{itemize}
+    \paragraph{Question 18} What can a local network attacker not do if your application uses HTTPS with HTTP Strict Transport Security enabled (HSTS)?
+    \begin{itemize}
+        \item Impersonate your application with a fraudulent but legitimate certificate
+        \item \textbf{Impersonate your application with an invalid certificate, and trick the user into accepting the SSL warning} \checkmark
+        \item Trick the user into authenticating to a phishing site that also uses HTTPS
+        \item \textbf{Fake a network error to cause the browser to drop the HSTS policy} \checkmark
+    \end{itemize}
+    \paragraph{Question 19} Which of the following statements describes the best way to protect your application against server-side injection attacks?
+    \begin{itemize}
+        \item Handle user input carefully, and ensure it cannot be interpreted as code
+        \item Apply strict input validation to all user-provided data
+        \item \textbf{Treat every piece of data in the application as potentially untrusted, regardless of where it comes from} \checkmark
+        \item Use a higher-level language, such as Java or .NET
+    \end{itemize}
+    \paragraph{Question 20} Which of these attacks becomes harder if cookies would be associated with an origin, and not a domain?
+    \begin{itemize}
+        \item Session hijacking from JavaScript
+        \item \textbf{Session hijacking on the network} \checkmark
+        \item Cross-Site Request Forgery (CSRF)
+        \item Reflected cross-site scripting
+    \end{itemize}
+    \end{document}  

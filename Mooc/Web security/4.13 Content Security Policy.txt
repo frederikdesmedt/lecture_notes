@@ -1,0 +1,75 @@
+Origin-based isolation and sandboxing can be used to isolate specific blocks of content.
+But it is a challenge to deploy these techniques as an application-wide second line of defense.
+The recent Content Security Policy, also known as CSP, is better suited for this purpose.
+Since the first version of CSP in 2012, it has grown into a complex security policy with various options.
+Here, we introduce the basic concepts behind CSP.
+In the next part, we go a bit more into the details.
+A CSP policy defines the intended behavior of a page and prevents actions that violate these intentions.
+Take a look at this example of a CSP policy.
+As you can see, CSP offers control over various kinds of content, such as scripts, styles, and images.
+For each of these resources, you can specify where they can originate from.
+Whenever the page requests resources that are not listed in the CSP policy,
+the browser refuses to load them.
+But how can we leverage CSP as a defense against content injection attacks?
+Let's start by taking a look at XSS, where the attacker injects script code into the application.
+One common way to exploit an XSS vulnerability is by injecting inline scripts.
+In an inline script block, the malicious code is embedded between script tags
+and is executed when encountered by the browser.
+A second way to exploit XSS vulnerabilities is to load remote scripts.
+In this scenario, the injected code instructs the browser to load a remote file containing malicious code.
+The CSP policy you see here stops both kinds of attacks.
+By default, CSP no longer executes inline script blocks.
+So even if the attacker injects script code into the page, the browser will not execute it.
+Remote script files are only loaded if the CSP policy whitelists them.
+The policy you see here tells the browser that scripts can come from 'self',
+a value referring to the application's origin.
+The browser will refuse to load scripts from other external hosts.
+Thus, this policy prevents the second type of XSS attack.
+Script content is highly interactive, which is why the script-src directive is quite complicated.
+Similar in complexity is the style-src directive, which controls stylesheets.
+Stylesheets are also considered to be interactive and are subject to the same restrictions as script content.
+By default, CSP prevents inline styles from being executed.
+Other types of content are more static, and thus more straightforward.
+The sources for content such as images, fonts, and media elements can be listed in the policy.
+The browser will only load them if they are whitelisted.
+Let’s take another look at our example CSP policy.
+Now you understand that each of the directives controls a particular type of content.
+As we have seen earlier, scripts and stylesheets are subject to additional restrictions.
+The first line of the policy contains a directive that we have not yet covered: default-src.
+This is the default directive used when a more specific directive is absent.
+Here is an example of what the default-src directive actually means.
+We remove the img-src directive from our policy but retain the default-src directive.
+If the page tries to load a remote image, the browser uses the default-src directive,
+since there is no img-src directive.
+Note that the browser does not combine the default-src directive with a more specific directive.
+Either the more specific directive applies, or the default-src directive applies.
+If both are absent, then no restrictions apply.
+Whenever the browser detects a violation of a CSP policy,
+it shows an error message in the developer console.
+But of course, when a violation happens in the user's browser, these messages are not very useful.
+That is why CSP offers a reporting feature.
+To enable the reporting feature, you need to add the report-uri directive to the policy.
+The contents of the directive specify the URL of a reporting endpoint.
+Once enabled, the browser will send reports about detected violations to this endpoint.
+This way you get feedback on detected violations within the browsers of your users.
+With this feedback, you can detect potential misconfigurations or attacks in your application.
+CSP also supports a report-only mode.
+In report-only mode, violations do not result in the blocking of the resource.
+Instead, the browser loads the resource as usual but sends a report of the detected violation to the endpoint.
+One way to use report-only mode is to try out a CSP policy.
+Another way is to detect specific types of content like we did when we needed to detect
+mixed content in our applications.
+Let's summarize what CSP brings to the table.
+To enable CSP, the application includes the Content-Security-Policy header in the response.
+The browser will enforce this policy on the page that it is loading.
+Here you can see that the browser checks the policy before loading external script files.
+The policy only allows script files from our origin.
+But when an attacker injects an inline script block, the policy prevents its execution.
+Script files from non-whitelisted hosts are also blocked.
+A CSP policy can also include the report-uri directive.
+This directive instructs the browser to send a report for every violation it detects.
+With these reports, we can detect potential attacks or misconfigurations.
+That concludes this brief introduction to CSP.
+Remember that CSP is intended as a second line of defense against content injection attacks.
+The application still needs to deploy proper defenses.
+But with CSP, the impact of the attack is limited in case these defenses fail.

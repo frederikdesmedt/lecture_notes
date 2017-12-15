@@ -1,0 +1,37 @@
+Before, we stated that the ecosystem surrounding certificates is quite fragile.
+Let’s take a look at the biggest problem we are currently facing:
+the unconditional trust in the root CAs.
+A modern browser trusts hundreds of root CAs, hence thousands of intermediate CAs.
+Anyone of these CAs can issue a certificate for our beersafe.eu application.
+Even an obscure Chinese CA under government control.
+As long as every step in the chain is trusted, the browser will not complain.
+We have seen problems with this trust model in the past.
+CAs have mistakenly issued certificates before.
+Attackers have been able to trick CAs into giving out certificates for domains they did not own.
+And even worse, attackers have compromised CAs, enabling them to issue fraudulent certificates.
+One of the most noteworthy incidents was the hacking of DigiNotar, a Dutch CA.
+In this particular case, the attackers issued a wildcard certificate for all google.com services.
+A certificate that every browser considered to be valid at the time.
+Several technologies have been proposed to address this problem.
+Here, two technologies are relevant to discuss.
+The first is Certificate Transparency, or CT.
+With CT, CAs are required to publish all certificates they issue into a public log.
+Anyone can consult the log, and detect the issuing of a fraudulent certificate.
+Upon detection of such a fraudulent certificate, the CA is notified and the certificate revoked.
+We will discuss certificate transparency in a bit more detail in the next part.
+For now, it suffices to know that this is a detective measure, not a preventive one.
+A complementary technology is Certificate Authority Authorization, or CAA.
+CAA allows a domain owner to limit the number of CAs that are allowed to issue certificates for a domain.
+Doing so stops any other CA from mistakenly issuing a certificate for your domain.
+You can configure CAA through dedicated DNS records, which the CA needs to check
+before issuing a certificate.
+Granted, this may not be a waterproof countermeasure, but it will help to avoid mistakes on the part of the CA.
+CAs must check the CAA record, and honor its preferences as of September 2017.
+Alternative solutions propose to determine up front which key the server can use.
+Fixating the key makes it impossible for an attacker to use his own key pair
+in combination with a fraudulent certificate.
+Two approaches to achieve this are using HTTP Public Key Pinning, or the DANE DNS extension.
+Experience shows that pinning is hard to get right,
+which is why these technologies see a limited adoption rate.
+To conclude, it is important to keep in mind that the trust model of HTTPS hinges on the legitimacy of a certificate.
+The security properties hold, as long as the attacker is not able to obtain a valid certificate for a domain.

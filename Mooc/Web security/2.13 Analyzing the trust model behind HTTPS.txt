@@ -1,0 +1,70 @@
+At the beginning of this module, we introduced three security properties of TLS:
+confidentiality, integrity, and authenticity.
+The first two are robust and straightforward.
+Once both parties possess a shared secret, confidentiality and integrity follow from
+the correct use of cryptographic algorithms.
+Here, we zoom in on the third property, authenticity, which is a lot more delicate.
+Earlier, we explained authenticity as verifying the validity of a certificate.
+While technically correct, we did omit the details about issuing and verifying a certificate.
+Supporting these features on the web means introducing a whole ecosystem.
+Certificates are issued by a Certificate Authority, or CA in short.
+When the CA issues a new certificate, it signs the certificate using its private key.
+The browser can verify a certificate by using the CA’s public key to verify the signature.
+If it matches, the browser knows that the certificate is issued by the CA,
+and decides to trust it.
+But now we have the same problem as before.
+How can the browser know whether a key belongs to a CA or not?
+Well, the system works with different levels of CAs.
+A CA signing end user certificates is an intermediate CA.
+An intermediate CA, in turn, needs a certificate from a higher-level CA to prove the legitimacy
+of its key material.
+This process can continue for a few steps until it reaches the highest level.
+At this level, we find CAs known as root CAs.
+Since root CAs are the highest level of certificate authorities, there is no higher authority
+to vouch for the validity of their key.
+That is why every browser and operating system has a list of hardcoded root CAs.
+Browsers and operating systems trust these root CAs by default.
+Mozilla Firefox provides an easy way to consult the list of root CAs.
+As you can see here, the browser trusts many CAs by default.
+Whenever the browser needs to verify a certificate, it will verify every certificate in the chain,
+until it reaches a trusted root CA.
+A browser only trusts certificates with a valid signature chain,
+on the condition that the other properties are also valid.
+These properties include, among others, a domain name, a start date, and an expiration date
+All the properties of a certificate are added when the CA generates and signs the certificate.
+Since the CA issues a certificate for a particular domain name, it implies that it should only
+respond to legitimate requests.
+If an attacker attempts to request a certificate for the beersafe.eu domain,
+we expect the CA to deny this request.
+Otherwise, the attacker can use this certificate to impersonate our application.
+The latter not only violates authenticity but also undermines confidentiality and integrity.
+But how can a CA verify whether a request for a certificate is legitimate?
+The most common way is to verify whether the requester is in control of the domain
+for which the certificate is being requested.
+One way to verify this is by sending a code to a reserved email address, such as postmaster@beersafe.eu.
+Only the legitimate owner can access such an email address.
+Another way would be to request that a particular response is placed at a specific location
+on the web server.
+Again, this is something that only an administrator can do, as it requires full access to the web server
+These types of validation are what we call domain validation.
+Certificates with domain validation are the cheapest and most common variant.
+CAs also offer certificates with organization validation and extended validation.
+For these types of validation, the CA performs more rigorous checks than verifying domain ownership.
+In return, these types of certificates are more expensive as well.
+For certificates with organization validation, there is no defined set of verification guidelines.
+For extended validation certificates, there is such a set.
+The checks include verifying the details of the business making the request,
+as well as the right to use the domain name.
+On a cryptographic level, the type of validation does not impact the security of the connection.
+So is there an advantage of spending more money on a certificate, only to get stricter
+verification procedures?
+Yes, there is, but it is subtle.
+The biggest difference is the browser UI.
+For extended validation certificates, the browser shows more information in the address bar.
+Most browsers choose to show the business name right next to the URL.
+For domain validation or organization validation, the browser only shows the lock icon.
+As you can see on this overview, each browser has their specific UI, but they more or less
+agree on how to handle extended validation certificates.
+To conclude, all CA-issued certificates offer the same level of cryptographic security.
+Stricter verification procedures can exert more trust,
+but only if the user even notices the difference.

@@ -1,0 +1,45 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter3_passwords branch from the Git repository (git checkout start_chapter3_passwords). Also check for the latest updates (git pull) command.
+Breaking weakly-stored passwords
+In the first part of this lab session, we will simulate an attack on the BeerSafe application. This scenario is a nice illustration of how easy it is to break weakly-stored passwords.
+Let's assume that the attacker has found a way to obtain the raw data from the database. For example, a single SQL injection vulnerability is already enough to steal the database, as we will see later in this course.
+For now, you can obtain a copy of the database by running the following command in a terminal: mysqldump -u root BeerSafe > BeerSafe.sql. This will dump the entire BeerSafe database into a file named BeerSafe.sql. If you inspect the contents of this file with a text editor, you can see that it contains both the structure and the data of the database.
+Let's dig a bit deeper, and look for passwords. Use the find feature of your editor to search for the term "password". As you can see in the image below, the dump contains the table with user accounts, which includes a password column.
+
+To extract the interesting information from the dump, you can execute the following command in the terminal: cat BeerSafe.sql | grep INSERT | grep Users | sed -e "s/),(/\n/g" | cut -d "'" -f 4 > hashes.dat. This will extract all the hashes from the dump and put them in a separate file. Inspecting the contents of the file should yield something like the image shown below.
+9bc34549d565d9505b287de0cd20ac77be1d3f2c
+211a492a3371d6d290933b1d4f7162a9b29463f9
+6C616F7C2D2FDE9018A09F06EAEFCFC7582BC7BA
+9F2FEB0F1EF425B292F2F94BC8482494DF430413
+5C17FA03E6D5FC247565E1CD8FFA70E1BFE5B8D9
+1999E4893F732BA38B948DBE8D34ED48CD54F058
+6C616F7C2D2FDE9018A09F06EAEFCFC7582BC7BA
+By the looks of it, these are not cleartext passwords. Copy one of the hashes, and paste them in the following site: http://crackhash.com/hash_analyzer.php. As you can see below, it identifies the type of hash.
+
+From the hash analysis, we learn that the passwords are stored as SHA1 hashes. We could launch a brute force attack on our own machine, but plenty of online services offer to crack hashes for us. They are backed by enormous rainbow tables, and are extremely efficient at breaking hashes. Use one of these two services to retrieve a couple hashes:
+http://crackhash.com/
+https://crackstation.net/
+
+As you can see in the image below, retrieving the password behind these hashes works remarkably well.
+
+Secure password storage
+In this part, we will upgrade the password storage mechanism to use bcrypt. Before we start modifying our application, let's take a look at what bcrypt does exactly.
+Discovering bcrypt
+The code of the BeerSafe project already includes a bcrypt library for Java. It also contains a small code example to demonstrate the use of the bcrypt library. You can find the code example in the StandaloneBcrypt class, in the eu.beersafe.mooc.utils source package.
+As you can see, the code example generates a bcrypt hash. Next, it verifies both a valid and invalid password against this generated hash. Play a bit around with the roundsExponent variable, which represents the cost factor. This gives you an idea of how long it takes to generate and verify a hash. Note that these results vary depending on the hardware you are using.
+Upgrading the password storage mechanism
+Now that you have familiarized yourself with bcrypt, it's time to upgrade the password storage mechanism in the BeerSafe application. Password hashes are generated and verified in the AuthenticationUtils class, located in the eu.beersafe.mooc.utils source package.
+It is recommended that you try to upgrade the application yourself, using the following guidelines. Note that if you mess up the database (hey, it happens!), you can use the database dump from earlier to restore the database: mysql -u root BeerSafe < BeerSafe.sql.
+Modify the code to support the following:
+Generate bcrypt hashes from a new password
+Verify a bcrypt hash with a given password
+An upgrade mechanism that overwrites the legacy hash with the bcrypt hash if necessary (e.g. in the verifcyAndClearPassword method)
+The UserDAO class supports a method to save a new password to the database
+
+When the password storage mechanism has been upgraded, it's time to try it out. Authenticate as one of the BeerSafe users, and see if everything works as expected. If the authentication succeeds, you can take another dump of the database to see if the password hash has indeed been updated.
+A fully implemented solution is available in the solutions_chapter3_passwords branch. Remember to pull the latest version, in case changes have been made to the code.
+Wrapping it up
+The remainder of the lab sessions will start from a clean branch. In those branches, the application still checks for a SHA1 hash in the database. Therefore, we need to restore the database to its original state, before wrapping up here.
+Use the database dump from earlier to restore the database: mysql -u root BeerSafe < BeerSafe.sql.
+Conclusion
+That concludes this lab session. You have seen how easy it is to break SHA1 hashes stolen from the database. That is why you should be using a dedicated password hashing function, such as bcrypt. Using such a function in code is straightforward, and implementing an upgrade mechanism is not too that difficult.

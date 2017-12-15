@@ -1,0 +1,263 @@
+Welcome to another chapter in the web security fundamentals course.
+In this chapter you will dive into the dangers of insecure handling of untrusted data.
+But before we go into the technical details I wanted to offer you a broader perspective on the topic.
+I'm going to talk to Matias Madou, CTO of Secure Code Warrior.
+Matias has a PhD in software security
+and has been working on improving security practices for more than a decade.
+Hi Matias, thanks for joining me.
+You're welcome.
+So when I asked you if you want to do the interview, you were actually quite enthusiastic,
+and you immediately proposed to bring props so you brought something here to the interview.
+Can you maybe show it ?
+Absolutely.
+It's a comic right? The same is going here on the screen.
+Yes. So we're redoing our office here in Belgium
+and we bring all sorts of stuff to the office so we have an air hockey table for example.
+But also this one, this frame.
+So I brought this frame to have some ornaments on the wall
+and it's a comic about SQL injection.
+But the very interesting part is actually the back.
+So in the back, as you can see it's dated 2008.
+So this is actually almost a decade old.
+So the problems that we're facing today, the problems that we're still trying to eradicate in code
+are in there for a long long time. So this was not the beginning you know we were already working on
+getting rid of SQL injection 10 years ago and still here we are talking about SQL injection.
+Exactly. And I'm going to talk about SQL injection later in the chapter as well
+so yes, it's still a very active problem and a very problematic problem.
+So a comic about SQL injection, that's funny, we all like it probably
+- everybody knows this by the way -
+but actually SQL injection is not a laughing matter. So the consequences can be quite severe.
+Can you give a few examples of what can go wrong with SQL injection in particular.
+Sure. So with SQL injection the attacker essentially controls the database
+and by controlling the data in the database it's very very powerful.
+He cannot only
+get the information out of the database, but he can also, for example, delete the information
+out of the database.
+But also alter the data in the database. So for example, if you just
+alter your bank account, the amount in your bank account, that's very very powerful
+I would say.
+If you go to the SQL injection wiki page
+you'll see a lot of entries about companies that got hacked
+through SQL injection.
+Very interesting. I think it's up to
+2015 I think then the guy gave up getting track of all the people that got hacked through
+SQL injection.
+One very interesting one it was in 2011,
+MySQL, so people that are working with databases on a day to day basis,
+their home page was actually hacked through SQL injection.
+So I found that quite interesting.
+That's that's a really amazing story. So the people at the root of these systems, they still
+make a mistake against SQL injection. That shows how bad the problem really is.
+Actually before this interview I went looking for some statistics
+and one of the statistics says that
+the average cost of a data breach,
+which is often a consequence of a SQL injection attack,
+is 3.6 million dollars.
+Does that surprise you?
+So first of all, 3.6 million, that's a lot of money.
+But next to the amount of money that people can lose, there is also brand damage.
+These days C-level people have to step down because of breaches
+and 3.6 million that's that's a huge number. So back to the numbers,
+I think everybody has some idea of what a cost is based on the company size and stuff like that.
+However I think there's a general consensus where people say, well the later you find a problem
+in the development lifecycle the more costly it is.
+So this is the result
+of one particular problem in code. 3.6 million for one
+small mistake in the code.
+So if you go back; if you look at static analysis for example
+if you find a problem over there, well, it's found through a nightly build
+or over the weekend and people have to push it in the bug tracking system. You divide it up
+in a meeting. Developers take a bug back. They have to dig into the
+code figure out how to fix that particular problem. Push it back into the system.
+So that's already costly. Even going more to the left more to the front
+if you think about developers that are actually coding. Well, if you do peer review
+and you're writing a piece of code and the guy next to you says "Well, oh, watch out, you're introducing a
+problem over here". Well you can see the difference, you know, the difference in dollar amounts that can be
+assigned to where you find a problem in code.
+Yeah absolutely. And I think a large part of the cost here is the fallout of such a data breach.
+Absolutely.
+Fixing a vulnerability is only a very small part.
+Absolutely. It has an impact on a lot of people
+and a lot of systems.
+Absolutely. OK, so SQL injection is one example.
+But this problem is actually more fundamental, right? We see this in a lot of different places.
+Do you have some more examples
+of injection vulnerabilities.
+Oh yeah. So you have, for example, the cross site scriptings, the LDAP injections and so on.
+These are the top problems in our area. There's the OWASP top 10
+and injections problems are the number one in that particular list.
+And they all boil down to the same problem
+which is unvalidated data. But in essence if you think about developers,
+they can, if they follow particular guidelines,
+not introduce such a problem into the code.
+So if developers stick to certain
+guidelines, well they will never introduce that problem into the code.
+So it is, I think very important, to always stick to guidelines.
+And let me clarify. They really have to always stick to certain coding guidelines
+and not say "well, it's not going to be a problem over here
+so let's not do it according to the coding guidelines".
+What we see quite often is that
+younger developers copy and paste code from everywhere around in the
+application. So if there's a vulnerable piece of code somewhere out there, which is OK in that particular
+context, if they copy that to their section, they introduce a problem into the code.
+Yeah absolutely.
+And one of the funny things, well, the sad things actually, that
+I can get from your remarks
+is that we actually know how to solve these problems.
+It's just a matter of consistently doing it across the application.
+Absolutely.
+And that's kind of surprising that we're still dealing with this.
+And you mentioned this before,
+the comic was from 2008. Well, your frame is from 2008,
+the comic is from a bit earlier I think.
+And yet today we still suffer from these problems even though you know the perfect solution.
+That's true.
+So, this may be a good opening to talk about you for example.
+So you've been working on these things for more than a decade.
+You actually worked at HP, at Fortify
+on the static analysis tool.
+So how does a static analysis tool help in preventing SQL injection.
+Okay, so maybe I have to go one step even further. So I started my career as a
+PhD candidate here at Ghent University
+where I was working on code obfuscation and true static analysis.
+Static analysis is simply:
+you look into the code without executing the code
+and you do some deep analysis on the code,
+on the source code, or on the binary code.
+With that PhD I indeed moved to the U.S.
+and I joined a small startup called Fortify, where we were working on
+their flagship product, which is a static analysis solution.
+Not a lot of people know but
+they're essentially finding problems in code through static analysis, through dynamic analysis,
+through runtime analysis.
+So they had a pretty good pack of
+solutions to find problems in code.
+And that that's all automated right ?
+That's all automated.
+You run the program on the code and you get essentially a list of potential problems that you need to look at.
+Exactly. So you essentially collect the knowledge of various people how to find
+problems in code and you put that into one solution.
+So you gather all the knowledge together.
+Essentially what they're doing and for over a decade now,
+they're really good in finding problems in code.
+However. Well you find the problems. You do not fix the problems.
+They're still there.
+It's not because you can say "well, this is a particular problem in code",  that it's magically fixed.
+No, that's not the way it works.
+At the same time,
+people keep on developing code.
+They keep on introducing new problems into the code, because
+there's never a time that a company says well let's stop developing. And today we're done.
+You know doesn't happen.
+So while they're doing a really good job, these static analysis solutions,
+well, you don't get the code fixed and you do not tell the developers
+what to do next time, essentially.
+Yeah. And a lot of fallout from static analysis is that developers consider some
+issues not to be important, they ignore it. And you need to actually convince them to fix issues
+even though the static analysis tool says that it's a problem right ?
+Yes.
+It's also mainly because of the angle that they take.
+They find the problems in the code,
+they tell you where the code is wrong and of course developers may challenge you
+and they say "well, is that really a problem in that particular context?".
+So, I think it would be better to take another angle here
+and to educate developers and tell them what to do, and how to produce secure code,
+so that they never introduce this problem in the first place.
+But that's funny that you say that because you actually started the company doing exactly that.
+After you left Fortify, right ?
+Yes, so after Fortify I briefly did some consulting where I saw the same things
+happening over and over again. People finding the problems in code
+but not fixing them
+and not training people on how to not make that mistake in the code. Yes.
+And so we started the company Secure Code Warrior
+and our ideas are simply to fix that particular problem
+in the market space. It's really educating developers, making sure that they get the stuff right.
+and also if there are problems in the code, that they know how to eradicate these problems.
+And doing that requires two things, if I'm not mistaken. So first of all a developer needs to
+know about security problems and needs to know that they're important that needs to know how to fix them.
+But the other part is also tool support. You don't want the developer to figure out himself
+how to write secure code. Because first of all, probably he's going to make a mistake, that happens.
+And second of all, it's a lot of effort.
+So you combine both approaches if I'm not mistaken, right ?
+Absolutely. So it is very important to educate a developer and tell them
+exactly what the problem is, and why this problem is there.
+But it is also very important to do that
+in the language that he is using on a day to day basis.
+It doesn't make sense teach him stuff on Java
+while his day to day job requires Ruby.
+So we do that in the language of that particular developer.
+And yes, so right now we have a gamified training platform
+that brings application security closer to the developer.
+But we want to even bring it more closer to developer.
+We want to introduce features that we can help the developer in real time writing secure code.
+So the platform you're mentioning is Secure Code Warrior right ?
+It's correct.
+I have it open right here.
+So we see a map and we see the leaderboard.
+There's a lot of stuff going on.
+Can you explain what's what's happening here ?
+Absolutely.
+So the idea is that we train developers on application security
+in a gamified way.
+So there are game aspects embedded into the learning platform.
+So over here we pick a country for example the U.S.
+and we're attacked from adversaries with SQL injection,
+cross-site scripting and remote code executions, for example.
+So the idea is that you can go into these lessons into these training modules
+and you can protect yourself against SQL injection
+the ideas you find the SQL injection first.
+But you also remediate the SQL injection.
+So pentesters they
+have no problem in finding the problem.
+But then remediating the problem is hard for them.
+So the idea is that a developer can spot problems in code
+but also knows how to remediate
+remediate these issues into the code.
+And everything happens in like a gamified way.
+Absolutely
+We can score some points and become a leader.
+Absolutely.
+So there is this gamified aspect.
+But there's also the more serious aspect.
+For example, the assessment if you want to assess your
+if you want to assess the people that are working on your project, you can do that through
+the platform. For example, outsourced people, they can be given an assessment to
+figure out how well they will produce code for you
+or if you have to be compliant with PCI compliance,
+for example, you can create such an assessment and give that out to the developers that need to be
+PCI compliant.
+So I want to conclude the interview. Thanks a lot for your time.
+So maybe before we close it off
+Do you have a takeaway message ?
+What is the one thing that viewers should remember after having seen this interview ?
+So,
+let's see. I think what should ...
+If I talk to developers,
+what I would recommend them is application security will be there.
+And because, as I said before, C-level people can lose their jobs because
+there are application security vulnerabilities into the code. They will not understand or they will
+not always understand what it exactly means.
+What they will understand is that it
+cannot be in the code. So they will mandate from their developers to not introduce
+these things into the code.
+So developers will be forced to write secure
+code if they want or not.
+What I would recommend for developers is be involved.
+Make sure that the tools that they give you,
+the means that they give you to write secure code
+are actually the things that you want to use on a day to day basis. You're there
+every day you have to use them every day.
+So make sure that the tools that they provide
+you with are really engaging tools and they do the stuff that they are made for
+and they get your job done faster.
+OK that's very valuable advice for developers out there.
+Battling security day to day.
+Thanks a lot for your time. Thanks a lot for your insights
+on how to tackle these problems
+and hopefully in another ten years we will be talking about this
+as ancient history.
+Very welcome. Thank you.
+So in the reminder of this course
+we're going to talk about how you can actually handle untrusted data in a secure way.
+We're going to talk about SQL injection, command injection,
+but also client-site injection vulnerabilities such as cross-site scripting.

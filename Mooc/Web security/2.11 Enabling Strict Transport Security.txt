@@ -1,0 +1,75 @@
+The redirect from HTTP to HTTPS is a crucial step in any HTTPS deployment.
+During this redirect, the browser is told to load the HTTPS version of the application.
+Once the redirect to HTTPS has happened, the communication channel is secure.
+Unfortunately, the redirect itself remains vulnerable to network-based attacks.
+By executing an SSL stripping attack, the attacker can get a man in the middle position.
+In such an attack, the attacker intercepts the HTTP request and prevents the redirect from happening.
+Instead, the attacker fetches the HTTPS page and serves it over HTTP.
+Let’s see how this works in practice.
+Here, the user visits the BeerSafe application by typing “beersafe.eu” in the address bar.
+The browser transforms this domain into an HTTP request and sends it to the server.
+The attacker on the network intercepts this request and forwards it to the web server.
+The server responds with a redirect towards the HTTPS version of the application.
+The attacker does not forward this redirect but follows it himself.
+He fetches the contents of the requested page from the web server.
+The next step of the attack involves rewriting all URLs in the page.
+The attacker replaces all occurrences of HTTPS with HTTP.
+The rewritten page is served to the user’s browser as a response to the initial HTTP request.
+From this point forward, the attacker has a full man in the middle position.
+The only way to stop SSL stripping attacks is by deploying additional security policies.
+All modern browsers support the HTTP Strict Transport Security policy, also known as HSTS.
+With HSTS, a web application instructs the browser to use HTTPS by default for a specified period.
+For example, when a user types “beersafe.eu” in the address bar, the browser will use HTTPS for the request.
+Even better, every HTTP URI pointing to the beersafe.eu domain will be transformed to a HTTPS URI.
+The server can configure an HSTS policy by sending a response header.
+The name of the header is “Strict-Transport-Security”, and it supports two configuration parameters.
+The first parameter, max-age, is mandatory and specifies the lifetime of the policy in seconds.
+The example shown here instructs the browser to use HTTPS for beersafe.eu for 1 year.
+Note that the period is extended every time the browser sees this HSTS response header.
+A year? Isn’t that way too long?
+Sure, but since we never want to serve an HTTP version of the application, this does not matter.
+As a rule of thumb, the time between two subsequent visits from one user
+determines the sensible policy lifetime for an application.
+If your users regularly visit your application, a lifetime of a couple of weeks would already suffice.
+Of course, setting a longer lifetime is not a bad idea.
+But if your users visit your application once a year, for example during tax season,
+a lifetime of 1 year may be too short.
+The second parameter of an HSTS policy is the optional includeSubdomains flag.
+This flag instructs the browser to apply the HSTS policy to all subdomains of the domain that sets the policy.
+In our example, we set the policy from beersafe.eu, meaning that the policy also applies to www.beersafe.eu.
+Note that the includeSubdomains flag can be dangerous.
+It prevents the browser from making HTTP requests to all subdomains.
+If a legacy HTTP service is still running somewhere,
+it will become unavailable to all browsers that have seen the HSTS policy.
+Let’s see HSTS in action on our training application.
+The web server will send the HSTS policy you can see here.
+When we visit the application in our browser, we can see the policy as part of the response.
+From now on, the browser will always use HTTPS for requests going to “beersafe.eu”.
+Even if we explicitly navigate to an HTTP URL, the browser will send the request over HTTPS.
+Once enabled, the security benefits of HSTS are enormous.
+But what happens the very first time the user visits our application?
+How can we protect the user then?
+Look at what happens when Chrome has not yet seen our HSTS policy.
+The first request is still sent over HTTP because this is the default browser behavior.
+Chrome will only start enforcing the HSTS policy after it has followed the redirect
+and received the first HTTPS response.
+This means that if we visit an application for the first time over an insecure network,
+we are still vulnerable to an SSL stripping attack.
+This is a trust on first use problem.
+Such scenarios exist with other security measures as well.
+The only solution is to inform the browser up front that the application wants to use HTTPS.
+For HSTS, browsers support a preload list of sites that want this type of behavior.
+Adding your site to the list of HSTS preloaded domains means opting into the mandatory use of HTTPS for all requests.
+Even the very first one.
+Before you can add yourself to the list, you need to meet several requirements.
+First, you need to add the preload flag to show your consent of being added to the list.
+Second, you need to have the includeSubdomains flag enabled for your entire domain.
+Third, you need to have a sensible HSTS configuration.
+You can find the full list of requirements and the submission form at hstspreload.org.
+A final word about HSTS.
+If you want to disable your current policy, the max-age needs to be set to 0.
+Omitting the header from the response is insufficient to disable the policy.
+To conclude, deploying your application over HTTPS is only step one.
+Due to attacks like SSL stripping, an attacker can still become a man in the middle.
+To prevent this, you need to deploy HTTP Strict Transport Security, or HSTS.
+HSTS tells the browser to use HTTPS by default, thereby eliminating the attack vector for SSL stripping attacks.

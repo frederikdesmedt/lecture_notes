@@ -1,0 +1,38 @@
+Insecure handling of untrusted data is a common problem in many applications.
+But what is untrusted data in a web application?
+Are you thinking about user input right now?
+Good.
+User-provided data is the most apparent source of untrusted data.
+And many applications even fail to handle this kind of data securely.
+The consequences of mishandling untrusted data are severe.
+Examples are vulnerabilities such as SQL injection, command injection and cross-site scripting.
+But the problem is even worse.
+User-provided data is not the only kind of untrusted data.
+If you think this through, all dynamic data in a web application is untrusted in one way
+or another.
+Especially in the modern web, where many applications access the same underlying data stores.
+Why do so many applications fail to handle untrusted data in a secure manner?
+Is this problem that hard to solve?
+Unfortunately, there is no straightforward answer to these questions.
+In theory, handling untrusted data is not a hard problem.
+However in practice, things are a lot more complicated, and mistakes are easy to make.
+In the first part of this module, we investigate server-side injection vulnerabilities.
+The underlying cause of these injection vulnerabilities is a confusion between data and code.
+Simple coding mistakes lead to common vulnerabilities, such as SQL injection and command injection.
+You will learn how secure coding practices help you to avoid these vulnerabilities.
+Next, we dive into client-side injection vulnerabilities Of course, the most well-known example is
+cross-site scripting.
+But did you know that even the injection of plain HTML can already be quite dangerous?
+These client-side vulnerabilities have the same cause as server-side injection vulnerabilities.
+The difference is that they are a lot harder to defend against.
+Once you learn about the proper defenses, you will also understand why almost every
+web application has suffered from cross-site scripting problems.
+You can take extra steps to mitigate client-side injection attacks.
+Did you know that you can isolate dangerous content within the browser, and impose additional
+restrictions?
+Are you familiar with using Content Security Policy as a second line of defense against
+injection attacks?
+Few developers are aware of these new and powerful technologies.
+That is why we will explore how to use these technologies to enhance the security of your application.
+At the end of this module, you will understand the root cause behind injection vulnerabilities.
+The secure coding practices you have learned will help you neutralize these vulnerabilities.

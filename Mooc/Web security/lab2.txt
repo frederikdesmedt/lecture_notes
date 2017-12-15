@@ -1,0 +1,28 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter2_hsts branch from the Git repository (git checkout start_chapter2_hsts). Also check for the latest updates (git pull) command.
+Deploying HTTP Strict Transport Security
+The problem with redirecting to HTTPS
+Let's take another look at what happens if the user visits the BeerSafe application. Close previous tabs in Chrome, and open a new tab. Open the network tab of the developer console before loading the BeerSafe application. Also make sure that the checkbox preserve log is checked, as shown below.
+If you now type beersafe.eu into the address bar of the browser, you will see that the application is loaded over HTTPS. The network tab of the console shows the requests that have been made to load the application. If you take a look at the very first request, you see that it went to http://beersafe.eu. The response shows that the server redirected the browser to the HTTPS version of the application.
+
+Once we have loaded the HTTPS version of the application, we are protected against most network attacks. However, there is a small window of attack before we get to the HTTPS version. An attacker controlling the network sees the first HTTP request pass by. At that point, he can easily serve us a fake response page, which would neutralize the redirect to HTTPS.
+Fixing the insecure redirect
+Unfortunately, many applications suffer from such an insecure redirect. Let's see how deploying HTTP Strict Transport Security solves the problem.
+You can enable HSTS by modifying the https.txt configuration file in the src/main/webapp/_securitypolicies/ folder. The example below shows the two properties that control HSTS:
+# Enable HSTS policy (valid values: true, false)
+hsts-enabled: true
+
+# Set HSTS policy (single line)
+hsts-policy: max-age=600
+Once you have modified and saved the file, the new HSTS policy will be automatically applied. Let's see what happens. Clear the network console, and navigate the browser to beersafe.eu. As you can see, the application is still served over HTTPS.
+If you inspect the traffic in the network console, you can see that the first request still goes to http://beersafe.eu. The second request goes to the HTTPS version of the application. If you inspect the response to the second request, you will see that the server has included the Strict-Transport-Security header. This header tells the browser that for the specified max-age, all requests should be sent over HTTPS.
+
+You can see this in action by repeating the same scenario once more. Clear the network console, and navigate the browser to beersafe.eu. As you can see, the application is still served over HTTPS. But a closer look at the network console reveals that the first request is a redirect with status code 307. As you can see, this is Chrome's way of dealing with HSTS internally. In practice, the first reqeust is never sent, but an HTTPS request is sent instead.
+
+So by enabling HSTS, we can ensure that the browser never sends an HTTP request. As a result, an attacker controlling the network will not be able to obtain a man-in-the-middle position.
+Inspecting an HSTS configuration
+Chrome offers a way to consult the HSTS setting for a specific domain. Open a new tab in Chrome and navigate to the chrome://net-internals#hsts URL. This will open an internal configuration tool. The tool allows you to set or delete HSTS settings, but also to query a domain. If you query beersafe.eu, you should see something like the image shown below.
+
+The dynamic_sts settings indicate that the website has set its own HSTS policy. The static_sts settings apply to preloaded sites, which we have not done for the BeerSafe application.
+Conclusion
+That concludes this lab session. By deploying HTTP Strict Transport Security, we have ensured that every request to the application is sent over HTTPS. Of course, without preloading, the very first request to our application is still unprotected. However, by deploying HSTS, we have significantly reduced the attack surface.

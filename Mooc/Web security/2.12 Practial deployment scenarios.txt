@@ -1,0 +1,56 @@
+So far, we have covered the security properties and underlying principles of HTTPS.
+But once you start deploying HTTPS in a real-life scenario, all kinds of questions will rise.
+Can you run different HTTPS sites on one server?
+Where do you store the sensitive cryptographic material?
+What happens if you use a third-party service for traffic optimization?
+Questions like these make deploying HTTPS seem complicated.
+Do you remember the myth that you can only run one HTTPS application per IP address?
+It may surprise you that until a few years ago, that myth was a stone-cold reality.
+To understand why, we need to take another look at the TLS handshake.
+As you can see in the schematic here, the browser translates a domain name to an IP address.
+The browser uses the IP address to initiate a connection to that server.
+When TLS is used, the server responds with a certificate,
+tied to the domain name of the web application.
+The browser verifies the certificate and establishes the secure connection.
+Only then will the browser start sending HTTP traffic.
+Sounds good.
+But take a moment to think about the following problem.
+What if the server is running three different web applications, with three different domain names
+and three different certificates?
+In such a scenario, the server needs to know which application the browser is connecting to.
+Otherwise, the server has no idea which certificate to use.
+If the server uses the wrong certificate, the browser will detect a mismatch
+between the domain of the certificate and that of the actual request.
+As a result, the browser shows a warning to the user and aborts the connection.
+Unfortunately, the TLS handshake does not support sending the domain name of the application
+up front.
+Because of this limitation, you could run only one HTTPS application per IP address.
+But modern browsers and operating systems support a TLS extension
+known as Server Name Indication, or SNI.
+With SNI enabled, the client includes the domain name of the application it is connecting to
+in the first step of the handshake.
+Now that the domain name is known up front, the server can select the right certificate.
+In this scenario, SNI is essential to establish the connection without errors.
+The capability of running multiple HTTPS sites on one IP address
+enables a broad range of practical deployment scenarios.
+One example is deploying a reverse proxy service as a dedicated TLS endpoint.
+The proxy establishes the secure communication channel with a client.
+In the background, the proxy forwards all requests to internal services.
+This setup can seem a bit strange but offers several benefits.
+First, the deployment of internal services becomes a lot more practical.
+Now, they no longer need to worry about the public-facing TLS configuration.
+But this scenario offers a significant security benefit as well.
+It isolates the cryptographic material on a separate host or container.
+This isolation keeps the cryptographic material out of reach when an attacker targets the web application.
+Don’t worry if you have no idea how to deploy a reverse proxy to setup this scenario.
+Specialized companies are offering various traffic optimization services, including the configuration of HTTPS.
+One example of such a company is CloudFlare.
+CloudFlare offers protection against denial of service attacks, but also supports the deployment of HTTPS.
+They offer various deployment schemes, including advanced enterprise options.
+With CloudFlare, you can even ensure that HTTP applications are served over HTTPS.
+Of course, in this scenario, the traffic between CloudFlare and your application will still be plain text.
+There is, however, one side effect with these deployment schemes.
+Because an external service handles HTTPS, there is no secure end-to-end communication channel.
+The service offering HTTPS support has a full man in the middle position, giving it full access to all traffic.
+Using such a service means accepting the risk that there is another trusted party,
+which can become compromised or turn malicious.

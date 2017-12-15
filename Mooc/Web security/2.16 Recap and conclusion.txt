@@ -1,0 +1,37 @@
+We started this chapter with the hypothesis that wireless networks are insecure.
+The interview with Mathy Vanhoef, an expert on wireless security, illustrated the practicality
+of attacks.
+Throughout this chapter, we discussed several challenges with establishing a secure communication
+channel.
+HTTPS offers a secure communication channel between the browser and the web application.
+When used correctly, HTTPS ensures three important security properties: confidentiality, integrity,
+and authenticity.
+In a nutshell, the use of HTTPS prevents eavesdropping, data manipulation, and impersonation.
+Deploying HTTPS seems straightforward.
+In theory, it suffices to configure a web server with a legitimate certificate, and
+redirect all HTTP traffic to HTTPS.
+In practice, SSL Stripping attacks can still pierce the security of such an HTTPS channel.
+SSL Stripping takes advantage of the unprotected redirect from HTTP to HTTPS.
+To prevent these attacks, the web application should deploy a Strict Transport Security
+policy.
+Imperfections in the HTTPS ecosystem further complicate a modern HTTPS deployment.
+Throughout the chapter, we explained step-by-step how a secure HTTPS channel is established.
+As we have seen, the legitimacy of the certificate is crucial to ensure
+the security of the HTTPS  channel.
+The legitimacy of a certificate comes down to the trustworthiness of Certificate Authorities.
+They need to ensure proper validation procedures when issuing certificates.
+Unfortunately, that is not always the case.
+Certificate Authorities make mistakes, misbehave and are high-profile targets for attackers.
+Several technologies can offer stronger guarantees about the legitimacy of a certificate.
+Of these technologies, Certificate Transparency gained the most traction.
+Certificate Transparency mandates the logging of all issued certificates.
+Monitoring these logs enables the early detection of fraudulent certificates.
+Upon discovery, such fraudulent certificates can be immediately revoked.
+So getting HTTPS right is not as easy as it sounds.
+This chapter has given you the necessary knowledge to setup a correct HTTPS deployment.
+And remember, when you deploy HTTPS, you can use the SSL Server Test to verify the security
+of your deployment.
+To conclude, let me give you a two-line summary of this entire chapter.
+Using HTTPS in combination with Strict Transport Security is the baseline for building secure
+web applications.
+Anything less is vulnerable to trivial attacks on the communication channel.

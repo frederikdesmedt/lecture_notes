@@ -1,0 +1,84 @@
+Before, we talked about an attacker stealing user account information from the database.
+Unfortunately, there are also other threats against an application's authentication system.
+One of those threats is a brute force attack.
+In a brute force attack, the attacker tries to guess the password of a valid user of the application.
+Such a brute force attack seems like a hopeless effort.
+But make no mistake, it can be brutally effective.
+Using a list of most common passwords is already a good place to start.
+The chances are that at least one of the users of an application uses such a weak password.
+Of course, the attacker also needs a valid username to authenticate.
+And that is where enumeration attacks come in.
+With an enumeration attack, the attacker can determine if a username exists in the application.
+If the application leaks such information, it can be abused to compile a list of valid usernames.
+That list, in turn, enables the attacker to optimize his brute force attack.
+We will cover enumeration attacks first and then come back to brute force authentication attacks.
+So, how does an enumeration attack work in practice?
+Take a look at the following two screenshots of the login form in our BeerSafe application.
+Both show a failed authentication attempt.
+Can you spot the difference?
+The image on the left shows an authentication attempt for a non-existing account.
+The image on the right is an attempt with an existing account.
+The error messages in both screenshots are different.
+This means that the application leaks information about the existence of a username.
+As a consequence, it is vulnerable to an enumeration attack.
+Here, you can see how an attacker can exploit the enumeration attack.
+Sending an authentication request for each potential user allows the attacker to triage the responses.
+In the end, the attacker has a list of accounts that exist in the BeerSafe application.
+But the authentication form is only one place where such information can leak.
+Another common place is the account recovery form.
+The recovery form typically requests an email address.
+More often than not, it immediately notifies the user when the email address is not found.
+A third location is the registration form.
+When choosing a username or email address, the application discloses if it already exists.
+So, how can you prevent enumeration attacks?
+The best solution is to avoid leaking information about the existence of an account.
+For the authentication form, this is straightforward.
+As you see here, the application now uses the same error message for both scenarios.
+This small fix prevents the attacker from easily determining if an account exists.
+For account recovery, the process is also not that complicated.
+The first step is to refrain from giving the user immediate feedback about the existence of an email address.
+Instead, you look up if an email address exists.
+If it exists, you send the recovery email, like before.
+If it does not exist, you can send a message that informs the user about the potential account recovery.
+You can point out that the user may have used a different email address to sign up.
+Alternatively, you can suggest that the user can always register a new account if desired.
+Note that in this scenario, the attacker does not learn whether an email address is valid or not.
+Only the owner of the email account can learn that information.
+And in an enumeration attack, the owner will not be the attacker.
+The third scenario is registration of a new user.
+This is a bit more tricky.
+The simple case is when the application uses email addresses as a unique identifier.
+In this case, you can implement a similar mechanism as for recovery.
+If the email address is not yet known to the application, you create a new account and send an email to the user.
+If the email address matches an existing account, you send an email to remind the user of this account.
+You should also include instructions on how to recover the password.
+Things become a lot more complicated if the application uses arbitrary identifiers, such as usernames.
+The application will have to enforce uniqueness across the entire userbase.
+However, these identifiers are chosen by the user.
+By design, this leads to potential enumeration attacks.
+One way to limit this risk is to require registration with an email address first.
+Only then allow the selection of a username.
+This allows you to impose a limit on the number of attempts to pick a username.
+As a result, the attacker can only learn a tiny amount of information during an attack.
+As you can see, preventing enumeration attacks sounds easy, but is hard to get right.
+Before we conclude, let's revisit the brute force attacks we discussed earlier.
+With a list of valid usernames, an attacker can start brute forcing potential passwords, hoping to get lucky.
+There are two common strategies to prevent brute force attacks.
+The first strategy is to lock a user account after a certain number of authentication attempts.
+This is the most secure approach, as it prevents numerous guesses for the same account.
+Unfortunately, it also has the most impact on your application.
+How will you distinguish a forgetful user from an attacker?
+Will you need to manually intervene to unlock an account?
+What happens if an attacker locks all accounts in your application?
+These are scenarios to consider before installing a lockout policy.
+A second strategy is to slow down authentication attempts after a couple of failures.
+For example, after three attempts, the application waits for a second.
+After four attempts it waits 3 seconds.
+After five attempts it waits 10 seconds.
+As you can see, increasing the slowdown makes a brute force attack infeasible.
+And if a forgetful user needs a couple of tries, the 10-second wait will not have a significant impact.
+The practical implementation of these strategies takes us too far for this course.
+But you should remember that brute force attacks are quite dangerous.
+Especially when combined with an enumeration attack.
+To conclude, your application should ensure not to leak information about existing accounts.
+Even though this information disclosure seems harmless, it is often used as a stepping stone for further attacks.

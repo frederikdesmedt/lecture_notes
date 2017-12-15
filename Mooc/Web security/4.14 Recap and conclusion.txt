@@ -1,0 +1,44 @@
+Untrusted data lies at the basis of some of the most dangerous vulnerabilities in web applications.
+In this chapter, we investigated how these vulnerabilities end up in an application.
+We also covered various mitigation strategies to eliminate these vulnerabilities.
+The interview with Matias Madou illustrated that applying these defenses in a consistent
+manner is hard.
+The key to success is developer training and proper tool support.
+Insecure handling of untrusted data causes injection vulnerabilities.
+Server-side examples are SQL injection and command injection.
+Successful exploitation results in the execution of injected commands.
+These vulnerabilities are caused by a lack of context information during execution.
+This means that untrusted data is interpreted as code, resulting in an attack.
+That is why the proper defenses are to ensure that context information is available.
+For example, to prevent SQL injection, you can use prepared statements with variable
+binding.
+This way, there can be no confusion between data and code.
+There are situations where variable binding is not available.
+There, you should use alternative defenses.
+Examples are whitelisting allowed values and proper encoding of dangerous characters.
+Today, browsers are also a target for injection attacks.
+Most dangerous are Cross-site Scripting attacks, also known as XSS.
+In an XSS attack, the adversary injects JavaScript code into the page.
+The browser lacks context to distinguish between code and data.
+As a result, it executes the injected code.
+The mitigation techniques are like those discussed before.
+For DOM modifications on the client-side, the needed context comes from the use of proper
+APIs.
+However, these APIs are not available when composing pages on the server-side.
+In those cases, the proper defences are context-sensitive output encoding and sanitization.
+Recently, browsers also implemented a few additional security measures to combat client-side injection
+attacks.
+One example is Content Security Policy, also known as CSP.
+CSP is a second line of defense against script injection attacks.
+CSP blocks common XSS attack vectors by default.
+And if an attack still occurs, a strict CSP policy will limit the power of the attacker.
+A second example of a browser-based security measure is the sandbox attribute.
+The sandbox attribute can be set on any iframe.
+When enabled, it enforces strict constraints on the sandboxed content.
+Even if the untrusted data contains harmful code, it cannot break out of the sandbox.
+The sandbox thus prevents the harmful code from attacking to the rest of the page.
+To conclude, let me reduce this chapter into one key lesson.
+Always think about the source and destination of data in your application.
+Data can only be handled securely if the proper context information is available.
+So whenever you use data to generate output, check if the receiver will be able to distinguish
+between data and code.

@@ -1,0 +1,61 @@
+Client-side injection attacks are dangerous, and their defenses are error-prone.
+The consequences of an attack can be quite severe.
+Examples are altering the looks or behavior, or gaining full control over the browsing context.
+The impact of an attack is significant because the malicious code runs in the application's
+main browsing context.
+Fortunately, there are additional mitigation techniques to limit the power of these attacks.
+A first step to reduce the impact of injection attacks is to enforce context isolation.
+The Same-Origin Policy can be used to isolate the main application context from potential untrusted parts.
+Take the BeerSafe application as an example.
+It could load its tasting notes from a different origin.
+Putting the tasting notes in a separate iframe isolates them from the rest of the application.
+If the tasting notes contain malicious code, the code will be executed in a separate origin.
+The browser's Same-Origin Policy prevents the escalation of the attack to the main application context.
+Origin-based isolation is effective, but also tricky to implement.
+It requires splitting of the application into different components so that they can be deployed in different origins.
+Furthermore, even though the malicious code is isolated, it still runs without any restrictions on its behavior.
+That's where the HTML5 sandbox attribute comes in.
+The sandbox attribute allows you to impose additional constraints on an iframe.
+For example, the sandbox attribute can be used to disable the execution of scripts and
+prevent the submission of forms.
+In essence, a sandboxed iframe offers a restricted environment, which can be used to isolate untrusted content.
+Before we dive into the details of the sandbox attribute, let's see how a sandboxed iframe
+takes content isolation to the next level.
+As we have seen before, the Same-Origin Policy separates browsing contexts with different origins.
+Origin-based isolation prevents malicious code from compromising the application's browsing context.
+But within the isolated context, the malicious code is not subject to restrictions.
+An attacker can still show fake forms or execute arbitrary malicious code.
+Sandboxing the frame does not remove the attacker's code.
+Instead, the browser enforces a set of restrictions.
+For example, preventing form submissions renders injected forms harmless.
+Similarly, JavaScript is not executed, so script injection attacks will have no effect.
+So far, we used form submissions and script injections as the primary examples.
+But the sandbox attribute offers a lot more.
+By default, the following restrictions are applied:
+The content is assigned a separate and unique origin
+Scripts are not executed
+Forms cannot be submitted
+Navigation of external contexts is not allowed
+Popups are not allowed
+Plugin content, such as Flash or Java, is not executed
+Fullscreen capabilities are not available
+Autoplay for multimedia content is not available
+As you can see, the default sandboxed iframe is a highly constrained environment.
+These constraints increase security, but also limit the usability of the sandboxing mechanism.
+Fortunately, you can customize the sandbox to your specific needs.
+Most of the restrictions can be turned off by adding a specific directives to the value of the attribute.
+All these restrictions make sandboxed iframes a powerful content isolation mechanism.
+But the real power of the sandbox attribute is the capability to isolate content in a unique origin.
+This feature gives you the benefits of origin-based isolation, without the hassle of using different origins.
+When you load a page from your origin in a sandboxed iframe, the browser substitutes
+the actual origin with a random and unique value.
+In practice, this means that this content will be isolated from every other context in the browser,
+regardless of where it was loaded from.
+A final remark about the use of sandboxed iframes in practice.
+Combining the "allow-sameorigin" and "allow-scripts" permission enables a bypass-attack on the sandbox.
+The "allow-scripts" permission allows the execution of malicious code.
+The "allow-sameorigin" permission allows access to the application's browsing context.
+So use one or the other, but never both together.
+To conclude, origin-based isolation is a good defense-in-depth strategy.
+It allows you to limit the power of client-side injection attacks.
+The HTML5 sandbox attribute allows you to impose further restrictions on the isolated content.

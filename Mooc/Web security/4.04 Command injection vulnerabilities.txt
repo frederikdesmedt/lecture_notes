@@ -1,0 +1,35 @@
+Server-side injection vulnerabilities are the biggest threat to web applications.
+One very potent class of injection vulnerabilities is command injection.
+Let's dive right in with an example.
+We have built a PHP script that accepts a domain name as input
+and returns the associated IP address as the output.
+To get the IP address, the script calls the "host" command, which performs a DNS lookup of the domain.
+We can call our script with "beersafe.eu" as input, and get an IP address as a result.
+Looks good, right?
+Well, not really.
+Take a moment to think about what can go wrong here.
+What happens if an attacker sends a request to the following URL?
+The script takes the input and appends it to the command to execute.
+The shell executing the command has no context information to distinguish between data and code.
+As a result, the shell will see the semicolon as a command separator and will execute two commands.
+This security issue is known as command injection.
+In this case, the attacker has stolen system files, but he could have run arbitrary commands.
+From up close, command injection vulnerabilities look simple to spot.
+But make no mistake, they do occur in real-life systems.
+In 2016, a researcher discovered a command injection vulnerability in a variety of Netgear router models.
+Like most wireless routers, Netgear routers offer a web-based configuration interface.
+In the background, the web interface changes settings by invoking system commands on the router.
+For example, the URL you can see here will trigger a reboot of the router.
+Unfortunately, the script translating these URLs into system commands is unaware of command injection vulnerabilities.
+By appending a semicolon to the URL, an attacker can get the router to execute arbitrary commands.
+For example, calling this URL will show you a list of files on the router.
+Shortly after the public disclosure of this vulnerability, Netgear issued firmware updates.
+Ironically, until that happened, the workaround was to use the vulnerability to kill the HTTP server on the router.
+Sending a request to this URL ensured that nobody else could take control of your router.
+In essence, a potential command injection vulnerability exists
+every time untrusted data ends up in an external command.
+A common source of untrusted data is user input.
+However, alternative sources, such as cookies or HTTP headers are also potential attack vectors.
+So whenever a command is constructed using untrusted data,
+you need to implement additional defenses against command injection attacks.
+We cover a few defenses in the next part.

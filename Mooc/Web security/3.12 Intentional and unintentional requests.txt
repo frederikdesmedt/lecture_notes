@@ -1,0 +1,63 @@
+One of the most important aspects of authorization in web applications is deciding whether a request is legitimate.
+But due to the liberal interactions allowed in a browser, this determination is not as easy as you may think.
+The perfectillustration of this challenge is a Cross-Site Request Forgery attack,
+also known as C S R F, or "CSRF".
+CSRF attacks are a bit tricky to explain, so let’s take a look at a concrete CSRF scenario first.
+The user is logged into the BeerSafe application.
+As a result, the browser has a cookie containing the session identifier.
+To launch a CSRF attack, the attacker tricks the user into visiting an unrelated web page.
+But inside this page, the attacker has hidden a piece of malicious code to carry out the CSRF attack.
+When processed by the browser, the CSRF code will send a request to the BeerSafe application.
+The request instructs the application to post a new tasting note.
+Since the request is going to the beersafe.eu domain, the browser will attach the session cookie.
+When the BeerSafe application processes the incoming request, it verifies the session information.
+In this session, the user is authenticated, so the note will be posted in the user’s name.
+So, what happened here? Let’s break it down step by step.
+First, let's take a look at the practical details of launching a request to create a tasting note.
+In this code snippet, you can see a form that creates a POST request to the BeerSafe application.
+Loading this form into a hidden iframe suffices to have the user's browser make a request.
+In this case,the hidden POST request creates a new tasting note.
+A CSRF attack takes advantage of the way the browser handles cookies.
+The browser automatically attaches cookies to outgoing requests, regardless of the context they originated from.
+In the scenario here, the attacker’s page sent the request to create a tasting note.
+But even then, the browser attached the cookies without objection.
+From a server’s point of view, a request created by a CSRF attack is identical to a legitimate request.
+There is no way for the server to distinguish between intentional requests and unintentional requests.
+But if such a distinction is impossible to make, how can the server defend against CSRF attacks?
+The traditional defense against CSRF attacks is to add a hidden CSRF token to a form.
+When the application creates a page that contains a form, it should also generate a user-specific CSRF token.
+The CSRF token is stored in the user’s session, and embedded into the form as a hidden token.
+When the user fills out the form and submits it, the CSRF token will be part of the submitted data.
+The server can now match the CSRF token to the one stored in the user’s session.
+When these tokens are identical, the form has originated from within the BeerSafe’s application context.
+If they do not match, then somebody has tampered with the form submission.
+Note that the attacker is still able to submit a form to create a tasting note from the user’s browser.
+But the only way for the attacker to obtain the user-specific token of the victim,
+is to extract it from a page within the victim’s browser.
+Reading a page from a different origin is explicitly denied by the Same-Origin Policy.
+CSRF is possible because of the browser's cookie handling.
+Unfortunately, the decision to enable this kind of behavior was made almost twenty years ago.
+Changing the default behavior today would break a large number of applications.
+But recently, a new cookie flag allows applications to opt-in to more restrictive cookie handling.
+The new “SameSite” cookie flag indicates that a cookie should only be present on requests within one site.
+To determine if a request falls within one site, the browser uses the registered domain.
+Here, you see a few examples using the beersafe.eu domain.
+SameSite cookies are only present on requests originating from a context within beersafe.eu.
+Requests coming from contexts belonging to an unrelated domain will not have these cookies.
+Keep in mind that “SameSite” flag applies to domains, and not origins.
+This means that all subdomains of beersafe.eu fall within the same “beersafe.eu” site.
+The reason for this behavior is that many applications use different subdomains.
+Of course, they depend on cookies being present on requests between such subdomains.
+A final word on the “SameSite” cookie flag.
+It supports a strict and a lax mode of operation.
+Strict mode is the one we discussed until now.
+The Lax mode is a bit less restrictive.
+It allows the cookie to be present on top-level navigations through a GET request.
+For example, if a user opens the BeerSafe application by clicking on a link in a search engine,
+the cookie would be present.
+This benefits usability, while still limiting the exposure to CSRF attacks.
+The conclusion is that a CSRF attack allows the attacker to perform operations in the user’s name.
+Unless you have implemented defenses against CSRF attacks, your application will be vulnerable.
+Application-level CSRF defenses rely on user-specific tokens to ensure the validity of a request.
+An alternative mechanism is the “SameSite” cookie flag,
+but browser support for this flag is still limited.

@@ -1,0 +1,43 @@
+Preventing unauthorized access to web applications is a complicated challenge.
+That is why many applications are vulnerable, and why four out of ten issues in the OWASP
+top 10 relate to this problem.
+To make a sensible authorization decision, a web application needs to know who the user is.
+This information is a result of the authentication procedure.
+Unfortunately, HTTP is a stateless protocol and does not keep track of authentication
+information.
+That is where session management comes into play.
+The application maintains a session after authentication.
+With the state stored in this session, authorization decisions can be made.
+In this chapter, we focused on best practices for each of these responsibilities.
+We started by scrutinizing password-based authentication mechanisms.
+The debate about passwords has been going on for ages.
+While passwords may not be ideal, almost every application still uses them.
+And if you follow a couple of best practices, you can make them work.
+Storing credentials in a secure way is a top priority these days.
+We also discussed how to avoid enumeration and brute force attacks.
+Unfortunately, password-based authentication also has its limitations.
+That is where multi-factor authentication comes in, a best practice towards the future.
+After authentication, the application needs to keep track of this authenticated state.
+Most web applications do this with cookie-based session management mechanisms.
+Unfortunately, cookies have strange security properties, enabling all kinds of attacks.
+Over time, cookies have been augmented with security attributes and prefixes to make them
+more secure.
+But in general, these security measures are not enabled by default.
+So unless you take explicit action, your session management will be vulnerable.
+Once authentication and session management are secure, authorization seems straightforward.
+But from the interview with Maarten Decat, an expert on authorization in enterprise applications,
+we know better.
+Preventing unauthorized access is a hard problem to solve, both on the technical as the managerial level.
+For example, interactions between browser and server are sometimes unintentional.
+Overlooking such scenarios means that proper authorization checks will be missing.
+One typical example is an insecure direct object reference.
+Due to a lack of access control, a direct reference to an object suffices to access
+it.
+Another example is Cross-Site Request Forgery, where the attacker tricks the user's browser
+into making a request.
+Once you know about these problems, fixing them is not that hard.
+But unless you have heard about these issues before, defenses will likely be missing.
+To conclude, here is the most important lesson in this chapter.
+In web applications, preventing unauthorized access is about authentication, session management,
+and authorization.
+Getting a single detail wrong can already escalate into a major vulnerability.

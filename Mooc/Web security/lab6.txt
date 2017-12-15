@@ -1,0 +1,58 @@
+Setting up the lab session
+Before you get started, load the right branch from the repository. Stash your current changes to the branch (git stash). Next, checkout the start_chapter4_sqli branch from the Git repository (git checkout start_chapter4_sqli). Also check for the latest updates (git pull) command.
+Exploiting SQL injection vulnerabilities
+It's a good idea to take a backup of the database before you start attacking the BeerSafe application. Run the following command from a terminal to save the current database into a file: mysqldump -u root BeerSafe > BeerSafe.sql
+Executing arbitrary SQL code
+The aim of this SQL injection attack is to execute arbitrary SQL code on the database server. We will abuse the application's note creation for this. Use the pointers listed below to figure out how to abuse a SQL vulnerability to execute arbitrary statements.
+
+MySQL uses ; to separate statemetns and -- - as a comment symbol
+Avoid syntax errors by ensuring that the quotes in the final statement are correct
+Look at how the application creates or updates notes. The code that creates the SQL statement is located in the NoteDAO class in the eu.beersafe.mooc.data.access source package
+Using a DROP or DELETE statement will require you to restore the database over and over again. You can also aim to INSERT or UPDATE a tasting note, instead of droppring the entire table or database.
+
+A sample payload for this attack is provided at the bottom of this section.
+Extracting information
+The aim of this SQL injection attack is to extract data from the database. We will abuse the application's search feature for this. Use the pointers listed below to figure out how to extract a list of usernames and passwords from the database.
+
+Inspect the database to get understand how the tables are organized
+The code that creates the SQL query is located in the BeerDAO class in the eu.beersafe.mooc.data.access source package
+Select data from a different table using the UNION syntax, as explained here: https://dev.mysql.com/doc/refman/5.7/en/union.html
+Ensure that the number of columns in the second SELECT matches the number of columns from the first SELECT
+
+A sample payload for this attack is provided at the bottom of this section.
+Using SQL injection to bypass authentication
+The aim of this SQL injection attack is to bypass the application's authentication system using SQL injection. The application retrieves a record from the database based on the username. Next, it uses the data in the record to verify the user's password. Figure out a way to trick the application into authenticating you as an arbitrary user.
+This attack is a bit more complicated than the other ones. Let it sink in for a while, and see if you can find the solution to the puzzle. Instead of concrete pointers, you will find a few hints below.
+
+With the UNION syntax, you can provide custom data in the second query
+The query to the database can only return one record, so forget the first query
+
+A sample payload for this attack is provided at the bottom of this section.
+Sample SQL injection payloads
+Executing arbitrary SQL code
+The following data can be entered in the title of a note while editing it.
+haha"; UPDATE Notes SET title="SQL Beers"-- -
+Extracting information
+The following data can be entered in the search field of the list of beers of a note while editing it.
+duvel' UNION SELECT 0, "", "", 0, email, password, "" from Users WHERE password like '
+Using SQL injection to bypass authentication
+The following payload bypasses authentication. Entering this payload in the authentication form will return the user account with the email address that we chose. However, our SQL statement provides its own password hash, against which the application will verify the provided password.
+To exploit this, enter the payload below in the email field, and the string sqlinjection in the password field.
+bleh' UNION SELECT id,email,"665af2cd4e3dce8334baf6c9c70f140bfbc6a255",name FROM Users WHERE email = 'joschinner@example.com
+Defending against SQL injection
+In the course, we have covered a couple of defenses against SQL injection. Here in the lab, we focus on the most important one: parameterized statements with variable binding. However, feel free to experiment with other defenses as well.
+The main idea of using parametrized statements with variable binding is that you separate the SQL code from the data. In practice, this means that you will prepare a statement with the code first, and bind the variables to it later.
+This page explains everything you need to know about how to do this in Java: http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html
+A sample solution for the first SQL injection is provided at the bottom of this section.
+A fully implemented solution is available in the solutions_chapter4_sqli branch. Remember to pull the latest version, in case changes have been made to the code.
+Sample use of parametrized statements with variable binding
+Executing arbitrary SQL code
+String query = "UPDATE " + TABLE + " SET title = ?, content = ?, public = ? WHERE id = ?";
+statement = conn.prepareStatement(query);
+statement.setString(1, note.getTitle());
+statement.setString(2, note.getContent());
+statement.setBoolean(3, note.isPublicNote());
+statement.setLong(4, note.getId());
+statement.executeUpdate();
+Conclusion
+That concludes this lab session. As you have seen, the consequences of these simple SQL injection payloads were already quite serious. The solution is to ensure that the proper context information is preserved so that that data can be distinguished from code.

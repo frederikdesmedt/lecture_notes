@@ -1,0 +1,55 @@
+One of the most common server-side injection attacks is SQL injection.
+A SQL injection attack allows the attacker to modify the SQL code that is executed by the database server.
+As you can imagine, this has severe consequences.
+Examples are the extraction of data, the modification of data, or even the destruction of the entire database.
+Before we dive into the details of SQL injection, let's investigate an example attack in our BeerSafe application.
+The search feature enables a user to find a specific beer in the entire catalog.
+To enable this functionality, the application sends the search string to the server.
+The server, in turn, queries the list of beers in the database, using the search string as a constraint.
+The server uses the list of results, if any, to create a new page and sends it back to the browser.
+If implemented incorrectly, such a scenario is vulnerable to a SQL injection attack.
+Take a look at the flow of a SQL injection attack.
+The attacker uses the same search functionality as before.
+But now, he embeds a piece of malicious SQL code into the search string.
+The search string is sent to the server, where it becomes part of a SQL query.
+The server sends the SQL query to the database server, which executes it.
+But due to the SQL injection vulnerability, the structure of the query has changed.
+The database server executes the injected SQL code alongside the legitimate query.
+Let's make the example concrete with actual code snippets.
+The injected SQL code is a DROP statement.
+Even if you are not too familiar with SQL, you can see where this is going.
+This code instructs the database server to delete the entire database.
+Deleting an entire database using a SQL injection attack seems catastrophic.
+But the fallout of this attack is not too hard to address with proper backups.
+Other scenarios are a lot worse.
+Imagine the attacker stealing all the data in your database, including sensitive user information.
+What if the attacker modifies the data in the database.
+Would you be able to detect this?
+SQL injection is one of the most dangerous problems in web applications.
+Both the consequences and prevalence of SQL injection vulnerabilities contribute to this status.
+It should not come as a surprise that injection vulnerabilities rank first in the OWASP top 10.
+But is it that hard to prevent SQL injection attacks?
+Based on the attack scenario from before, it seems that banning the semicolon should do the trick.
+Unfortunately, it is not that easy.
+Appending a query with a semicolon is only a very simple example.
+There are plenty of other ways to influence the structure of a statement.
+A common way to attack a select query is by injecting a UNION statement.
+The UNION statement tells the database server to execute both queries and combine the data into one dataset.
+This type of attack is well-suited to steal data from the database.
+Another versatile attack is the insertion of a boolean clause.
+For example, many queries filter the results in the WHERE clause.
+By appending a boolean clause that is always true, the attacker can disable filtering.
+Consequences are the leaking of information, but also bypassing authorization checks.
+Another way to modify the structure of the query is by injecting the comment symbol.
+When the database server encounters a comment symbol, everything after that is ignored.
+So if the attacker injects the comment symbol, he can eliminate the trailing part of a query.
+The consequences can be severe since additional constraints are often put at the end of a query.
+From these examples, it becomes clear that SQL injection comes in many shapes.
+And these were the easy ones.
+Tools like "sqlmap" collect a variety of potential attacks.
+They even support scanning applications for potential SQL vulnerabilities.
+These results from "sqlmap" paint a more complete picture on the complexity of SQL injection attacks.
+Back to the example scenario from before.
+This simple example suffices to illustrate the underlying cause of these vulnerabilities: a lack of context.
+The database server does not have enough information to determine which part of the query is data, and which part is code.
+The next part covers proper defenses against SQL injection vulnerabilities.

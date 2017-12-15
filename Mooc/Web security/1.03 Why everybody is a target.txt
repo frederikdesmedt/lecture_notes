@@ -1,0 +1,72 @@
+The introduction painted a grim picture about the current state of affairs.
+An extensive list of potential threats fuels the impression that web applications are under constant attack.
+But is this true?
+Isn't this only true for big and important applications, such as banking applications,
+healthcare systems, and social networks?
+Many people argue that nobody cares about small applications.
+Security is less important there because an attacker will not target them.
+A perfect example of such an application is BeerSafe, the training application for this course.
+It stores tasting notes about beer, which hardly classifies as sensitive personal information.
+It does not handle money or goods and does not control physical systems in the real world.
+So an attacker would have no reason to attack the BeerSafe application.
+It's so unimportant that nobody cares.
+This right here is a very dangerous assumption to make.
+Let's investigate, and discover why every application is a potential target for attackers.
+A simple case to investigate is a public web application.
+Take a simple website of a local restaurant as an example.
+Such an application holds no private data, so many people assume that security is not that important.
+But attackers care about more than data alone.
+The restaurant's website runs on a server somewhere, so a first valuable asset is hardware.
+If the attacker can execute commands on the server, he can take advantage of the computing resources.
+One example is launching mining software for cryptocurrency.
+If you let someone else pay the electricity bill, it becomes easy to make a profit.
+Another asset is storage space and bandwidth.
+The attacker can use the restaurant's web server to host his files.
+These files may be illegal wares, malicious exploits, or phishing pages.
+This email is a real-life example of why your resources are valuable.
+This is a phishing email looking to collect Dropbox credentials.
+The email looks legitimate, but the URL behind the link does not point to Dropbox.
+Instead, an attacker exploited a vulnerable application to upload the phishing page there.
+When you take a step back and look at the bigger picture, things become even worse.
+The attacker could take control of the server and enlist it in a botnet.
+These botnets consist of thousands or millions of machines and are rented out for money.
+Anyone can rent resources in a botnet to run all kinds of commands.
+One of the most popular uses of a botnet is launching denial of service attacks.
+And it goes even further.
+Let's say that the restaurant is often frequented by the employees of a million-dollar company.
+That might make it an ideal target for the attacker to use as a stepping stone.
+For example, the attacker can inject a malicious payload in the PDF containing the restaurant's menu.
+Doing so ensures that the malicious code will be delivered to every visitor that opens the menu.
+This could be a very successful first step in the attack against the company.
+As you can see, security is something to take seriously.
+And so far, we only talked about a public application without any sensitive data.
+As you can imagine, such applications are becoming scarce.
+Most applications handle some personal data.
+Even our BeerSafe application has user accounts, with passwords and personal information.
+This kind of data is valuable to an attacker in a variety of ways.
+One example is the theft of data from your systems, also known as a data breach.
+Having access to all the data of an application puts the attacker in control.
+In most cases, the attacker tries to leverage the data for financial gain.
+One way to do that is by extorting the company that owns the data.
+The attackers threaten to release all the data online unless the company pays up.
+This happened to a cosmetic surgery clinic, where the attackers threatened to release patient records.
+The records included nude pictures, passport scans, and insurance data.
+Another approach is selling personal data.
+Personal data, such as email addresses or credit card numbers, is worth a lot on underground marketplaces.
+For example, a single credit card number is worth one dollar.
+It increases in value if it is associated with additional information, such as the name
+of the owner, a home address or an email address.
+A last example is the recent flood of ransomware attacks.
+After breaking in, an attacker would encrypt all the data on a server.
+If you want to decrypt that data, you need to pay the attacker for the right decryption key.
+Ransomware attacks are surprisingly successful.
+One common reason to pay the ransom is that there are no working backups.
+But even if there are backups, think about the impact of retrieving them and restoring all the data.
+In a major hospital, this would take a couple of hours or even days.
+With that in mind, it may be easier to pay the ransom to get all systems back online.
+As you can see, financial gain is an important motive for the attacker to go after the data of an application.
+This overview illustrated that security is a concern for every application.
+Even the most insignificant ones.
+Remember that every application has valuable resources.
+Most applications also have valuable data.
+So the argument that nobody is interested in your application is no longer valid.

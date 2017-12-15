@@ -1,0 +1,52 @@
+So far, we have established that command injection vulnerabilities are quite dangerous.
+They follow from a confusion between data and code, due to a lack of context.
+But how do we prevent command injection vulnerabilities?
+Let's go back to our example from before, and take a look at a few options.
+A first line of defense is strict input validation.
+In our example, we expect a domain name as input.
+Domain names have a well-known structure and a limited set of valid characters.
+If we reject all input that does not match these requirements, we already reduce the risk of command injection.
+But input validation is tricky to get right.
+It is easy to make the checks too restrictive, which breaks the application.
+But if the check is too permissive, the vulnerability remains.
+That is why input validation makes sense as a first defense, but not as the only defense.
+Remember that injection vulnerabilities follow from a lack of context at execution time.
+This example shows that the semicolon breaks out of the data context, and starts a new command context.
+The proper way to mitigate command injection is to ensure that the right context information is preserved.
+One way to achieve that is by encoding dangerous characters in the data.
+If the data does not contain a semicolon, then it will not be seen as code.
+As you can see here, PHP offers a function to escape dangerous shell characters.
+Passing the encoded data to the shell will cause the execution of the following command.
+The dangerous characters are encoded, and the shell is no longer confused between data and code.
+Encoding is an implicit mechanism to ensure that there is no confusion between data and code.
+There is also a more explicit way to preserve the proper context information.
+Some languages offer a safe API to make system calls.
+Such an API accepts the command and its arguments as separate parameters.
+Separating the command and the data ensures that there can be no confusion between data and code.
+Most languages that execute OS commands in a shell suffer from command injection.
+Examples are C, PHP, Perl, and Python.
+But what about higher-level languages, such as Java and .NET?
+Let's take a look at our example from before, but now written in Java.
+It still looks very like our first PHP version.
+And if you take a closer look, we still construct the command as a string and execute it.
+Fortunately, Java offers protection against command injection attacks out of the box.
+Even though the name of the method is "exec", it does not pass the command string to a shell.
+Instead, the method parses the string and takes the first parameter to identify the command.
+Everything else is considered data.
+The "exec" method preserves the proper context.
+As a result, Java applications are not vulnerable to command injection.
+By the way, .NET offers a similar protection mechanism.
+But it is not all good news.
+Improper use of the "exec" method in Java, and its counterpart in .NET, can still cause injection vulnerabilities.
+Take a look at this modified example.
+Instead of calling the command, we first launch a shell and run the command there.
+Do you see the problem?
+Does the shell have the right context information to distinguish data from code?
+No, it does not.
+The following input is passed to the shell by the "exec" method in a secure way.
+But once the shell executes the command, the injection vulnerability returns.
+So to conclude, remember that the lack of context information causes command injection vulnerabilities.
+The proper way to mitigate these vulnerabilities is to ensure that the context information
+is preserved up to the point of execution.
+An implicit way of doing this is by properly encoding the data.
+A more explicit approach is using a safe API, where data and code are treated differently.

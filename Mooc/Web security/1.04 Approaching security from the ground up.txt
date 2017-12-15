@@ -1,0 +1,70 @@
+Building secure web applications is a challenging task.
+The threats and incidents we talked about before illustrate this quite well.
+But why is it so hard to build a secure web application?
+It may be surprising to hear that the biggest obstacle is not technology, but our approach to security.
+More often than not, security is seen as an obstruction.
+An annoyance getting in the way of functionality and productivity.
+As a consequence of this attitude, security is often ignored until the very last moment.
+Many companies only do a final security check on a release candidate of the application.
+Consider the following scenario.
+Let's say we have built the BeerSafe application from scratch, and are ready to release it to the public.
+We want to be sure that it is secure, so we hire a security company to do a penetration test.
+This company will try to hack the application and discover security flaws.
+After the penetration test, we receive a report covering the discovered security problems.
+We can increase the security of our application by addressing this list of problems.
+After having done so, we release the application and hope for the best.
+Take a moment to think about whether this is a good way to approach security.
+Did you think of a few problems?
+Well, there are indeed a few drawbacks to this approach.
+What happens if the penetration test uncovers a fundamental problem?
+Addressing this may require us to redesign the entire application.
+How do we know that the penetration test covered all relevant threats?
+And did it cover the entire application or only a part of it?
+What do we do in a couple of weeks, when there is a new release?
+As you can see, only relying on a penetration test is not the optimal way to deal with security.
+That is because security is a process, not a task.
+The only way to build secure applications is by making security inherent to the application.
+The best way to achieve this is by implementing various security activities throughout the application's lifecycle.
+A first important step is to raise security awareness among developers.
+Every developer should have a security foundation to build on.
+Note that a developer does not need to be a security expert.
+Awareness about common threats against web applications is already a good starting point.
+Being able to recognize dangerous patterns is crucial to address potential security issues.
+This general level of awareness combines well with secure coding guidelines.
+These guidelines cover practical ways to mitigate certain threats.
+You can construct your own secure coding guidelines, adapted to your development process.
+The list of best practices at the end of this course can serve as a good starting point.
+But there are also plenty of excellent documents in the public domain.
+Great examples are OWASP resources, which include various prevention cheat sheets.
+Before we go on, we will put all this into perspective with an example.
+We will use SQL injection, which we will cover later in a lot more detail.
+For now, you should know that a SQL injection vulnerability occurs when a SQL query is constructed with untrusted data.
+If a developer is unaware of this problem, the application is likely to be vulnerable.
+However, having a security foundation enables a developer to spot the dangerous pattern.
+The secure coding guidelines prescribe the proper way to construct a SQL query with user input.
+As a result, the application will be more secure from the beginning.
+Running a penetration test afterward is still a good idea.
+It will ensure that the implemented defenses hold up against real-world attacks.
+As you can see, each of these steps contributes to the security of the application.
+So far, we have assumed that a developer can spot a security problem in the code, and address it.
+This process is implicit and only works for a specific set of threats.
+That is why it is recommended to adopt an explicit process to enumerate potential threats.
+This process is known as threat modeling but also referred to as risk analysis.
+Threat modeling is a structured approach to list security threats against an application.
+It is applicable in various stages of the application's lifecycle.
+Threat modeling based on a decomposed architecture or design of the application.
+The first step in the threat modeling process is to enumerate potential threats.
+Next, you assess whether the threats are relevant and significant.
+After that, you can define how to mitigate the threats in the application.
+The real power of threat modeling lies in its proactive nature.
+It allows you to reason about threats and defenses, even before you have built the application.
+As a result, you can incorporate security into the core of the application's architecture.
+Here, we only covered the idea behind threat modeling.
+If you want to know more, you can check out the references at the end of this chapter.
+A final word about security activities in the application's lifecycle.
+We started this discussion by talking about penetration tests.
+Now, you know that many other activities contribute to the security of the application.
+To be clear, a penetration test is a useful security activity.
+It helps verify if previous security activities have been effective.
+It also offers a different perspective and may uncover overlooked problems.
+But remember, a penetration test works best in combination with other security activities.

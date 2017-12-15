@@ -1,0 +1,41 @@
+An extensive list of security vulnerabilities tells us that building secure web applications
+is a hard task.
+Vulnerabilities can be introduced in any component of a web application.
+Think about common mistakes, insecure dependencies or a lack of knowledge about specific threats.
+How a vulnerability ends up in an application is useful to determine the cause, and fix
+the problem.
+But what is more important is to realize that a single vulnerability can lead to the full
+compromise of the application.
+Keep in mind that every web application is a potential target for adversaries.
+Even if you believe that nobody cares about your application.
+Your server can always be used to host malicious files or launch phishing campaigns.
+Besides, almost every application collects some form of sensitive information.
+This information, in turn, can lead to an escalation of attacks against your users.
+One example is stealing credentials to hijack other accounts from the same user.
+Threats like these are the perfect illustration of the need for security awareness.
+Every developer should have a good security foundation to build on.
+That is the reason that this course exists.
+However, security is not a short-term project that you can finish in a few days or weeks.
+Building secure applications requires continuous attention to security.
+That is why security should play an important role throughout the entire lifetime of an application.
+But such a rigorous security process requires time and effort, both from developers and
+from management.
+But how do you get started?
+Which threats should you worry about?
+An excellent summary of several critical threats against a web application is the OWASP Top 10
+This top 10 is a list of most common and most dangerous vulnerabilities in web applications.
+While not an exhaustive list, the OWASP top 10 is a good place to start and focus your
+security efforts.
+In fact, this course covers a majority of the threats listed in the top 10.
+In the course, we explain where these threats come from and how the attacks work.
+We cover the countermeasures in detail and illustrate why they are effective.
+The most important security concept from this chapter is the Same Origin Policy.
+The Same Origin Policy is a fundamental security principle of the web.
+It isolates contexts within the browser and protects client-side resources against unauthorized
+access.
+As we will see later, many countermeasures build upon the Same Origin Policy.
+I want to conclude this first chapter with an optimistic message.
+Even though many applications are insecure, this insecurity is not inherent to the web
+platform.
+Today, the security toolbox of a web developer is better than ever.
+In this course, you will learn how to use these tools to build secure applications.
