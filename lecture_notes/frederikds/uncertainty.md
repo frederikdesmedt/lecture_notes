@@ -115,3 +115,40 @@ The **Viterbi** makes sense if you expand $\mu(h_t)$ in backtracing. In backtrac
 
 Last 5 minutes of lecture: explanation as to why Markov property does not always hold. It doesn't hold, because how the robot reacts to an action depends on the previous actions, i.e., the robot might already be moving and would be accelerating when you again move it forwards.
 We can however apply a trick to *do* get the Markov property: we "inflate" our state by introducing the velocity in the state.
+
+In the running example of continuous dynamical models, $\omega_t$ is the rotation/angular step that has occured due to input.
+The system model includes some noise to account for poorly-calibrated hardware.
+
+Using a Gaussian as summarizing statistic is pretty nice because we only need a mean and a covariance for it, i.e., we don't need a complex data structure to represent it.
+
+In online estimation we use summarizing statistics because of the limited resources and restrictions imposed on it, because of this all results are approximations.
+
+Kalman filter can only handle unimodel data, e.g., a robot cannot be either completely to the left, or completely to the right, since we use a normal distribution to represent the probability of the state (and only a single normal distribution!).
+
+A dynamical system satisfying all Kalman assumptions will be represented perfectly by the Kalman filter, i.e., it will not be an estimation!
+
+The running example in Kalman filter does not have a linear system model, since it uses $cos$ and $sin$, so we need to approximate it with a linear model.
+
+Sample-based filters have bad scaling to higher dimensions because of the exponential increase in samples required.
+
+In particle filters we expect the samples to be drawn according to the posterior distribution, so we can try to estimate this posterior by analysing the distribution of the samples: importance sampling.
+
+> Prediction-step := apply system model to previous samples.
+> Correction-step := apply probability of new sample (after applying system model to the previous sample), based on the measurement model.
+
+Particle filtering is a pretty good name, considering we have a lot of samples (particles), and we filter those using the correction-step.
+
+Additional questions last lecture
+---------------------------------
+
+Bring a calculator to the exam!
+
+Look at the example exam on Toledo.
+
+Take into account causality when coming up with a belief network for a problem.
+
+Major difficulty on exam: time!
+
+Exam: about doing and understanding the practical stuff.
+
+Exam lasts for 4 hours.
