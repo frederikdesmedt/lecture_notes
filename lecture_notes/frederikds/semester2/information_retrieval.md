@@ -6,6 +6,8 @@ Overall information
 
 Publications put on Toledo are for more information, but they are not meant for learning.
 
+"What have we learned?"-slides are pretty much "what to know"-slides?
+
 Lesson 1
 --------
 
@@ -50,8 +52,38 @@ In practice one would like to find a trade-off between the two: try to get a rep
 encapsulates as much information as possible, yet at the same time keep the time and memory complexity at compile-time (i.e. the retrieval model +
 conversion to the representation) as small as possible!
 
-Term vector, in general, will be very sparse (since there are a lot more words than there are words in a specific document).
-
 `Representation model := Data representation x matching algorithm`
 
 > Semantic labeling := Labeling of a document with some kind of semantics (such as the topic of the document)
+
+Lesson 2: Information retrieval models
+--------------------------------------
+
+Pretty much all ranking functions are found by unsupervised learning.
+
+Ranking function also known as similarity/distance function in some space.
+
+> Relevance feedback := feedback from the user about the relevance of the retrieved documents. Can be used to improve ranking performance.
+
+Similarity function in boolean model is very strict: a document is only relevant if and only if it has the exact same weights as the query.
+
+**Extended Boolean model** doesn't actually use boolean weights in its documents, but it does still receive boolean queries.
+
+Term vector, in general, will be very sparse (since there are a lot more words than there are words in a specific document).
+
+Note how in the **vector space model** distance != similarity.
+
+To see why **cosine similarity** is useful, look at the visual representation and look how the $cos(\alpha)$ goes to 1 when the document and query are
+more and more equal.
+
+Vector space model assumes that there is no correlation between different terms, though this really is a big deal in natural language.
+
+A model is a bag-of-words representation when it does not hold into account any of the sequential information, i.e., the ordering of the terms in a sentence.
+
+Repeat: we (usually) calculate the term weights for document by $TF \cdot IDF$.
+
+Using **log-odds** to rank documents allows us to not need $P(D, Q)$.
+
+If there is any formula we should know by heart, it should be the formula for the language model.
+
+The language model also works when the probability of a query given a document is close to 0.
