@@ -52,29 +52,51 @@ Getting to know your data + preprocessing: Most critical part of the pipeline.
 
 Having the controls in collection of prospective data is key, i.e., making sure the only changing variables are the ones we want to be able to change.
 
+Retrospective studies are used for finding correlations. It is based on observational data, which makes it cheap to do.
+
+Prospective studies are used for finding causations. There is an explicit data collection step in the research, which is very expensive and time intensive.
+
 Data mining are mainly retrospective studies.
+
+In prospective studies there are two groups: the control group and treatment group. They (should) differ in a very precise manner (say, a single variable),
+if there is a change in the outcomes of the two groups, the change must either be caused by the changing variable or by chance.
+How to decide which one it is? Use statistics for this (formal hypothesis testing).
 
 > p-value := **probability** the data is "generated from" the null hypothesis.
 
-> Type 1-error: Finding a (non-null-)hypothesis while it is not there.
+> Type 1-error := Rejecting the $H_0$ while it is correct, probability of this error is $\alpha$.
 >
-> Type 2-error: Saying the effect isn't real while it really is.
+> Type 2-error := Accepting $H_0$ while it is incorrect, probability of this error is $\beta$.
+>
+> Power = $1 - \beta$ := Probability that the alternative hypothesis is found **if it exists**.
 
-> Overall Evaluation Criteria (OEC) := Metric we are measuring, should be fixed, needs to be representative, ...
+A simple proof of why Power = $1 - \beta$:
+
+$\lnot (type2err) \Leftrightarrow \lnot (\lnot reject \wedge H_0 = false) \Leftrightarrow H_0 \neq false \vee reject \Leftrightarrow H_0 = false \Rightarrow reject$, i.e., the negation of a *Type 2-error* is what *power* should cover and thus $Power = P(\lnot type2err) = 1 - P(type2err) = 1 - \beta$.
+
+From this insight it is obvious that *power* is a very intuitive measure and how it relates to a *Type 2-error*.
+
+> Overall Evaluation Criteria (OEC) := Metric we are measuring and use in the *formal hypothesis test*, should be fixed, needs to be representative, ...
+>
+> Effect size := *OEC(treatement group)* - *OEC(control group)*
 
 > Newness effect := People might just look around on a website more, simply to look at the new interface, it doesn't mean the interface is better.
 
 Transaction data can be viewed as a huge sparse vector with binary components.
 
-> Class skewness := e.g. are there many more positives than negatives?
+> Class skewness := How uniformly are the classes distributed? E.g. are there many more positives than negatives?
 
 Insight in the domain you are mining is very important, you need this to explain some phenomena in your data.
 
 In Simpson's paradox, trends can change because the sample set changes.
 
+Simpson's paradox is caused by different class distributions, e.g., the paradox in the UC-Berkeley example occurs because the distribution of women over different
+departments is different than the distribution of men. This paradox could be recognized/avoided by using ratios rather than percentages or similar (or in general:
+by using something that also holds the information concerning the class distribution).
+
 > Censored data := you do not get any data in some case, e.g., you do not get data from before or after some timepoint.
 
-> IQR := Interquartile range
+> IQR = $Q_3 - Q_1$ := Interquartile range
 
 Lecture 2: Predictive modelling
 -------------------------------
