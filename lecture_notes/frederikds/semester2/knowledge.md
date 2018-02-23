@@ -47,3 +47,39 @@ There used to be a big controversy about this, with the declarative and procedur
 - Argument of declarative party: A procedure is a task-oriented compilation of implicit declarative knowledge, i.e., to actually create the procedure one needs declarative knowledge (such as the knowledge known by the developer), so one always needs declarative knowledge. Even more: using a purely procedural software development approach is intrinsically error prone, while a single knowledge base of declarative knowledge can be used to solve a lot of related problems, which each would require a separate procedural approach.
 
 In reality, both the procedural and declarative approach have their advantages and disadvantages (see slides).
+
+Lesson 2
+--------
+
+Artificial neural networks cannot **express** the knowledge it knows, yet it can show behavioral characteristics that "prove" that it knows it.
+
+> Formal language := A *precise* language that can be used to precisely express specific kinds of knowledge.
+
+Desirable traits of a formal language:
+
+- Meaningful
+- Unambiguous
+- Expressive
+- Compactness
+- Modularity
+
+In choosing a formal language, you need to make a trade-off between expressivity and tractability.
+The hard version of this trade-off: if language more expressible $\Rightarrow$ language can be used to express (and solve) harder problems (this doesn't say that
+it is less efficient).
+
+The domain of discourse can be seen as a class of possible instantiations of a world.
+
+> Possible world analysis := Look at the worlds in which a proposition is true or false and use these to proof a difference between two propositions,
+> e.g., a world in which the first proposition is true and the second is false (or reversed).
+
+Possible world analysis has a shortcoming: it only works for some forms of reasoning, e.g., explanations of inconsistencies can be different but are not covered by it.
+
+Difference between a sentence and a formula: a sentence is a forumla *without free variables*.
+
+Translation from FO -> NL: the declarative reading.
+
+> Model theory := mathematical version of possible world analysis.
+
+> Formal semantics of FO-formula := (class of models of the formula?) or as defined by induction on the formula.
+
+FO is considered very expressive since almost every mathematical theory can be expressed in set theory and set theory can be expressed in FO.
