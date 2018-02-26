@@ -104,3 +104,13 @@ Lecture 2: Predictive modelling
 > Model class := Class of all possible instantiations of a model.
 
 We use gradient descent instead of finding least-squared solutions because it is faster/more performant.
+
+Exercise session 1
+------------------
+
+When you need to calculate some data, e.g., get the month from the year, then consider adding a column for "month", you can do this as follows:
+`data['hour'] = data['datetime'].dt.hour`.
+
+`factorplot` for the win.
+
+**Crucial** insight: look at a `Dataframe` as a dict of `Series`, this way the API makes sense.
