@@ -79,17 +79,34 @@ Lecture 2: Passive constraints
 > Labelling := Branching by variable assignment (restricting domains in branches to singletons for some variable).
 
 We can decide which variable to label first (**variable ordering**), general rule of thumb: label the variable with the smallest domain first.
+Why does this work? Imagine having a variable $A$ and $B$ with $\vert dom(A) \vert = 4$ and $\vert dom(B) \vert = 2$. If $A$ is selected first, the number
+of internal nodes in the search tree will be 5 (1 for the root and 4 for each assignment of $A$), if $B$ is selected first, there will - similarly -
+be 3 internal nodes, the number of leaves must the same. Therefore the size of the search tree is reduced when selecting the variable with the smallest
+domain first.
 
 `foreach` and `fromto` are *iterators*, it's build into the language itself (and is optimized at the lower level?).
 
 `fromto` works by passing transforming `In`, unifying it with `Out`, in the next iterator `In` will be the `Out` of the previous iteration until `Out = Rest`.
 
+The examples about combining `fromto` and `foreach` work  because of **synchronous iteration**, i.e., `fromto` and `foreach` are iterated simultaneously.
+Whenever a `fromto` or `foreach` goes into the next iteration, so will every other related `fromto` or `foreach`.
+> ? When is another `fromto` or `foreach` related? Are they all related?
+>
+> Currently assuming an iterator is related to another iterator when they are in the same clause, i.e., if they can unify with each others variables.
+
 The minus in `Var-Domain` is an infix functor.
 
-The `param` predicate is for introducing some global variable (it makes sure the global variable is initialized).
+`Search([A-Dom, ...])` will assign each value in `Dom` to `A`, this happens for each var-dom pair supplied in the list.
 
+Incomplete search assumes the best values appear earlier in the domain, from this one can create several strategies:
+
+- N-best := Only consider the $N$ best values of the domain.
+- Credit-based := Assign credit to each assignment, a good value should correspond to a high credit, only consider value assignments above some credit threshold.
+- Limited discrepancy search := For `lds(n)` allow the algorithm $n$ to "go right" $n$ times (considering the left-most value is the "best").
+
+> `param(A)` := The variable `A` will be constant across all iterations of the loop.
+
+*Limited discrepancy search* is useful when we order the values from left to right according to "value importance".
 > Limited Discrepancy Search (`lds(n)`) := You are allowed to go right $n$ times or less, in all the other choices you must go left.
 
 `succeed(Q, N)` works because of `fail`, everytime this `fail` occurs, the system backtracks to `Q` after which the counter will be incremented every time.
-
-*Limited discrepancy search* is useful when we order the values from left to right according to "value importance".
