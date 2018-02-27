@@ -110,3 +110,46 @@ Incomplete search assumes the best values appear earlier in the domain, from thi
 > Limited Discrepancy Search (`lds(n)`) := You are allowed to go right $n$ times or less, in all the other choices you must go left.
 
 `succeed(Q, N)` works because of `fail`, everytime this `fail` occurs, the system backtracks to `Q` after which the counter will be incremented every time.
+
+Lecture 3: Passive constraints
+----------------------------------------------
+
+> Generate := search + labeling
+>
+> Test := Constraints
+>
+> Co-routining/interleaving := interleaving between generating and testing
+>
+> Interleaving in `suspend` library := Gather constraints in a global "constraint store" -> start search -> during search wake up constraints for testing. This is a kind of interleaving.
+
+suspended arithmetic constraints: `$` for constraints on reals, `#` for integer constraints.
+
+In variable declaration with `suspend` `0..9` is an integer interval because the bounds are integers.
+
+Reified constraints are constraints in which a Boolean variable is introduced such that the value of this variable shows whether the constraint is true or false.
+
+> Reification := turn something abstract into something concrete, e.g., in a reified constraint, the truth value of the constraint is put into a variable, rather than being an abstract truth value used by the backpropagation mechanism.
+
+> `suspend/3` := First argument: constraint to suspend, second argument: priority (in case there are multiple constraints that should be woken up), third argument: the condition on which the constraint should be waken up, e.g. when some variable is grounded.
+
+diff_list exercise:
+
+```prolog
+:- library(suspend).
+
+diff_list(List) :-
+    (fromto(List, [El|Rest], Rest, [])
+     do foreach(F, Rest), param(El)
+        do El #\= F)
+```
+
+We cannot implement `diff_list` by using `member/2` because it is not a constrant, it's a Prolog-predicate, but we want to have a collection of constraints.
+
+Lecture 3: Active constraints
+-----------------------------
+
+> Propagating bound information := constraint propagation concerning the bounds of variables.
+>
+> Arc consistency for disequality := remove values from the domain for which there is an inequality in your constraint list.
+
+> `alldifferent/1` := Global constraint that checks whether the argument is a list of all different values.

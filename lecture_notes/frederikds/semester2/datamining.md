@@ -114,3 +114,50 @@ When you need to calculate some data, e.g., get the month from the year, then co
 `factorplot` for the win.
 
 **Crucial** insight: look at a `Dataframe` as a dict of `Series`, this way the API makes sense.
+
+Lecture 3: Predictive modelling
+-------------------------------
+
+We use convex functions in optimizations because they have "nice mathematical properties". To see this, look at how gradient descent evolves
+in a convex function. Example of convex function: squared sum.
+
+Gradient descent: go towards the negation of the gradient.
+
+> Regularization := Introducing a penalty on the size of the weights. This way, one can encode a preference for "simpler" models that ignore outliers. Useful for the tradeoff between faithfully fitting the data and having an easy (non-complex) model.
+
+The tradeoff between model complexity and training loss is a classical tradeoff that occurs pretty much always.
+
+> L2 := Make sure squared sum of weights is below some threshold.
+>
+> L1 := Make sure sum of absolute weights is below some threshold.
+
+L1 is more popular than L2 right now, LASSO allows the model to select which features it needs because it has a preference for weights close to 0. This is why
+L1/LASSO is more popular right now. Why does L1 have a bias for 0-weights? Look at the visualizations in the slides (the one with the square).
+
+LASSO selects one correlated variable (at random) from a group of correlated variables, because it can calculate the other correlated variables from it.
+
+> Elastic Net Regularization := Combine L1 and L2 penalties.
+
+Logistic regression is useful for *scoring problems*.
+
+> Scoring problem := Finding the probability of something happening, e.g., the probability a client will suitably pay his/her loan, probability of a customer spending money, ...
+
+Logisitic regression allows finding a probability distribution with numerical input!
+
+> Logistic regression := sigmoid of linear combination of input data, which can be found by maximizing some function, e.g., the sum of the conditional probabilities.
+
+Naïve Bayes and logistic regression can (only) express the exact same hypotheses, they are equally expressive. Yet there is a difference in bias.
+
+Naïve Bayes tends to set probabilities towards 0 and 1, logistic regression however is well calibrated.
+
+> Concave := *inverse* of convex
+
+Usually L1- or L2-regularization is applied on top of logistic regression.
+
+The flu prediction challenge is a kind of problem that can be on the exam.
+
+When using temporal data, you usually do not want to do regular cross-validation, instead use some kind of cross-validation that respects time, e.g., do not simply skip a year of data.
+
+> ? How would one combine logistic regresssion and decision trees? Perhaps by using a decision tree with logistic regression models as leaves? This could increase expressivity of the (combined) model a lot!
+
+Linear regression -> real-value, scoring -> logistic regression

@@ -119,3 +119,13 @@ The language model also works when the probability of a query given a document i
 The inference model constructs a belief network integrating both the documents and queries (including the words, concepts, etc. they introduce) and performs
 belief propagation on this to calculate probabilities. The way the probability of a node given its parents is computed is not by a conditional probability
 table per se, but could also be some very specific way to get some nice final results, e.g., in a way that it behaves as in Boolean logic.
+
+A topic can be viewed as a probability distribution over (all) words.
+
+> Latent variable := hidden variable
+
+> pLSA := Assume the joint probability assumptions from the Markov network in slide 14. From this simplify the joint, train it by maximizing the log-likelyhood, e.g., by using EM.
+
+> ~ := follows distribution, e.g., $P(X \mid \Theta) ~ A$ = $P(X \mid \Theta)$ follows distribution $A$.
+
+> Corpus := Collection of all documents.
