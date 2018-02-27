@@ -61,13 +61,26 @@ Lesson 2: Information retrieval models
 
 Pretty much all ranking functions are found by unsupervised learning.
 
-Ranking function also known as similarity/distance function in some space.
+Ranking function (sometimes) also known as similarity/distance function in some space, that is, it is implemented by a similarity/distance function.
+
+The *term vector* representation is an oversimplification of a document, there is in fact much more information in a document, we will later look at
+these kinds of additional information (latent semantic topic models, word embeddings, ...).
 
 > Relevance feedback := feedback from the user about the relevance of the retrieved documents. Can be used to improve ranking performance.
 
 Similarity function in boolean model is very strict: a document is only relevant if and only if it has the exact same weights as the query.
 
 **Extended Boolean model** doesn't actually use boolean weights in its documents, but it does still receive boolean queries.
+
+> ? In the **extended Boolean model**, are the document vectors generated during query time? If not, isn't it just the same as the vector space model?
+>
+> Answer: No they are not generated during query time. All the weights are defined during "document preprocessing", the exact vector that is used during
+> ranking is then constructed from these weights. It is different than the vector space model in that only the relevant weights
+> (from the terms present in the query) are considered, while in the vector space model the query has a weight for each possible term.
+
+Idea: More complex Boolean queries (such as $(W_1 \wedge W_2) \vee W_3$) in the **extended Boolean model** can be answered by converting it to one big
+disjunction/conjunction then inverting the weights for the negative words in the query, e.g., $1-W_3$ when $\lnot W_3$ is in the query, and then applying
+the same similarity function with the transformed document weights.
 
 Term vector, in general, will be very sparse (since there are a lot more words than there are words in a specific document).
 
@@ -78,12 +91,31 @@ more and more equal.
 
 Vector space model assumes that there is no correlation between different terms, though this really is a big deal in natural language.
 
+The orthogonality-assumption of the vector space model can be a "big deal", e.g., synonims are expected to be unrelated with 0 similarity according to
+the $sim$-function!
+
 A model is a bag-of-words representation when it does not hold into account any of the sequential information, i.e., the ordering of the terms in a sentence.
 
 Repeat: we (usually) calculate the term weights for document by $TF \cdot IDF$.
 
 Using **log-odds** to rank documents allows us to not need $P(D, Q)$.
 
+> ? How do we estimate $P(W_i \vert Q, R)$? Usually estimated by max likelyhood, so I'm guessing there is some counting involved?
+>
+> Answer: Yes, you count the probability of that word in the number of documents relevant to this query and divide it by the total number of documents relevant
+> to the query, this will work well when we already have pretty good estimations. Yet what if we don't have this, e.g., at the start? This is the
+> **cold start problem**, to solve it, you try using accurate guesses, either by the formulas provided in the slides, or by some other means, e.g.,
+> relevance feedback.
+
+Informally, the **language model** assumes there is just one document that correctly "generates" the query and that the user knows something about this document
+(or guesses it correctly). The probability that the model generates the query is $P(Q \mid D)$.
+
 If there is any formula we should know by heart, it should be the formula for the language model.
 
 The language model also works when the probability of a query given a document is close to 0.
+
+> Language model := $p(\cdot \mid D, r)$
+
+The inference model constructs a belief network integrating both the documents and queries (including the words, concepts, etc. they introduce) and performs
+belief propagation on this to calculate probabilities. The way the probability of a node given its parents is computed is not by a conditional probability
+table per se, but could also be some very specific way to get some nice final results, e.g., in a way that it behaves as in Boolean logic.
