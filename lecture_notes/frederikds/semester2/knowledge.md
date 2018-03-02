@@ -65,16 +65,22 @@ Desirable traits of a formal language:
 
 In choosing a formal language, you need to make a trade-off between expressivity and tractability.
 The hard version of this trade-off: if language more expressible $\Rightarrow$ language can be used to express (and solve) harder problems (this doesn't say that
-it is less efficient).
+it is less efficient). However it can be more inefficient, e.g., when expressing an NP Complete-problem in the formal language. The weak version is not necessarily true!
+
+Expert systems are the predecessors to *business rule systems*.
 
 The domain of discourse can be seen as a class of possible instantiations of a world.
 
 > Possible world analysis := Look at the worlds in which a proposition is true or false and use these to proof a difference between two propositions,
 > e.g., a world in which the first proposition is true and the second is false (or reversed).
 
-Possible world analysis has a shortcoming: it only works for some forms of reasoning, e.g., explanations of inconsistencies can be different but are not covered by it.
+Possible world analysis has a shortcoming: it only works for some forms of reasoning, e.g., explanations of inconsistencies can be different but are not covered by it. Why is this different than possible world analysis? Imagine two different inconsistent propositions, both have the same possible (and impossible) worlds, but why they are inconsistent is something else.
 
-Difference between a sentence and a formula: a sentence is a forumla *without free variables*.
+Difference between a sentence and a formula: a sentence is a formula *without free variables*. Only sentences can express some proposition of the domain.
+
+Formal and informal semantics are complementary, in general formal semantics is a mathematical representation of a formula while informal semantics are not, e.g., the declarative reading.
+
+A structure is a mathematical representation of a possible state of affairs, i.e., of a model.
 
 Translation from FO -> NL: the declarative reading.
 
