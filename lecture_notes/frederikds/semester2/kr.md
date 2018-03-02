@@ -89,3 +89,37 @@ Translation from FO -> NL: the declarative reading.
 > Formal semantics of FO-formula := (class of models of the formula?) or as defined by induction on the formula.
 
 FO is considered very expressive since almost every mathematical theory can be expressed in set theory and set theory can be expressed in FO.
+
+Lesson 3
+--------
+
+> "Overloading does not entail ambiguity"
+
+> Intentional statement := statement in which you switch between the set of worlds you talk about.
+
+In the root of an FO-sentence one is talking about all possible worlds, but in a conditional you are not.
+
+If a proof system is sound and complete, it is equivalent to all other sound and complete proof systems, i.e., a sound and complete provability-relation is unique.
+
+Recent famous proof system: Coq.
+
+Expressing knowledge in KR is a two-step process: (1) ontology design -> (2) explicitating knowledge.
+
+> Ontology := A set of informal concepts, attributes, roles, ... relevant to the domain of discourse and which we would like to talk about.
+>
+> Vocabulary := A set of formal symbols to denote elements of the ontology.
+
+An ontology is more than defining a vocabulary, e.g., UML diagrams represent an ontology for object-oriented design.
+
+Important qualities of an ontology:
+
+- Precision: the ontology - i.e. the concepts introduced - must be suitably specific (you need the right granularity).
+- Abstraction: should work at the right level of abstraction. You want to be precise (see previous point) but not too precise. This implies a tradeoff between abstraction and precision but there is a sweet-spot. Some systems walk through this tradeoff, e.g., Event-B.
+- Compactness of representation: You want the relevant propositions to be expressible in a compact representation.
+- Robustness: Allowing the ontology (and theories in it) to be adaptible and extensible. There are techniques developed for this, e.g., reification.
+
+Reification allows for improving/changing robustness, compactness and precision/abstraction of an ontology. This is why reification is such a valuable idea.
+
+WATCH OUT: Adding arguments to a predicate or function that is the result of a reification is a bad idea!
+
+> Category clash := Kind of type error in FOL, e.g., "the colour of that building is very heavy".
