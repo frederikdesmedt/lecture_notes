@@ -122,15 +122,20 @@ Lecture 3: Passive constraints
 >
 > Interleaving in `suspend` library := Gather constraints in a global "constraint store" -> start search -> during search wake up constraints for testing. This is a kind of interleaving.
 
+Delaying constraints is the first step towards more sophisticated constraint programming.
+
 suspended arithmetic constraints: `$` for constraints on reals, `#` for integer constraints.
+
+> Variable declaration := Assigning a domain to the variable.
 
 In variable declaration with `suspend` `0..9` is an integer interval because the bounds are integers.
 
-Reified constraints are constraints in which a Boolean variable is introduced such that the value of this variable shows whether the constraint is true or false.
+Reified constraints are constraints in which a Boolean variable is introduced such that the value of this variable shows whether the constraint is true or false, i.e.,
+making the truth value more concrete which is called reification.
 
 > Reification := turn something abstract into something concrete, e.g., in a reified constraint, the truth value of the constraint is put into a variable, rather than being an abstract truth value used by the backpropagation mechanism.
 
-> `suspend/3` := First argument: constraint to suspend, second argument: priority (in case there are multiple constraints that should be woken up), third argument: the condition on which the constraint should be waken up, e.g. when some variable is grounded.
+> `suspend/3` := First argument: clause to suspend, second argument: priority (in case there are multiple constraints that should be woken up), third argument: the condition on which the constraint should be waken up, e.g. when some variable is grounded.
 
 diff_list exercise:
 
@@ -143,13 +148,22 @@ diff_list(List) :-
         do El #\= F)
 ```
 
-We cannot implement `diff_list` by using `member/2` because it is not a constrant, it's a Prolog-predicate, but we want to have a collection of constraints.
+We cannot implement `diff_list` by using `member/2` because it is not a constraint, it's a Prolog-predicate, we want to have a collection of constraints.
 
 Lecture 3: Active constraints
 -----------------------------
 
+> Active constraint := Constraint that prunes impossible assignments from a variable's domain.
+
 > Propagating bound information := constraint propagation concerning the bounds of variables.
 >
-> Arc consistency for disequality := remove values from the domain for which there is an inequality in your constraint list.
+> Arc consistency for disequality := remove values from the domain for which there is an inequality in your constraint list. Note, inequalities can also cause propagation of bound information.
 
-> `alldifferent/1` := Global constraint that checks whether the argument is a list of all different values.
+Different *kinds* of propagation:
+
+- > Forward checking := When a variable `X` is assigned a value, for each variable `Y` that shares a constraint with `X` its assignments are checked, this keeps on propagating.
+- > Bounds consistency := A kind of propagation that checks whether there can stil be an assignment for a variable in between its lower and upper bounds.
+- > Domain consistency := A kind of propagation that checks whether for each assignment of a variable `X` there is a consistent value in the domain of a variable `Y` which shares a constraint with `X`.
+
+> `alldifferent/1` := Constraint that checks whether the argument is a list of all different values, several different versions: trade-off between time spend on
+producing constraints and time spend on searching.
