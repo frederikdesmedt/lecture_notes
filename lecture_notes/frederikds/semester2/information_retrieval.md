@@ -110,7 +110,11 @@ Using **log-odds** to rank documents allows us to not need $P(D, Q)$.
 Informally, the **language model** assumes there is just one document that correctly "generates" the query and that the user knows something about this document
 (or guesses it correctly). The probability that the model generates the query is $P(Q \mid D)$.
 
-If there is any formula we should know by heart, it should be the formula for the language model.
+If there is any formula we should know by heart, it should be the formula for the smoothed language model.
+
+The smoothed language model uses a document collection $C$, such that $P(w_i \mid C)$ is the language model for the document collection, e.g., the language model
+for the document containing all documents. This is a useful form of smoothing because data sparseness will be less of a problem over the entire document collection
+than it is over a specific document.
 
 The language model also works when the probability of a query given a document is close to 0.
 
@@ -120,12 +124,66 @@ The inference model constructs a belief network integrating both the documents a
 belief propagation on this to calculate probabilities. The way the probability of a node given its parents is computed is not by a conditional probability
 table per se, but could also be some very specific way to get some nice final results, e.g., in a way that it behaves as in Boolean logic.
 
-A topic can be viewed as a probability distribution over (all) words.
+Lesson 3: Monolingual probabilistic topic modeling
+--------------------------------------------------
+
+In **probabilistic topic models** we assume the following factorization holds: $P(w \mid d) = P(w \mid z) P(z \mid d)$, i.e., this is how a topic is related to the documents
+and words. Note how the name implies there can be non-probabilistic topic models, i.e., this factorization might not be used in some topic models.
+
+> Latent semantic topic model := An unsupervised (or semi-supervised) model that captures the semantics of a document by its topic.
+
+> LSI (Latent Semantic Indexing) := A very simple latent semantic topic model that assumes the semantical information can be derived from the word-document matrix ($P(w \mid D)$).
+
+Major issue of LSI: it cannot express multiple meanings of the same word.
+
+From the assumed factorization of probabilistic topic models it is clear we should try to find $P(w \mid z)$ and $P(z \mid d)$ - if we have this, we can find $P(w \mid d)$,
+which can be used to rank documents - they are approximated from data.
 
 > Latent variable := hidden variable
 
-> pLSA := Assume the joint probability assumptions from the Markov network in slide 14. From this simplify the joint, train it by maximizing the log-likelyhood, e.g., by using EM.
+The best we can say about some hidden variables $\theta$ is that they "generated" the observed variables $X$, so it makes sense to find the values of $\theta$
+that maximize the likelihood $P(x \mid \theta) = L(\theta \mid x)$, e.g., we would like to find $\theta'$ such that $argmax_\theta L(\theta \mid x) = \theta'$.
 
-> ~ := follows distribution, e.g., $P(X \mid \Theta) ~ A$ = $P(X \mid \Theta)$ follows distribution $A$.
+> pLSA := Assumes the joint probability assumptions from the belief network in slide 14. From this simplify the joint and train it by maximizing the log-likelihood, e.g., by using EM.
+
+The joint $P(d_j, w_i)$ can be simplified in *pLSA* as follows: $P(d_j, w_i) = P(d_j) P(w_i \mid d_j)$ and $P(w_i \mid d_j) = \sum_{k=1}^K P(w_i \mid z_k) P(z_k \mid d_j)$.
+This is simple to prove if you remember from the independency assumptions of *pLSA* that $P(w_i \mid z_k) = P(w_i \mid z_k, d_j)$ since $W$ is independent to $D$ given $Z$.
+
+A story for generating documents using *pLSA*: (1) Sample a document $d$ with probability $P(d)$ (2) Sample a topic $z$ with probability $P(z \mid d)$ (3) Sample a word with probability $P(w \mid z)$ (4) Go back to step 1 until enough words.
+
+Proof for E-step of *pLSA*:
+$P(z_k \mid d_j, w_i) = \frac{P(z_k, d_j, w_i)}{P(d_j, w_i)} = \frac{P(z_k \mid d_j) P(w_i \mid z_k)}{\sum_{l=1}^K P(d_j, w_i, z_l)} = \frac{P(z_k \mid d_j) P(w_i \mid z_k)}{\sum_{l=1}^K P(w_i \mid z_l) P(z_l \mid d_j)}$
+
+Disadvantages of *pLSA*:
+
+- $P(z_k \mid d_j)$ only works for the documents it is trained for, however, $P(w_i \mid z_k)$ can be reused for new documents since it is not dependent on them, doing this is called **folding in**.
+- Every time a document is added, $K$ topics have to be introduced in the belief network, e.g., the number of latent variables grows linearly with respect to the number of documents.
+
+> LDA (Latent Dirichlet Allocation) := A latent semantic topic model that assumes the independency assumptions given in slide 20.
+>
+> $\theta$ := Per-document topic distribution
+>
+> $\phi$ := Per-topic word distribution
+
+> Conjugate prior := A conjugate prior is a distribution that is both a prior of some posterior and is a conjugate distribution. Let $P(X \mid \Theta) \sim A$ with prior $P(\Theta) \sim B$. $P(\Theta)$ is a prior, if $P(\Theta \mid Y) \sim B$ it is a conjugate prior.
+
+> $\sim$ := follows distribution, e.g., $P(X \mid \theta) \sim A$ = $P(X \mid \theta)$ follows distribution $A$.
+
+> Variational inference := The principle of approximating a distribution as $P(\theta \mid X) \approx Q(\theta)$ with $\theta$ a vector of latent variables and $Q$ a
+> *variational distribution*. In general $Q(\cdot)$ should always be of a simpler form than $P(\cdot \mid X)$.
+
+Applying variational inference in *LDA* is done by assuming a simpler model and finding the hyperparamaters - e.g. by means of EM - such that the KL-divergence
+between the initial model and the variational model is minimal. This simplified model can then be used to (more easily) approximate topic-document
+distributions in the future.
 
 > Corpus := Collection of all documents.
+
+Topic models have lots of uses, one would be to label documents with topic vectors and use it:
+
+- to rank
+- to organize
+- to summarize
+- to incorporate it in a language model
+- for recommendation
+- for text classification
+- ...
