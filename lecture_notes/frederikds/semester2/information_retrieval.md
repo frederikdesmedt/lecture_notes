@@ -187,3 +187,44 @@ Topic models have lots of uses, one would be to label documents with topic vecto
 - for recommendation
 - for text classification
 - ...
+
+Lesson 4: Advanced Text Representations: Part 2
+-----------------------------------------------
+
+3 types of representation:
+
+- Unstructured representation, e.g., bag of words.
+- Weakly-structured
+- Latent representations, e.g., LSI, LDA, word embeddings, ...
+
+A lot of text representations are a combination of different representations, e.g., vector space representation + probabilistic representation.
+
+> *one hot* representation := Vector space representation where each word is a unique unit vector in exactly one of the dimensions (union of all word representations is a basis of the vector space).
+
+> *dense* word representation := Vector space representation where $dimension << size of vocabulary$, reduces dimensionality a lot, but you might lose information.
+
+In LSI if we convert our word-document matrix to an SVD-decomposition, we can reduce the SVD up to rank $k$, and we will get the word-document matrix that has the smallest
+mean-squared-errors?
+
+What should $k$ be in LSI? -> Open problem
+
+In LSI we can convert queries and document to coordinate vectors in the topic space and perform cosine similarity on the coordinate vectors to get a ranking.
+
+**Word2Vec** is an improved version of LSI (which gives better results).
+
+A neural net with one hidden layer can represent any function, but we use deep neural nets because otherwise the number of nodes in the single hidden layer can explode.
+
+> CBOW model := Neural net that will predict the current word based on the neighbourhood/context (some of the previous words and some of the next words).
+>
+> Skip-gram NNLM model := Based on the current word, predict the neighbourhood/context.
+
+> Word embedding := Coordinate vector in the reduced vector space (e.g. a topic space).
+
+> Truncated backpropagation in RNN's := Only backpropagate over the time steps in the **immediate future**.
+
+The weird dot with a circle around it in **LSTM** is point-wise multiplication.
+
+Checkout:
+
+- http://colah.github.io/
+- https://medium.com/mlreview/understanding-lstm-and-its-diagrams-...

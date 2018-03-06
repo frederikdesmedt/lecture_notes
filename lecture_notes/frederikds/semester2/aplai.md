@@ -15,6 +15,8 @@ The professor really likes the "Constraint Logic Programming using ECLiPSe" book
 To get access to the website of Simonis: use web.archive.org to get an archived version.
 Archived version can be found [here](http://web.archive.org/web/20170731071043/http://4c.ucc.ie/~hsimonis/ELearning/index.htm).
 
+Heuristics that are a good idea for N-queens might also be a good idea for Sudoku?
+
 Lecture 1: Introduction
 -----------------------
 
@@ -167,3 +169,50 @@ Different *kinds* of propagation:
 
 > `alldifferent/1` := Constraint that checks whether the argument is a list of all different values, several different versions: trade-off between time spend on
 producing constraints and time spend on searching.
+
+Lecture 4: Active constraints
+-----------------------------
+
+Need $n$ `param`s in `foreach` or `fromto`? Use `param/n` (you don't have to use $n$ separate `param`s)!
+
+> `squash/3` := First argument: list of continuous variables, second argument is the neighbourhood in which to test, e.g., squash with 0.1 will keep on increasing or decreasing the lower and upper bound until it finds possible assignments.
+
+One should be able to give the choicepoints to the search itself instead of giving it to Prolog, this can be used to optimize more.
+
+The output variable in the reified version of constraints will be a number (0 or 1). One can perform arithmetic on these output variables to enforce the constraints to
+either be true, false, or any combination of the two. Note how the reified constraint does not express a constraint by itself, you should also put a constraint on the
+reified output variable in order for it to do something!
+
+> `or/2` := A disjunctive constraint such that one of the parameter constraints should be satisfied. One can implement it by converting the constraint to reified
+constraints and then constraining that the sum of the two is #>= 1 (this is also how it is implemented in IC!)
+
+> Shallow backtracking := Only backtrack over the current variable, if all constraints are satisfied for the current variable the value assignment is final!
+
+> Labeling := Will loop through the variables assigning them to values in their domains, starting from small to big. Has a very simple kind of backpropagation. How is
+it simple? -> It uses a default variable ordering, but this might be optimized, e.g., if a variable only has a remaining domain with one variable, then choose this one!
+
+Middle-out heuristic works well for N-queens because deciding a variable for the middle columns will produce more constraints! 
+
+Lecture 4: ilog
+---------------
+
+> Viewpoint := Tuple with a variable list and a list of the domains of the variables (`viewpoint(Vars, Domains)`).
+
+Different viewpoints can provide different advantages, e.g., better propagation, number of constraints, ...
+
+> Permutation problem := A problem that has a viewpoint such that the union of the domains have the same number of elements as there are variables and each variable must be assigned a different value (`alldifferent(Vars)`).
+
+> `sum/1` := Sum of list elements.
+
+"+" in front of argument name -> input, "-" in front of argument name -> output.
+
+> Channeling constraints := Constraints that combine the constraints between two different viewpoints. This allows different viewpoints to be combined, this way we could
+represent the constraints in any of the two viewpoints!
+
+How can we break symmetry (making sure there are no (multiple) symmetric solutions):
+
+- Reformulating the problem;
+- Symmetry breaking constraints;
+- Use a search procedure that performs symmetry breaking.
+
+> Lex-Leader := Create a lexicographic ordering and only return the solution that is smaller (according to the lexicographic ordering) than all the other symmetric variants.
