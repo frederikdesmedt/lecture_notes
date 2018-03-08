@@ -93,11 +93,33 @@ FO is considered very expressive since almost every mathematical theory can be e
 Lesson 3
 --------
 
+> Deductive logic := formally a triple: (syntax, proof theory, model theory).
+>
+> Proof theory := A theory consisting of logical axioms and inference rules. The logical axioms are typically axiom schema's.
+
+> Derivable := A formula $\phi$ is derivable from a theory $T$ iff $T \vdash \phi$.
+>
+> Consistent := A theory $T$ is consistent if there does not exist a formula $\phi$ such that $T \vdash \phi \wedge T \vdash \lnot \phi$
+
+If a proof system is both sound and complete, then $T \vdash \phi \Rightarrow T \models \phi$ because of soundness and $T \models \phi \Rightarrow T \vdash \phi$
+because of completeness, and thus $\vdash$ and $\models$ are the same relationship and thus derivability and logical entailment coincide.
+When a theory $T$ is satisfiable, then for every model of $T$ and every formula $\phi$, $\lnot (T \vdash \phi) \vee \lnot (T \vdash \lnot \phi)$, since every formula is
+either true of false in a model and derivability and logical entailment coincide. Therefore, if $T$ is satisfiable, $T$ must be consistent. If $T$ is not consistent, then
+for some formula $\phi$, $T \vdash \phi \wedge T \vdash \lnot \phi$, from soundness then follows $T \models \phi \wedge T \models \lnot \phi$ for every model of $T$.
+There does not exist a model $M$ for which $M \models \phi \wedge M \models \lnot \phi$, thus $T$ cannot have any models and is unsatisfiable. From this it follows that
+satisfiability and consistency coincide.
+
+Proof of equivalency of sound and complete proof systems: For every two sound and complete proof systems $P_1$ and $P_2$, it follows that a proof for some formula $\phi$
+from some theory $T$ exists iff $T \models \phi$. This means that $T \vdash \phi$ according to proof systems $P_1$ iff $T \models \phi$ iff $T \vdash \phi$ according to
+proof system $P_2$, which is the definition of proof system equivalence. Therefore any two sound and complete proof systems must be equivalent.
+
+> Difference between a structure and a model := A model is a set of objects, a structure has a model and a mapping from symbols to objects in its model.
+
 > "Overloading does not entail ambiguity"
 
-> Intentional statement := statement in which you switch between the set of worlds you talk about.
+> Intensional statement := statement in which you switch between the set of worlds you talk about.
 
-In the root of an FO-sentence one is talking about all possible worlds, but in a conditional you are not.
+In the root of an FO-sentence one is talking about all possible worlds, but in a conditional one is talking about one specific (current) world.
 
 If a proof system is sound and complete, it is equivalent to all other sound and complete proof systems, i.e., a sound and complete provability-relation is unique.
 
@@ -109,17 +131,28 @@ Expressing knowledge in KR is a two-step process: (1) ontology design -> (2) exp
 >
 > Vocabulary := A set of formal symbols to denote elements of the ontology.
 
-An ontology is more than defining a vocabulary, e.g., UML diagrams represent an ontology for object-oriented design.
+An ontology gives rise to a set of models representing possible worlds of the domain of discourse, yet this set will/can also consist of worlds that shouldn't be
+possible in the domain of discourse. Specifying which worlds are and are not possible is done in phase 2: explicitating knowledge.
 
 Important qualities of an ontology:
 
 - Precision: the ontology - i.e. the concepts introduced - must be suitably specific (you need the right granularity).
-- Abstraction: should work at the right level of abstraction. You want to be precise (see previous point) but not too precise. This implies a tradeoff between abstraction and precision but there is a sweet-spot. Some systems walk through this tradeoff, e.g., Event-B.
+- Abstraction: should work at the right level of abstraction. You want to be precise (see previous point), but not too precise. This implies a tradeoff between abstraction and precision but there is a sweet-spot. Some systems walk through this tradeoff, e.g., Event-B.
 - Compactness of representation: You want the relevant propositions to be expressible in a compact representation.
 - Robustness: Allowing the ontology (and theories in it) to be adaptible and extensible. There are techniques developed for this, e.g., reification.
 
 Reification allows for improving/changing robustness, compactness and precision/abstraction of an ontology. This is why reification is such a valuable idea.
+Why can it improve robustness? Look at the `Purchases`-example in the slides. Because of the reification of a purchase, one can now add additional properties of a
+purchase without having to change the theories that already depend on the other properties.
 
 WATCH OUT: Adding arguments to a predicate or function that is the result of a reification is a bad idea!
 
+> ? Why is adding arguments to a predicate or function that is the result of a reification a bad idea? Perhaps because reifying a reification is a bad idea? If that is the
+> case, adding arguments to a reified predicate or function is then equally bad (or even worse) than adding an argument to some pre-existing predicate or function without
+> reifying.
+
+Many-sorted logic enforces the sets of the types to be disjunct, i.e., subtyping is impossible. Want subtyping? Use order-sorted logics.
+
 > Category clash := Kind of type error in FOL, e.g., "the colour of that building is very heavy".
+
+Cardinality constraints can be reduced to a corresponding formula in **FO(Agg)**.
