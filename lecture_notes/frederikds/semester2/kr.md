@@ -6,8 +6,8 @@ Overall information
 
 Exam: 50% theory closed book, 50% exercises open book
 
-Lesson 1
---------
+Lecture 1
+---------
 
 A proposition is always a property of some **domain**, this domain can be any kind of fictional world.
 
@@ -48,8 +48,8 @@ There used to be a big controversy about this, with the declarative and procedur
 
 In reality, both the procedural and declarative approach have their advantages and disadvantages (see slides).
 
-Lesson 2
---------
+Lecture 2
+---------
 
 Artificial neural networks cannot **express** the knowledge it knows, yet it can show behavioral characteristics that "prove" that it knows it.
 
@@ -90,8 +90,8 @@ Translation from FO -> NL: the declarative reading.
 
 FO is considered very expressive since almost every mathematical theory can be expressed in set theory and set theory can be expressed in FO.
 
-Lesson 3
---------
+Lecture 3
+---------
 
 > Deductive logic := formally a triple: (syntax, proof theory, model theory).
 >
@@ -155,4 +155,40 @@ Many-sorted logic enforces the sets of the types to be disjunct, i.e., subtyping
 
 > Category clash := Kind of type error in FOL, e.g., "the colour of that building is very heavy".
 
+Lecture 4: KR using classical logic
+-----------------------------------
+
+Sum, min, max, and count aggregates will be used in exercise sessions.
+
+Watch out with using existential quantifiers in an aggregate, e.g., slide 67.
+
 Cardinality constraints can be reduced to a corresponding formula in **FO(Agg)**.
+
+> Terminological knowledge := Particular class of very simple sorts of knowledges. Similarly: terminological logics.
+
+Different kinds of terminological facts:
+
+- Subtypes
+- Disjointness
+- A supersort as the union of subsorts
+- Symmetric roles
+- Inheritance
+
+> ? Does the list above specify all kinds of terminological facts? I believe so.
+
+Type reification is not recommended because the prof doesn't like it.
+
+In slide 74, `A(x) = y \Rightarrow ...` is too strong because `A(x)` is a total function, so the antecedent is always met and this entails that every
+object in the domain must be of type `E`.
+
+If one tries to implement partial functions in FO, one usually uses a dummy value as the result of function application of objects we don't want a value for.
+These dummy values are *spurious elements*.
+
+**UNA** and **DCA** are important because they express very common implicatures.
+
+> Sufficient condition := Some condition is sufficient to be true.
+>
+> Necessary condition := The condition must be satisfied to be true.
+
+The qualification problem is a problem that seems to arise when trying to introduce exceptions to some rules, say, in the antecedent of an implication
+in a universal quantification. This problem arises because of the major difference between "common sense reasoning" and reasoning imposed by FOL.
