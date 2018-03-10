@@ -175,44 +175,84 @@ Lecture 4: Active constraints
 
 Need $n$ `param`s in `foreach` or `fromto`? Use `param/n` (you don't have to use $n$ separate `param`s)!
 
-> `squash/3` := First argument: list of continuous variables, second argument is the neighbourhood in which to test, e.g., squash with 0.1 will keep on increasing or decreasing the lower and upper bound until it finds possible assignments.
+> `squash/3` := First argument: list of continuous variables, second argument is the interval of the neighbourhood in which to test,
+> e.g., squash with 0.1 will keep on increasing or decreasing the lower and upper bound until it finds possible assignments within the neighbourhood.
 
-One should be able to give the choicepoints to the search itself instead of giving it to Prolog, this can be used to optimize more.
+One should be able to give the choicepoints to the search itself instead of giving it to Prolog in the case of disjunctive constraints,
+this can be used to optimize more.
 
-The output variable in the reified version of constraints will be a number (0 or 1). One can perform arithmetic on these output variables to enforce the constraints to
-either be true, false, or any combination of the two. Note how the reified constraint does not express a constraint by itself, you should also put a constraint on the
-reified output variable in order for it to do something!
+The output variable in the reified version of constraints will be a number (0 or 1). One can perform arithmetic on these output variables to enforce
+the constraints to either be true, false, or any combination of the two. Note how the reified constraint does not express a constraint by itself,
+you should also put a constraint on the reified output variable in order for it to do something!
 
-> `or/2` := A disjunctive constraint such that one of the parameter constraints should be satisfied. One can implement it by converting the constraint to reified
-constraints and then constraining that the sum of the two is #>= 1 (this is also how it is implemented in IC!)
+Arithmetic on the output variables of reified constraints can be used to implement disjunctive constraints.
 
+> `or/2` := A disjunctive constraint such that one of the parameter constraints should be satisfied. One can implement
+> it by converting the constraint to reified constraints and then constraining that the sum of the two is #>= 1
+> (this is also how it is implemented in IC!)
+
+> Backtrack-free search := Select the minimal value for each variable in the search tree, never backtrack. This is (obviously) a kind of incomplete search.
+>
 > Shallow backtracking := Only backtrack over the current variable, if all constraints are satisfied for the current variable the value assignment is final!
+> Also a kind of incomplete search, but can actually find solutions to some kinds of problems, e.g., SMM.
+>
+> Labeling := (Basic) search with backtracking, will loop through the variables assigning them to values in their domains, starting from small to big.
+> Has a very simple kind of backpropagation. How is it simple? -> It uses a default variable ordering, yet this can be optimized, e.g., if a variable
+> only has a remaining domain with one variable, then choose this one! So we can provide various heuristics to improve the choices labeling makes.
 
-> Labeling := Will loop through the variables assigning them to values in their domains, starting from small to big. Has a very simple kind of backpropagation. How is
-it simple? -> It uses a default variable ordering, but this might be optimized, e.g., if a variable only has a remaining domain with one variable, then choose this one!
+Different kinds of heuristics:
+
+- > Naive variable-ordering heuristic: Label variables in the order in which they are provided.
+- > Middle-out heuristic (static): Label variables in the middle first, e.g., start with the centered columns/rows in N-queens.
+- > First_fail heuristic (dynamic): Label variables with the smallest domain first, intuitively it focuses more on bottlenecks. Works well with forward-checking propagation. In general, works almost always.
+- > Middle-out value ordering heuristic: Similar to middle-out variable heuristic, but for values instead of variables.
 
 Middle-out heuristic works well for N-queens because deciding a variable for the middle columns will produce more constraints! 
 
 Lecture 4: ilog
 ---------------
 
+If a problem P must be solved using constraint processing, the problem must be converted to a *Constraint Satisfaction Problem*. Which means the objects part of
+the problem must be expressed in terms of variables and values. The exact variables and values one decides to use defines the viewpoint of the problem.
+
 > Viewpoint := Tuple with a variable list and a list of the domains of the variables (`viewpoint(Vars, Domains)`).
 
 Different viewpoints can provide different advantages, e.g., better propagation, number of constraints, ...
 
-> Permutation problem := A problem that has a viewpoint such that the union of the domains have the same number of elements as there are variables and each variable must be assigned a different value (`alldifferent(Vars)`).
+> Permutation problem := A problem with a viewpoint such that the union of the domains have the same number of elements as there are variables and
+> each variable must be assigned a different value (`alldifferent(Vars)`).
+
+In a permutation problem one can switch the role of the variables and values, e.g., in the set-of-columns-representation of N-queens the vars are the columns
+and the values are the rows, yet it can also be reversed.
 
 > `sum/1` := Sum of list elements.
 
 "+" in front of argument name -> input, "-" in front of argument name -> output.
 
-> Channeling constraints := Constraints that combine the constraints between two different viewpoints. This allows different viewpoints to be combined, this way we could
-represent the constraints in any of the two viewpoints!
+> Channeling constraints := Constraints that combine the constraints between two different viewpoints. This allows different viewpoints to be combined,
+> this way we could represent the constraints in any of the two viewpoints!
 
-How can we break symmetry (making sure there are no (multiple) symmetric solutions):
+Channeling arises trivially when the CSP is a permutation problem.
 
-- Reformulating the problem;
-- Symmetry breaking constraints;
+When adding channeling constraints for two viewpoints of a permutation problem, the `alldifferent`-constraints are inferred, i.e., they no longer have to be
+mentioned explicitly.
+
+> Symmetry := Can be seen as a property of (1) the solution set: multiple elements in the solution set are symmetric, (2) the statement of the problem: the
+> problem is defined in such a way that it allows symmetric solutions, (3) the values (of a variable): they can be permuted.
+
+Because of the different kinds of symmetry (look at definition above) we can break symmetry (making sure there are no (multiple) symmetric solutions) in
+different ways:
+
+- Reformulate the problem;
+- Add symmetry breaking constraints;
 - Use a search procedure that performs symmetry breaking.
 
-> Lex-Leader := Create a lexicographic ordering and only return the solution that is smaller (according to the lexicographic ordering) than all the other symmetric variants.
+One can reformulate the problem by introducing the notion of a set, rather than a list, since a set does not have ordering and thus all symmetric lists
+(lists that are the same, but with a different ordering) are not considered. But propagation for sets is a difficult problem, so it's not used a lot, in general:
+no known general technique.
+
+> Lex-Leader := Create a lexicographic ordering and only return the solution that is smaller (according to the lexicographic ordering) than all the other
+> symmetric variants.
+
+Lex-Leader can be implemented in the search procedure: look at a branch for an assignment `var=val`, after that, go to a different branch and add the additional
+constraint that `var=val` will never occur in that subtree (look at last slide). This gets rid of symmetric variants.
