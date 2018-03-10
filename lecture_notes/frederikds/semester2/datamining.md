@@ -118,12 +118,17 @@ When you need to calculate some data, e.g., get the month from the year, then co
 Lecture 3: Predictive modelling
 -------------------------------
 
-We use convex functions in optimizations because they have "nice mathematical properties". To see this, look at how gradient descent evolves
-in a convex function. Example of convex function: squared sum.
+Predictive learning can be seen as: (1) Choose a model for the prediction function (2) Choose a loss function that must be minimized
+(3) Tune the parameters of the model to minimize the loss function applied over some training (and possibly validation) set.
 
-Gradient descent: go towards the negation of the gradient.
+We use convex functions in optimizations because they have "nice mathematical properties", e.g., the convex function has one local (and therefore global)
+minimum/maximum. To see this, look at how gradient descent evolves in a convex function. Example of convex function: squared sum.
+
+Gradient descent: go towards the negation of the gradient, which is the direction of greatest decrease.
 
 > Regularization := Introducing a penalty on the size of the weights. This way, one can encode a preference for "simpler" models that ignore outliers. Useful for the tradeoff between faithfully fitting the data and having an easy (non-complex) model.
+
+Regularization can reduce variance and 
 
 The tradeoff between model complexity and training loss is a classical tradeoff that occurs pretty much always.
 
@@ -131,30 +136,43 @@ The tradeoff between model complexity and training loss is a classical tradeoff 
 >
 > L1 := Make sure sum of absolute weights is below some threshold.
 
-L1 is more popular than L2 right now, LASSO allows the model to select which features it needs because it has a preference for weights close to 0. This is why
-L1/LASSO is more popular right now. Why does L1 have a bias for 0-weights? Look at the visualizations in the slides (the one with the square).
+L1 is more popular than L2 right now, LASSO allows the model to select which features it needs because it has a preference for weights close to 0.
+Why does L1 have a bias for 0-weights? Look at the visualizations in the slides (the one with the square).
 
 LASSO selects one correlated variable (at random) from a group of correlated variables, because it can calculate the other correlated variables from it.
 
 > Elastic Net Regularization := Combine L1 and L2 penalties.
 
+When using L1 or L2, one needs to try to optimize the hyperparameter $\lambda$: do this using cross-validation.
+
+One shouldn't use gradient descent when using L1 because it causes minimization function to not be convex.
+
 Logistic regression is useful for *scoring problems*.
 
-> Scoring problem := Finding the probability of something happening, e.g., the probability a client will suitably pay his/her loan, probability of a customer spending money, ...
+> Scoring problem := Finding the probability of something happening, i.e., $E[Y \mid X]$, e.g., the probability a client will suitably pay his/her loan,
+> probability of a customer spending money, ...
 
 Logisitic regression allows finding a probability distribution with numerical input!
 
 > Logistic regression := sigmoid of linear combination of input data, which can be found by maximizing some function, e.g., the sum of the conditional probabilities.
 
+Encoding discrete variables in logistic regression can be done by using $k - 1$ binary variables, rather than one integer variable from 0 to $k - 1$.
+Why? Because it allows more complex model learning since the examples are represented in higher dimensions.
+
 Naïve Bayes and logistic regression can (only) express the exact same hypotheses, they are equally expressive. Yet there is a difference in bias.
 
 Naïve Bayes tends to set probabilities towards 0 and 1, logistic regression however is well calibrated.
+
+With calibration curves, being on the diagonal is the best. Why? X signifies the predicted probability of being positive, Y signifies the actual probability
+according to the examples. If on the diagonal, both perfectly align.
 
 > Concave := *inverse* of convex
 
 Usually L1- or L2-regularization is applied on top of logistic regression.
 
 The flu prediction challenge is a kind of problem that can be on the exam.
+
+> Confounding variables := Variables that are not considered, but are correlated with both the target variable and the predictor variable(s).
 
 When using temporal data, you usually do not want to do regular cross-validation, instead use some kind of cross-validation that respects time, e.g., do not simply skip a year of data.
 
