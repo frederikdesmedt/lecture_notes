@@ -132,7 +132,7 @@ and words. Note how the name implies there can be non-probabilistic topic models
 
 > Latent semantic topic model := An unsupervised (or semi-supervised) model that captures the semantics of a document by its topic.
 
-> LSI (Latent Semantic Indexing) := A very simple latent semantic topic model that assumes the semantical information can be derived from the word-document matrix ($P(w \mid D)$).
+> LSI (Latent Semantic Indexing) := A latent semantic topic model that assumes the semantical information can be derived from the word-document matrix ($P(w \mid D)$).
 
 Major issue of LSI: it cannot express multiple meanings of the same word.
 
@@ -193,36 +193,62 @@ Lesson 4: Advanced Text Representations: Part 2
 
 3 types of representation:
 
-- Unstructured representation, e.g., bag of words.
-- Weakly-structured
-- Latent representations, e.g., LSI, LDA, word embeddings, ...
+- Unstructured representation: Text as unordered set of words, e.g., bag of words.
+- Weakly-structured: Groups of terms with additional importance parameters
+- Latent representations: Discovering of (latent) topics/concepts as part of text representation, e.g., LSI, LDA, word embeddings, ...
 
-A lot of text representations are a combination of different representations, e.g., vector space representation + probabilistic representation.
+A lot of text representations are a combination of different representations, e.g., vector space representation + language model + additional metadata.
 
 > *one hot* representation := Vector space representation where each word is a unique unit vector in exactly one of the dimensions (union of all word representations is a basis of the vector space).
 
 > *dense* word representation := Vector space representation where $dimension << size of vocabulary$, reduces dimensionality a lot, but you might lose information.
 
-In LSI if we convert our word-document matrix to an SVD-decomposition, we can reduce the SVD up to rank $k$, and we will get the word-document matrix that has the smallest
-mean-squared-errors?
+LSI will try to reduce the dimension of the vector space (to a $k$-dimensional space) by decomposing the word-document matrix to its SVD-factorization.
+From this SVD-factorization, only the $k$ largest singular values are kept in $\Sigma$ (the others are set to 0), and only the corresponding eigenvectors
+in $U$ and $V$ are kept. The resulting matrix $\hat{A} = U_k \Sigma_k V_k$ is the a matrix of dimension $k$ such that the least-square error between
+$A$ and $\hat{A}$ is minimal.
 
-What should $k$ be in LSI? -> Open problem
+What should $k$ be in LSI? -> Open problem, but usually somewhere between 50 and 300 and you need to be sure that $k \ll t$ (number of terms)
+and $k \ll m$ (number of documents).
 
-In LSI we can convert queries and document to coordinate vectors in the topic space and perform cosine similarity on the coordinate vectors to get a ranking.
-
-**Word2Vec** is an improved version of LSI (which gives better results).
+In LSI we can convert queries and document to coordinate vectors in a reduced space and perform cosine similarity on the coordinate vectors to get a ranking.
 
 A neural net with one hidden layer can represent any function, but we use deep neural nets because otherwise the number of nodes in the single hidden layer can explode.
 
-> CBOW model := Neural net that will predict the current word based on the neighbourhood/context (some of the previous words and some of the next words).
->
-> Skip-gram NNLM model := Based on the current word, predict the neighbourhood/context.
+> Word embedding := A technique for finding word vector representations that also holds additional contextual information, e.g.,
+> the words that went before and after a word in the document.
 
-> Word embedding := Coordinate vector in the reduced vector space (e.g. a topic space).
+Why are word embeddings useful? Because context can change the meaning of the word, e.g., "not bad" != "not" + "bad"
+and "almost correct" != "almost" + "correct".
+
+Word embeddings are trained from its context, e.g., CBOW, Skip-gram NN-LM, GloVe, etc.
+
+> ? Can a word embedding be more powerful than the word vector in a posssibly reduced vector space (like in LSI)? I would say so, because the word embedding
+> uses more information than just the word in a document, but also the context of that word.
+
+> CBOW model := Used for learning word embeddings: uses a neural net that will predict the current word based on the neighbourhood/context
+> (some of the previous words and some of the next words).
+>
+> Skip-gram NNLM model := Used for learning word embeddings: uses a neural net with as input a one-hot representation of the current word and
+> predicts the neighbourhood/context.
+
+Disadvantage of skip-gram model: activation function on output nodes uses *softmax*, which is computationally expensive since it requires
+a (complex) summation over all output nodes.
+
+> *word2vec* := Optimized code for calculating CBOW and skip-gram models.
+
+Open question: How many dimensions should we allocate for a word? I.e., how large should a word vector be? I.e., how many hidden nodes should we put
+in our neural net word embeddings?
 
 > Truncated backpropagation in RNN's := Only backpropagate over the time steps in the **immediate future**.
 
 The weird dot with a circle around it in **LSTM** is point-wise multiplication.
+
+Now that we know how to create word vectors, how can we use it for information retrieval? Different models:
+
+- Vector space model:
+  - Centroid model: Document and queries are represented as a normalized sum of their word vectors. Possible to mix this with traditional bag-of-words model.
+- Neural translation language model: Uses the probabilistic approach of ranking (e.g., finding a language model) estimates $P(w \mid z)$ by cosine similarity of word vector and "topic vector" normalized over sum of cosine similarity between the word vector and all "topic vectors".
 
 Checkout:
 
