@@ -179,3 +179,39 @@ When using temporal data, you usually do not want to do regular cross-validation
 > ? How would one combine logistic regresssion and decision trees? Perhaps by using a decision tree with logistic regression models as leaves? This could increase expressivity of the (combined) model a lot!
 
 Linear regression -> real-value, scoring -> logistic regression
+
+Lecture 4: Recommender systems
+------------------------------
+
+In recommender systems we do not necessarily want to show popular products, because they should already be easily accessible, instead recommend products that
+cannot easily be found, i.e., that aren't popular, but that have a high probability of being bought by the current user.
+
+Different kinds of recommender systems:
+
+- Content-based filtering
+- Collaborative filtering
+- Hybrid: content-based + collaborative filtering
+
+The model build by ML is a *user profile*.
+
+Feature representation problem: how do we represent items?
+
+> Item profile := Description of an item.
+
+Content-based filtering can be seen as a classification algorithm, which is nice, because there is lots of research going on for classification problems.
+
+> ? Why does content-based filtering not consider information about other users? Couldn't it be used when constructing the user profile?
+> -> Because this approach is called collaborative filtering.
+
+Cosine similarity can often return zero, because the user-product matrix is so sparse.
+
+Root mean square error doesn't focus on highly rated items, e.g., if an item actually has rating 1, but is predicted to have 3 is not that big of a deal
+as when the item actually has rating 5, but is predicted a 2! The former case is more desirable than the latter because the item will most likely not be
+recommended anyway.
+
+Prediction diversity: when predicting movies, don't just predict 10 action movies.
+
+Rating scale of user: e.g., user only rates between 3 to 5 stars, some only between 2 to 4 stars, ...
+
+> Latent factor models := Just like in IR, consider a latent topic variable. Factorize the user-movie co-occurence matrix by it. This is found by a minimization
+> problem, e.g., by minimizing the mean squared error. You can do this by (stochastic) gradient descent.

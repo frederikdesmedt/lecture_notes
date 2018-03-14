@@ -256,3 +256,60 @@ no known general technique.
 
 Lex-Leader can be implemented in the search procedure: look at a branch for an assignment `var=val`, after that, go to a different branch and add the additional
 constraint that `var=val` will never occur in that subtree (look at last slide). This gets rid of symmetric variants.
+
+Lecture 5: Optimisation with active constraints
+-----------------------------------------------
+
+> All-solution method := The CSP-algorithm
+
+> `minimize/2` := First argument is the goal (e.g. the search procedure), the second argument is the cost of a specific assignment, this is what is minimized.
+>
+> Branch-and-bound := COP-technique that searches for a solution, then a constraint is added that specifies that the cost must be smaller than or equal to
+> the cost of the solution found.
+
+Maximization of a cost/score can be expressed as the minimization of the negation of that cost/score.
+
+`Value $= sum(List)` is syntactic sugar for $sum(List, Sum), Value $= Sum$.
+
+> `eval/1` := First argument is a variable that at runtime, will evaluate to a symbolic expression (a formula), `eval(Expr)`
+> can then be used in any kind of constraint, e.g., in `eval(Expr) #= 5`. So `eval/1` allows constraints to be compiled
+> at runtime.
+
+> Dichotomic branch-and-bound: In a minimalization problem when a solution is found, this solution is considered an upper bound, if we also have a lower bound, e.g., the cost of a solution 
+> of the relaxed version of the problem. Then we split the search space in two version, the one with cost in $[lower + (higher - lower) / 2, higher]$ and one in the interval
+$[lower, lower + (higher - lower) / 2)$.
+
+> `bb_min` := Branch-and-bound minimization
+
+Often similarity breaking can be expressed by simply adding `<=`-constraints to the CSP.
+
+Lecture 5: Constraints on reals
+-------------------------------
+
+Different settings of constraint problems with reals:
+
+- Continuous variables entirely dependent on finite domain variables: search problem can just assign values to the finite domain variables and calculate the continuous variables from it. Very nice property is that the search space does not explode because of an infinite domain.
+- Continuous variables not entirely dependent on finite domain variables, but with finite search space, e.g., when the constraints are expressed in such a way that only a couple of real values can be considered (look at the "Intersection of 2 circles"-example in the slides).
+- Continuous variables with infinite domain. Cannot perform discrete search algorithms, e.g., labeling. Constraint propagation must be reimplemented, e.g., by using *safe arithmetic*. Try to use integrals as much as possible (more safe). Continuous variables are often not ground (they can still be different values).
+
+How to represent reals?
+
+- Floating-point numbers: a single value, but finite precision, rounding errors, ...
+- Interval of floating-points: real number is guaranteed to be somewhere inside the interval.
+
+> `incons/3` := First 2 arguments are two real variables, the third argument is a real variable indicating the difference between the two. Continuously applying the constraints makes `incons`
+> become inconsistent. When it does not become inconsistent, it means that adding the difference has no influence on the values of the two variables, i.e., the sum cannot be represented in a
+> finite (double floating-point) representation. This continuous process is called *shaving*. It can be used to express a constraint where a real variable only changes the moment it is
+> increased by some finite amount greater than some threshold, this threshold is called the *propagation threshold*. This is important for efficiency during propagation, higher threshold:
+> more efficient searching, but lower precision, lower threshold: the opposite of higher threshold.
+
+Splitting domain: add a disjunctive constraint specifying the variable must be in one half of the domain, with some luck the problem will turn out to be inconsistent in one half of the domain,
+i.e., we can reduce the interval by only considering the remaining half. Keep on doing this until both halves succeed, or until some predetermined *precision* is reached.
+
+> Shaving := excluding a small part of the interval located at the bounds, i.e., increasing the lower bound by a very small amount.
+
+> Locate := Keep on domain splitting until the specified *precision* is reached.
+>
+> Squash := Keep on shaving the domain interval until we get actual solutions, it shaves stepping over a predefined step.
+
+Interval splitting = exponential, shaving = polynomial.

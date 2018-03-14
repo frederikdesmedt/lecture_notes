@@ -254,3 +254,29 @@ Checkout:
 
 - http://colah.github.io/
 - https://medium.com/mlreview/understanding-lstm-and-its-diagrams-...
+
+Lesson 5: Advanced Text Representations: Part 2
+-----------------------------------------------
+
+Term-document co-occurrence matrix can be used to understand something about a document, but also to understand something about a term. Then you could
+represent a similarity relation between two terms by performing vector similarity between the two rows of the terms, e.g., cosine similarity.
+The same with documents, sentences, ...
+
+This term-document co-occurrence matrix is very large and sparse, so we want to perform dimensionality reduction. This is what happens in word embeddings, LSI, ...
+
+In LSI, dimensionality reduction is performed by converting the term-document matrix to an SVD-factorization and reducing the rank of the SVD to $k$
+(which is considered easy to do for an SVD).
+
+With a term-document matrix $A$, one can see that $A^{T} A$ is a document(-to-document)-correlation matrix, similarly $A A^{T}$ can be seen as a
+term-correlation matrix.
+
+Lesson 5: Indexing structures and Search techniques
+---------------------------------------------------
+
+> Semantic hashing := A kind of hashing such that items with similar hashes are similar themselves, e.g., have similar topics, ...
+
+Semantic hashing basically solves the problem of similarity with items such as images, so of course they can be difficult to compute, e.g., deep semantic hashing,
+but the moment you have generated them, they allow for very fast searching.
+
+Lesson 5: Evaluation Measures
+-----------------------------
