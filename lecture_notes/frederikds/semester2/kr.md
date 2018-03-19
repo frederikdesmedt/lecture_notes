@@ -192,3 +192,34 @@ These dummy values are *spurious elements*.
 
 The qualification problem is a problem that seems to arise when trying to introduce exceptions to some rules, say, in the antecedent of an implication
 in a universal quantification. This problem arises because of the major difference between "common sense reasoning" and reasoning imposed by FOL.
+
+Lecture 5: Extending FO with definitions
+----------------------------------------
+
+> Assertional knowledge := Knowledge that some object belongs to some class or relation.
+>
+> Definitional knowledge := Knowledge that is part of some definition.
+
+Note how assertional knowledge != definitional knowledge.
+
+Most definitions in practice are not inductive, but some are, so it's important to understand them.
+
+Monotone inductive definitions allow an arbitrary selection of rules during each step, the result of non-monotone definitions can change as the choice
+of a rule at each timestep changes.
+
+When the order of an inductive definition is fixed, a non-monotone kind of inductive definition will always produce the same results. Orderings that are
+consistent with the specified ordering will also produce the same results.
+
+The exact semantics of an ordering? Look at the slides about **well-founded ordering**.
+
+A definitional implication has the following property: $(\phi \rightarrow A) \Rightarrow (\phi \Rightarrow A)$.
+
+$Q(x) \leftarrow false$ doesn't add anything to $Q$!.
+
+> Justification tree := A construction that can be used to (visually) express the semantics of an inductive definition?
+
+${ P \leftarrow Q, Q \leftarrow P}$ results in the empty structure.
+
+Gotcha: the value of a negative (justification) cycle is **true**, the value of a positive cycle is **false**.
+
+Lecture went up to formal semantics of FO(ID) (without the discussion).
