@@ -198,16 +198,30 @@ Feature representation problem: how do we represent items?
 
 > Item profile := Description of an item.
 
-Content-based filtering can be seen as a classification algorithm, which is nice, because there is lots of research going on for classification problems.
+Content-based filtering can be seen as a classification algorithm, i.e., based on features that indicate user preference predict the likes and dislikes
+of the user. This is nice, because there is lots of research going on for classification problems, but bad because it doesn't use information from other users.
 
 > ? Why does content-based filtering not consider information about other users? Couldn't it be used when constructing the user profile?
 > -> Because this approach is called collaborative filtering.
 
-Cosine similarity can often return zero, because the user-product matrix is so sparse.
+In collaborative filtering, the user profile is compared to other user profiles based on their preferences, with the idea that users having a similar 
+like/dislike-history will also like and dislike the same items in the future.
+
+A general approach of collaborative filtering:
+
+- Define a similarity function between two user profiles (where a user profile is a feature vector with 1's and 0's to indicate whether they liked some items).
+- Optionally find prototypes in the user space.
+- Perform k-Nearest neighbours in the user space (the new averaged vector is a weighted vector based on Pearson-correlation, look at the slides).
+- Return the highest rated items in the averaged feature vector.
+
+Cosine similarity can often return zero, because the user-product matrix is so sparse, even more, simply considering every value that isn't filled in to be zero
+is not a good idea.
 
 Root mean square error doesn't focus on highly rated items, e.g., if an item actually has rating 1, but is predicted to have 3 is not that big of a deal
 as when the item actually has rating 5, but is predicted a 2! The former case is more desirable than the latter because the item will most likely not be
 recommended anyway.
+
+Focusing on accuracy is not necessarily a good idea, because you are missing a lot of other interesting evaluation measures, e.g., order of prediction, diversity, ...
 
 Prediction diversity: when predicting movies, don't just predict 10 action movies.
 
