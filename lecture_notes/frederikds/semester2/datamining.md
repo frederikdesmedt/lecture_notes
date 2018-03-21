@@ -229,3 +229,47 @@ Rating scale of user: e.g., user only rates between 3 to 5 stars, some only betw
 
 > Latent factor models := Just like in IR, consider a latent topic variable. Factorize the user-movie co-occurence matrix by it. This is found by a minimization
 > problem, e.g., by minimizing the mean squared error. You can do this by (stochastic) gradient descent.
+
+Lecture 5: Recommender systems
+------------------------------
+
+> "Kitchen Sink Approach" := Build lots and lots of predictors and combine the results of these.
+
+Take away of Netflix-challenge: Try to create a baseline that encompasses as much as possible, e.g., the more complex baseline with average user rating and
+average movie rating, rather than simply using the overall average rating.
+
+Lecture 6: Model Ensembles
+--------------------------
+
+If the error of each classifier in a set of classifiers is independent of the errors of other classifiers, combining them should always yield an improvement.
+This can be proven with probability theory.
+
+> Unstable learner := Learners where a small change in training data results in major changes in the resulting model, e.g., decision trees, neural nets, ...
+
+Unstable learners can be used with subsampling, e.g., make minor changes in the training data.
+
+> Bagging := Randomly sample examples with replacement from training set. Do this $T$ times, the result is $T$ quite different datasets that still hold the same
+> information. However, when using an unstable learner the $T$ models generated can still be very different.
+>
+> Boosting (AdaBoost) := Serial process: learn a model from data, from it, look at the kind of examples that are predicted poorly, increase
+> the weight of these examples, i.e., make them more important. Then create a new model from the weighted data and keep on doing this.
+
+**Occam's razor doesn't seem to apply with boosting!**
+
+**Margin** can be used to measure the confidence of a classification, this can be used to calculate a weighted majority vote in boosting.
+
+**Gradient Tree Boosting** is the hottest ensemble algorithm at this point in time.
+
+> Gradient boosting := Gradient descent + boosting. Gradients come in to represent the shortcomings of a new model.
+>
+> Gradient tree boosting := Gradient boosting with decision trees as a model in each stage (most common form of gradient boosting).
+
+In gradient tree boosting you want to learn a simple model at each step (such that we don't overfit at some step), this could be by using decision trees.
+It's ok if the model isn't very accurate, because the errors are corrected by some other future decision tree.
+
+You can plug in every possible (differentiable) loss function in **gradient boosting**, which makes it very generic and useful in general.
+
+> Manipulating input features := Drop random features in datasets to create multiple datasets. Only good when features are highly connected, i.e., we don't lose
+> information when removing a feature.
+
+Random forests is all about finding a good hyperparameter $i$.

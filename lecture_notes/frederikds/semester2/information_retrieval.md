@@ -280,3 +280,27 @@ but the moment you have generated them, they allow for very fast searching.
 
 Lesson 5: Evaluation Measures
 -----------------------------
+
+Lecture 6: Text categorization
+------------------------------
+
+> Text categorization := Assigning descriptors to documents.
+
+Text categorization seems to usually be done by supervised learning (where we get a training set with document-descriptor pairs).
+
+Feature selection is useful in reducing curse of dimensionality.
+
+Ways of doing feature selection:
+
+- Unsupervised
+ - Frequent item sets: find words that often occur together in the document collection.
+ - Hyperclique patterns: Similar to frequent item sets, yet with the additional constraint that there exists some kind of relation between the items in the item set. This is useful for reducing the amount of work in finding frequent item sets.
+- Supervised: Computes relevance or correlation between a term and the classification.
+ - $\chi^2$: Find correlation between class distribution where some term is present and class distribution of document collection where term is not present.
+ - Entropy: Using entropy to calculate information gain when introducing some feature, if it's significant perhaps we would like to keep it.
+
+Feature extraction is used to transform features to other features containing some specific kinds of information.
+
+$P(c \mid ...) >$ threshold is unreliable so watch out.
+
+"Metric learning"?

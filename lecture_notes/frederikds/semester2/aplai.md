@@ -313,3 +313,39 @@ i.e., we can reduce the interval by only considering the remaining half. Keep on
 > Squash := Keep on shaving the domain interval until we get actual solutions, it shaves stepping over a predefined step.
 
 Interval splitting = exponential, shaving = polynomial.
+
+Lecture 6: eplex
+----------------
+
+We have to "manually" invoke the *eplex*-solver. This is not done automatically, such as with the constraints defined in *ic*. You can decide when
+the eplex-solver should be invoked by using `eplex_solver_setup`.
+
+> MIP branching := If we first find the solution with reals, e.g., $X = 4.2$ , we can create two branches, one where $X <= 4$ and one with $X >= 5$ with
+> integrality constraints on $X$ (`integers([X])`). Keep on doing this for all variables.
+
+> Big M constraint := A kind of constraint of the form: $M \cdot Bool >= Expr$, which can be used to express if-then-else constraints in linear constraints.
+
+Lecture 6: CHR
+--------------
+
+> Simplification rule := If all terms in the head are part of the constraint store, they are removed and the terms of the body are added.
+>
+> Simpagation rule := Similar to the simplification rule, except that all terms in the head before the backslash are kept in the constraint store.
+>
+> Propagation rule := All terms in the head stay in the constraint store, the terms of the body are added to the constraint store.
+
+The only difference between the different rules is about what happens with the terms in the head.
+
+In a multi-headed constraints all terms in head should be a member of the constraint store, i.e., `,` signifies a conjunction. Similar with the body.
+
+Simplification rules are tried/performed in the order in which they are defined in the code, e.g., in the Prolog source code.
+
+> ? What happens if a simplification rule is applied: does the simplification rule repeat, does it stop, or does it continue with the next?
+> We can perform an experiment to figure this out by applying a simplification rule that can be repeated multiple times after each other.
+> *The slides that extensively explain the gcd-example seems to imply that it completely restarts every time.* It's completely explained in the
+> "operational semantics"-slides.
+
+Matching heads of rules is not by unification, a head only applies if all ground subterms in the head are also ground in the input. Look at the `and/3` example
+in the slides. You could look at it like "one-way unification".
+
+> Guards := Additional constraints the head should satisfy.
