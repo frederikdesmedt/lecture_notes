@@ -223,3 +223,40 @@ ${ P \leftarrow Q, Q \leftarrow P}$ results in the empty structure.
 Gotcha: the value of a negative (justification) cycle is **true**, the value of a positive cycle is **false**.
 
 Lecture went up to formal semantics of FO(ID) (without the discussion).
+
+Lecture 6: Extending FO with definitions
+----------------------------------------
+
+Rules in the same stratum/layer only monotonically depend on each other.
+
+The difference between definitional and material implication can be seen in the relation between the conditional/antecedent and the conclusion/consequent.
+
+> Clark completion := A transformation of a definition to an FO-theory/formula. A Clark completion of definition $\Delta$ is denoted by $Compl(\Delta)$.
+
+$\Delta$ and $Compl(\Delta)$ are equivalent if $\Delta$ is non-inductive.
+
+Relation between logic programming and Prolog: a logic program is Prolog without side-effects.
+
+Inductive definitions are more than what Prolog does.
+
+Deduction in *FO(ID)* is undecidable and not semi-decidable, FO is undecidable and semi-decidable. This doesn't mean *FO(ID)* is useless, it's only useless
+for doing deduction.
+
+CWA can very easily lead to inconsistencies, e.g., when you have a disjunction of two positive literals. In general, it only really works without
+inconsistencies in *Horn logic*. Yet CWA can be useful in some knowledge representation settings: Default assumptions and communication agreements.
+
+A place where default assumption is unacceptable: formal verification (of software).
+
+> Communication agreement := CWA **only in a scenario where we have total knowledge of the domain**, then we only construct a theory $T$ for all true formulas,
+> we then don't need to right all false formulas.
+
+A common misusage of CWA happens when we only want to apply CWA locally (for some specific axioms).
+
+> ? What's a default assumption? How is it different from a communication agreement?
+
+> Inheritance hierarchies := A tree-like structure of types (parent is supertype, child is subtype).
+>
+> Default inheritance hierarchies := An inheritance hierarchy together where properties for subtypes are by default the properties of the supertype,
+> yet they can be overridden.
+
+Inductive definitions are quite *elaboration tolerant*, we can easily extend the predicate expressed by the definition by providing additional rules.
