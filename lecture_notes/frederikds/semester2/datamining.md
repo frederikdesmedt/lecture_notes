@@ -273,3 +273,51 @@ You can plug in every possible (differentiable) loss function in **gradient boos
 > information when removing a feature.
 
 Random forests is all about finding a good hyperparameter $i$.
+
+Lecture 7: Model ensembles
+--------------------------
+
+> Stacking := Construct a learning problem to learn when each learner is good. The training data is the prediction of each learner labeled with the expected value.
+> The meta learner will learn from this training data, minimizing some loss function.
+
+Why do ensembles work so well?
+
+- The expected error considering data points are drawn from some probability distribution is small.
+- Can be useful to address both bias and variance.
+
+Bias can be caused by:
+
+- The inability to express decision boundary;
+- Wrong assumptions about data;
+- Classifier is too global, i.e., not expressive enough.
+
+> Variance := Small changes in the dataset cause these changes to be modelled, while we might not want this.
+
+High bias -> underfitting. High variance -> overfitting. So we need a trade-off between bias and variance, this trade-off can be changed by considering
+more/less expressive models.
+
+> Bayes optimal classifier := Take a weighted vote over all possible hypotheses. The Bayes optimal classifier is proven to be the best possible classifier.
+
+Bayes optimal classifier cannot be used in general because of the size of the hypothesis space, boosting, however, is a way to approximate Bayes optimal classifier.
+
+Lecture 7: Association Rule Mining
+----------------------------------
+
+> Association rule learning := Input if a set of transactions, a transaction is an itemset bought at the same time. An itemset is a set of items.
+> Model is a set of if-then-rules that go from an itemset to another itemset that are associated with the input items. There is no labeled data (nor is it necessary)!
+
+Finding frequent pairs is the hardest problem in this setting. Especially considering the I/O-overhead you can have, considering association rule mining
+can be performed in big data.
+
+> **Apriori** := Algorithm that allows learning frequent itemsets for size $k$. Main principle: if we have a non-frequent tuple of size $k$, then adding any number
+> of items to the tuple will still result in a non-frequent tuple. So, when looking for frequent tuples/itemsets of size $k + 1$, we only need to consider those
+> that add a component to a frequent tuple of size $k$.
+
+> **PCY** := Extension of **Apriori** with hash filtering. The hash filter holds the count of the itemset, if the count at a location $l$ is below
+> the support threshold, we can get rid of all elements that hash to location $l$ (this is the best-case scenario).
+
+> ? Hash filtering in **PCY** happens right after constructing tuples of size $k + 1$ in **Apriori** (during joining)?
+
+> Hash filtering := Solution for problem of finding a value in a large collection. Constructs a bit array, putting 1's on the locations of the hashes of the items
+> we are looking for. For each item in the dataset, if there is a zero on the location of the hash of the item, we are not looking for it.
+> No false negatives, but there are false positives, we can reduce the number of false positives by increasing bit array size.

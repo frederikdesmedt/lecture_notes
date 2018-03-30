@@ -281,6 +281,14 @@ but the moment you have generated them, they allow for very fast searching.
 Lesson 5: Evaluation Measures
 -----------------------------
 
+Different kinds of relevance: topical: we found documents of the correct topic, motivational/interpretational relevance: finding the documents the user needs.
+
+In information retrieval motivational relevance is too difficult to handle, so we use weaker notions of relevance. Yet, topical relevance is only the first
+step in relevance in information retrieval.
+
+Lots of evaluation measures that aren't relevance measures: execution efficiency, space efficiency, "retrieval effectiveness" (precision, recall, ...), ...
+
+
 Lecture 6: Text categorization
 ------------------------------
 
@@ -304,3 +312,23 @@ Feature extraction is used to transform features to other features containing so
 $P(c \mid ...) >$ threshold is unreliable so watch out.
 
 "Metric learning"?
+
+Lecture 7: Text categorization
+------------------------------
+
+> Receptive field of node $n$ := All nodes in a neural net in a previous layer that influence the node $n$ (nodes connected to $n$).
+
+How to use CNN's for text categorization? Considering hidden nodes start representing more abstract features, you can use some of the hidden layers
+(and output layer) as a classification. The different layers can be used for different levels in case of hierarchy categorization. Loss-function is applied
+at all these layers.
+
+Lecture 7: Web Information Retrieval
+------------------------------------
+
+> Sink := node that doesn't have outgoing links.
+
+> $PR(p)$ := PageRank of page $p$.
+
+> In PageRank, applying ranking to pages can be done in a single run with the matrix formula, but because of the huge size of this matrix, the $PR(p)$-formula
+> will usually be applied iteratively. Why iteratively? Because you need the probabilities of the other pages to get a good estimate of the probability of the
+> current web page.

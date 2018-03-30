@@ -14,3 +14,5 @@ Pipeline for:
 Dataset: History of games previously played by our system, yet there might be a dataset coming on Toledo, look out for this.
 
 Allowed to use libraries, yet the more libraries we use, the more advanced our solution should be (because we are only evaluated on the work we do ourselves).
+
+How to work for arbitrary board sizes? Use local areas and annotate them with features of the kind "a chain starts here, ends here, etc".

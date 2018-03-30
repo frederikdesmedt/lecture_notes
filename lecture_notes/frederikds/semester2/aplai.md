@@ -328,11 +328,11 @@ the eplex-solver should be invoked by using `eplex_solver_setup`.
 Lecture 6: CHR
 --------------
 
-> Simplification rule := If all terms in the head are part of the constraint store, they are removed and the terms of the body are added.
+> Simplification rule (`H <=> B`) := If all terms in the head are part of the constraint store, they are removed and the terms of the body are added.
 >
-> Simpagation rule := Similar to the simplification rule, except that all terms in the head before the backslash are kept in the constraint store.
+> Simpagation rule (`H1 \ H2 <=> B`) := Similar to the simplification rule, except that all terms in the head before the backslash are kept in the constraint store.
 >
-> Propagation rule := All terms in the head stay in the constraint store, the terms of the body are added to the constraint store.
+> Propagation rule (`H ==> B`) := All terms in the head stay in the constraint store, the terms of the body are added to the constraint store.
 
 The only difference between the different rules is about what happens with the terms in the head.
 
@@ -348,4 +348,32 @@ Simplification rules are tried/performed in the order in which they are defined 
 Matching heads of rules is not by unification, a head only applies if all ground subterms in the head are also ground in the input. Look at the `and/3` example
 in the slides. You could look at it like "one-way unification".
 
-> Guards := Additional constraints the head should satisfy.
+> Guards (`H <=> Guard | B`, `H1 \ H2 <=> Guard | B`, `H ==> Guard | B`) := Additional constraints the head should satisfy.
+
+Lecture 7: CHR
+--------------
+
+In CHR, a state is a list of constraints, i.e., a constraint store.
+
+Operation semantics:
+
+- Rule application is applied from top to bottom.
+- Rule application completely restarts when new rules are added, to avoid that the system starts looping, a rule with the same constraints is only executed once.
+- A rule is applicable if it can unidirectionally unify with the head and the guard constraints are satisfied.
+
+> Unidirectional unification := Unification only of the form $rs = rh\Theta$. Where $rs$ is a rule from the store and $rh$ is a rule from a head, i.e., $rh$ can
+> never be more specific than $rs$ anywhere in the rule.
+
+**Never put `chr_show_store` in the body of a rule!**
+
+CHR can be used to construct constraints, while still using a search, which will awaken constraints in the constraint store.
+
+> ? When an `@` occurs in the rule, the text before it is considered the name of that rule?
+
+CHR does not backtrack, this must be done in Prolog.
+
+**Prolog backtracking undoes CHR changes!**
+
+In general, using phases in CHR is a very good programming technique.
+
+> ? CHR-constraints can be viewed as regular Prolog-predicates when using them, they are simply computed differently (not with resolution, but with CHR-rules).
