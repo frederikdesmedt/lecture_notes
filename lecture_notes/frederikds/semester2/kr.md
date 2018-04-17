@@ -253,6 +253,10 @@ A place where default assumption is unacceptable: formal verification (of softwa
 A common misusage of CWA happens when we only want to apply CWA locally (for some specific axioms).
 
 > ? What's a default assumption? How is it different from a communication agreement?
+>
+> Answer: They are more informal concepts, default assumption means we expect a default value for *objects we know nothing about*, while a communication
+> agreement is used when we do know all information about the world and want to express everything without actually specifying every false atom explicitly
+> (so we can reduce the size of the theory).
 
 > Inheritance hierarchies := A tree-like structure of types (parent is supertype, child is subtype).
 >
@@ -260,3 +264,21 @@ A common misusage of CWA happens when we only want to apply CWA locally (for som
 > yet they can be overridden.
 
 Inductive definitions are quite *elaboration tolerant*, we can easily extend the predicate expressed by the definition by providing additional rules.
+
+Lecture 7: Definitions summary
+------------------------------
+
+**Only some pages are required for the exam, look on Toledo!**
+
+Lecture 7: Using logic for problem solving
+------------------------------------------
+
+> **Knowledge base system** := A system that contains a **knowledge base** (a bag of information) and that supports various inference tasks to be performed
+> on this knowledge base.
+
+> Model revision := Change a model so that it satisfies a new set of constraints, model expansion is a specific kind of model revision that only adds elements
+> to the sets of a structure.
+
+> Propagation inference / computing ramifications := Propagate consequence of changes to a model by using the theory.
+
+Visualisations in IDP are done by the theory itself! It passes all relevant information to the structure, which is then read and rendered by some algorithm.

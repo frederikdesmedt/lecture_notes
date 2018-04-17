@@ -303,7 +303,7 @@ Bayes optimal classifier cannot be used in general because of the size of the hy
 Lecture 7: Association Rule Mining
 ----------------------------------
 
-> Association rule learning := Input if a set of transactions, a transaction is an itemset bought at the same time. An itemset is a set of items.
+> Association rule learning := Input is a set of transactions, a transaction is an itemset bought at the same time. An itemset is a set of items.
 > Model is a set of if-then-rules that go from an itemset to another itemset that are associated with the input items. There is no labeled data (nor is it necessary)!
 
 Finding frequent pairs is the hardest problem in this setting. Especially considering the I/O-overhead you can have, considering association rule mining
@@ -313,11 +313,19 @@ can be performed in big data.
 > of items to the tuple will still result in a non-frequent tuple. So, when looking for frequent tuples/itemsets of size $k + 1$, we only need to consider those
 > that add a component to a frequent tuple of size $k$.
 
+Idea behind **Apriori**: if $\{1, 2\}$ is not frequent then $\{1, 2,3\}$ can never be frequent.
+
 > **PCY** := Extension of **Apriori** with hash filtering. The hash filter holds the count of the itemset, if the count at a location $l$ is below
 > the support threshold, we can get rid of all elements that hash to location $l$ (this is the best-case scenario).
 
 > ? Hash filtering in **PCY** happens right after constructing tuples of size $k + 1$ in **Apriori** (during joining)?
+>
+> Answer: At that time the hash filter (bitstring) is constructed, yet it's at the pruning-face (right after **Apriori**-pruning) that itemsets are removed
+> that are infrequent according to the bitstring.
 
 > Hash filtering := Solution for problem of finding a value in a large collection. Constructs a bit array, putting 1's on the locations of the hashes of the items
 > we are looking for. For each item in the dataset, if there is a zero on the location of the hash of the item, we are not looking for it.
 > No false negatives, but there are false positives, we can reduce the number of false positives by increasing bit array size.
+
+Lecture 8: Association Rule Mining
+----------------------------------
