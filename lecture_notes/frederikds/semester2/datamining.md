@@ -320,7 +320,7 @@ Idea behind **Apriori**: if $\{1, 2\}$ is not frequent then $\{1, 2,3\}$ can nev
 
 > ? Hash filtering in **PCY** happens right after constructing tuples of size $k + 1$ in **Apriori** (during joining)?
 >
-> Answer: At that time the hash filter (bitstring) is constructed, yet it's at the pruning-face (right after **Apriori**-pruning) that itemsets are removed
+> Answer: At that time the hash filter (bitstring) is constructed, yet it's at the pruning-phase (right after **Apriori**-pruning) that itemsets are removed
 > that are infrequent according to the bitstring.
 
 > Hash filtering := Solution for problem of finding a value in a large collection. Constructs a bit array, putting 1's on the locations of the hashes of the items
@@ -329,3 +329,22 @@ Idea behind **Apriori**: if $\{1, 2\}$ is not frequent then $\{1, 2,3\}$ can nev
 
 Lecture 8: Association Rule Mining
 ----------------------------------
+
+> Sample algorithm := Fill memory with samples of dataset and perform **Apriori** on the sample set. This is much faster because it fits completely in memory.
+
+By using sampling it's possible to not find frequent itemsets (because they are frequent in the dataset but not in the sample set).
+
+With the sample algorithm: make sure that you scale the support to the partition size (don't require as much occurences as you would require for the entire dataset).
+
+The monotonicity in **SON** works because of the scaled support threshold, e.g., if support threshold is 8 and there are 2 partitions, then support threshold
+in partitions is 4, if an itemset occurs >=8 times, then it will be present >=4 times in at least one of the partitions.
+
+> **Negative border** in **Toivonen's algorithm** := An itemset is in the negative border if and only if all subsets of the itemset are frequent in the sample.
+
+> **FP tree** (Frequent-Pattern tree) := A compressed version of the dataset that can (hopefully) completely fit in memory.
+
+Finding an optimal ordering for construction of the **FP tree** is intractable, so we use heuristics.
+
+There is an implicit constraint in every association rule mining algorithm: *number of occurences >= support threshold*.
+
+**MaxMiner** works similar to **Apriori**.

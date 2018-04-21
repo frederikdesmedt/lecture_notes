@@ -282,3 +282,19 @@ Lecture 7: Using logic for problem solving
 > Propagation inference / computing ramifications := Propagate consequence of changes to a model by using the theory.
 
 Visualisations in IDP are done by the theory itself! It passes all relevant information to the structure, which is then read and rendered by some algorithm.
+
+Lecture 8: Model logics and agents
+----------------------------------
+
+> Deontic information := Information that *should* be true, but *is not necessarily true*.
+
+> Epistemic logics := model logics that reason about the knowledge of agents.
+
+> Modal logic := A logic that supports multiple **propositional attitudes**.
+
+The knowledge of a world is what worlds are possible and impossible, this intuition explains the use of the reachability relation in **Kripke structures**.
+
+In modal logic, if something is necessarily true, it doesn't imply it is possible that it is true.
+
+> Logic engineering := Adding axioms in a modal logic or adding properties to the reachability relation (correspondence theory) to express the assumptions
+> about the **propositional attitudes** you are making.
