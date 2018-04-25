@@ -377,3 +377,8 @@ CHR does not backtrack, this must be done in Prolog.
 In general, using phases in CHR is a very good programming technique.
 
 > ? CHR-constraints can be viewed as regular Prolog-predicates when using them, they are simply computed differently (not with resolution, but with CHR-rules).
+
+Lecture 7: CHR (CHR solver programs)
+------------------------------------
+
+**Propagation** only happens **once** on the same head/rule.

@@ -348,3 +348,27 @@ Finding an optimal ordering for construction of the **FP tree** is intractable, 
 There is an implicit constraint in every association rule mining algorithm: *number of occurences >= support threshold*.
 
 **MaxMiner** works similar to **Apriori**.
+
+Lecture 9: Sequential Pattern Mining
+------------------------------------
+
+Mining sequences is similar to mining transactions but the temporal component is considered in your model.
+
+> Sequence := An ordered list of transactions, the length of the sequence is the number of transactions, not the number of items (within the transactions).
+>
+> Support of sequence := **Fraction** of users/customers that support the sequence.
+
+> FP-Growth := The main hypothesis that **Apriori** uses
+
+You can construct all prefixes of a sequence by simply adding a new item to the sequence from left to right when looking at the notation for a sequence in the slides.
+
+The algorithms seen in this lecture are all about *divide-and-conquer*.
+
+> Pseudo-projection := Pointer to the initial sequence with some offset to point to a projection of that sequence: much less memory loss.
+
+Lecture 9: Clustering
+---------------------
+
+> Intra-class similarity := Similarity between different objects within the same group/cluster.
+>
+> Inter-class similarity := Similarity between objects of a different group/cluster.
