@@ -310,3 +310,12 @@ Slide 74 implies that general knowledge is *weaker* than common knowledge.
 > Common knowledge := Everyone knows it, everyone knows that everyone knows it, everyone knows that everyone knows that everyone knows it, ...
 
 It's impossible to get common knowledge when sending the corresponding information over an unreliable medium.
+
+Lecture 10: Probabilistic logics
+--------------------------------
+
+> Probabilistic process (CP-logic) := A tree expressing the possible causations of the theory. A probabilistic process is to a CP-logic theory as a structure is
+> to an FO-logic theory.
+>
+> Execution model (CP-logic) := A probabilistic process that is possible for the related CP-logic theory, an execution model is to a CP-logic theory as a model is
+> to an FO-logic theory.
