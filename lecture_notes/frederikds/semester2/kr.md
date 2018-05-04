@@ -296,5 +296,17 @@ The knowledge of a world is what worlds are possible and impossible, this intuit
 
 In modal logic, if something is necessarily true, it doesn't imply it is possible that it is true.
 
-> Logic engineering := Adding axioms in a modal logic or adding properties to the reachability relation (correspondence theory) to express the assumptions
-> about the **propositional attitudes** you are making.
+> Logic engineering := Adding axioms in a modal logic to express the subtle differences between interpretations of the **propositional attitudes** you are using.
+
+Lecture 9: Model logics and agents
+----------------------------------
+
+> Correspondence theory := Theory concerned with the relation between axioms and the properties the reachability relation has.
+
+Slide 74 implies that general knowledge is *weaker* than common knowledge.
+
+> General knowledge := Everyone knows it.
+>
+> Common knowledge := Everyone knows it, everyone knows that everyone knows it, everyone knows that everyone knows that everyone knows it, ...
+
+It's impossible to get common knowledge when sending the corresponding information over an unreliable medium.

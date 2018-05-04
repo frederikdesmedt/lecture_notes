@@ -332,3 +332,8 @@ Lecture 7: Web Information Retrieval
 > In PageRank, applying ranking to pages can be done in a single run with the matrix formula, but because of the huge size of this matrix, the $PR(p)$-formula
 > will usually be applied iteratively. Why iteratively? Because you need the probabilities of the other pages to get a good estimate of the probability of the
 > current web page.
+
+Lecture 8: Information Extraction and Search
+--------------------------------------------
+
+> Language model := Model with as input a sequence of terms and as output some kind of score.

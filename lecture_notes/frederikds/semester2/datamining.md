@@ -306,6 +306,10 @@ Lecture 7: Association Rule Mining
 > Association rule learning := Input is a set of transactions, a transaction is an itemset bought at the same time. An itemset is a set of items.
 > Model is a set of if-then-rules that go from an itemset to another itemset that are associated with the input items. There is no labeled data (nor is it necessary)!
 
+> Support of item $j$ := An approximation of $P(j)$ (more specifically: the max likelihood-assignment of $\theta_j$).
+>
+> Confidence of pattern $A \Rightarrow B$ := An approximation of $P(B \mid A)$ (more specifically: the max likelihood-assignment of $\theta_{B \mid A}$).
+
 Finding frequent pairs is the hardest problem in this setting. Especially considering the I/O-overhead you can have, considering association rule mining
 can be performed in big data.
 
