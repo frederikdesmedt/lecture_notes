@@ -376,3 +376,29 @@ Lecture 9: Clustering
 > Intra-class similarity := Similarity between different objects within the same group/cluster.
 >
 > Inter-class similarity := Similarity between objects of a different group/cluster.
+
+Lecture 10: Clustering
+----------------------
+
+> BIRCH := Create a feature tree that can be used to construct clusters (by combining leafs in the tree), major advantage: scales linearly,
+> database of instances is scanned once.
+
+A cluster feature (CF) contains a statistical summary *of a cluster*.
+
+A *CF-tree* is constructed bottom-up: in the database scan, each instance is assigned to the closest subcluster in a leaf node,
+the statistics are then propagated/summarized up the tree.
+
+> CURE := Clustering algorithm that defines a cluster by a set of representative points, rather than by a centroid (like in BIRCH), this allows
+> for different shapes for each clusters.
+
+Representative points in *CURE* are not points in the actual dataset, they are point in the dataset slightly moved towards the cluster center.
+
+Pass 1 in CURE will define the representative points and thus also the shape and number of clusters, after that, the database is simply scanned
+and each point is assigned to the closest cluster.
+
+The first pass in CURE can be done by just using any kind of hierarchical clustering (which is fine, because it's only on a sample of the dataset).
+
+> Model-based clustering := Clustering is considered as a probability estimation, i.e., each cluster represents a probability distribution,
+> a point is assigned to a cluster if the probability for that point is high according to that cluster.
+
+> Mixture of Gaussians := Clustering is considered as a set of normal distributions, each distribution is a cluster.

@@ -337,3 +337,29 @@ Lecture 8: Information Extraction and Search
 --------------------------------------------
 
 > Language model := Model with as input a sequence of terms and as output some kind of score.
+
+Lecture 9: Clustering
+---------------------
+
+> Distance function := Function expressing distance between two objects.
+>
+> Proximity function := Function that expresses "distance" between two clusters.
+
+Problem with single pass algorithm: ordering of input dataset influences the final clusters. Yet, still used often in practice.
+
+Difference between centroid and medoid: A medoid is an actual instance from the dataset, while the centroid is some mathematical average.
+A centroid is useful if you want some actual representative for a cluster, for example, in image clustering you might want an actual image
+as the representative of a cluster.
+
+Actual time complexity of k-means is $O(n \cdot k \cdot r)$ with $k$ number of clusters and $r$ number of iterations, however in practice
+$n >> k, n >> r$ and so time complexity can be approximated by $O(n)$.
+
+**Slide 36**: Fitness function defines normalized difference between average similarity with other objects in same cluster and most similar
+object in another cluster.
+
+Clustering objectives can be used to improve performance in supervised learning, e.g., in a classification problem trying to increase
+intra-cluster/intra-class similarity and decrease inter-cluster/inter-class similarity.
+
+> Triplet loss := Supervised learning where each input is a triplet such that the first two components of the triplet are part of the same
+> class and the third component is part of a different class. This can be used to encode clustering objectives
+(inter-cluster/intra-cluster similarity constraints).

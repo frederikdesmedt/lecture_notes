@@ -382,3 +382,18 @@ Lecture 7: CHR (CHR solver programs)
 ------------------------------------
 
 **Propagation** only happens **once** on the same head/rule.
+
+Lecture 8: Jess
+---------------
+
+> Conflict set := The list of rules that will be activated.
+
+> Rete network := A representation of the working set, used by Rete.
+
+Facts added to the working set must always be ground!
+
+Left-hand side in rule definitions is a list of **facts**, not functions, i.e., they are not evaluated by the LISP-system itself.
+
+`?n1&~b` is a pattern that describes a variable `n1` and it must be different than `b`.
+
+Jess does not support search (backtracking, ...). If you want this, you must implement it yourself.
