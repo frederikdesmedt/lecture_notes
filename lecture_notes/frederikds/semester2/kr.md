@@ -319,3 +319,17 @@ Lecture 10: Probabilistic logics
 >
 > Execution model (CP-logic) := A probabilistic process that is possible for the related CP-logic theory, an execution model is to a CP-logic theory as a model is
 > to an FO-logic theory.
+
+Lecture 11: Probabilistic logics
+--------------------------------
+
+> ? How is the instance-based semantics identical to the causal semantics if the ordering matters? For example, in the following CP-logic program:
+> `{ 0.3::a, 0.5::b <- a, 0.6::c <- b`.
+>
+> Answer: Make sure that head selections are in a stratified ordering.
+
+Advantages of CP-logic over Bayesian networks:
+
+- It's easier to recognize conditional independence.
+- CP-logic can, in general, more compactly represent probabilistic systems.
+- One can change some parts of a CP-logic without having to change everything else, this is much more difficult in BNs.
