@@ -8,6 +8,10 @@ Publications put on Toledo are for more information, but they are not meant for 
 
 "What have we learned?"-slides are pretty much "what to know"-slides?
 
+Exam?:
+ - Written, closed book, 2 hours
+ - Oral, open book, 1 hour preparation
+
 Lesson 1
 --------
 
@@ -363,3 +367,22 @@ intra-cluster/intra-class similarity and decrease inter-cluster/inter-class simi
 > Triplet loss := Supervised learning where each input is a triplet such that the first two components of the triplet are part of the same
 > class and the third component is part of a different class. This can be used to encode clustering objectives
 (inter-cluster/intra-cluster similarity constraints).
+
+Lecture 10: Multimedia IR
+-------------------------
+
+One way to represent multi-modal content: label with text and do querying on
+this text. Another way: Map the multi-model content to some multi-model space.
+We can also combine these, e.g., by considering the labeling as a part of the
+content and also representing it in the multi-modal space.
+
+> Classemes := Assigning multiple classes to content with some probability,
+> e.g., when the content is an image 60% probability of being a lion, 30%
+> probability of being a panther, ...
+
+Mori et al. RIAO 2000, split images in regions, then learn probability
+distribution $P(w \mid region)$ by a supervised learning problem, where
+the input is a list of images together with their labeling.
+
+Slide 80: To make sure that similar images all have similar
+dot products/similarities to similar word embeddings.

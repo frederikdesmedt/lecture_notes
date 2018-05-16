@@ -402,3 +402,75 @@ The first pass in CURE can be done by just using any kind of hierarchical cluste
 > a point is assigned to a cluster if the probability for that point is high according to that cluster.
 
 > Mixture of Gaussians := Clustering is considered as a set of normal distributions, each distribution is a cluster.
+
+Lecture 11: Time series
+-----------------------
+
+Common preprocessing: **Z-Normalization**.
+
+> **Z-Normalization** := Instead of working with actual values of the
+> time series, work with a series of the standard deviations from the mean
+> of the time series. This allows us to focus on the shape of the time series
+> instead of on the actual values.
+
+How to use time series in learning:
+
+- Extract features from the series and do standard supervised learning with these features.
+- Define a distance measure between different time series and do instance-based learning, e.g., k-NN.
+- Convert the time series to some symbolic representation and use techniques that expect symbolic sequences.
+
+Different distance measures between time series:
+
+- Euclidian distance
+- Dynamic Time Warping
+
+> Euclidian distance in time series :=
+> Consider time series as large vectors and use standard Euclidian distance.
+>
+> Dynamic Time Warping (DTW) :=
+> Similar to the Euclidian distance but map components in the first sequence
+> to components in the second sequence such that there are no gaps (continuity),
+> i.e., no components are skipped, and the mapping never goes backwards in time
+> (monotonicity).
+
+Dynamic Time Warping is easy to solve using dynamic programming.
+
+DTW is not a distance metric, yet DTW is still very useful because lots of
+techniques have been developed that explicitly use DTW.
+
+Triangle inequality is useful for skipping distance calculations, e.g.,
+you know the distance between two nodes is not interesting because the
+triangle inequality tells us that distance must be greater than some value.
+
+> Longest Common Subsequence (LCSS) :=
+> Match element in sequences but allow for gaps to ignore outliers.
+
+LCSS is a *similarity measure*, not a *distance measure*.
+
+> SAX := Converts a time series to a symbolic sequence by doing the following:
+>
+> - Perform Z-normalization
+> - Divide time series in $\frac{N}{W}$ windows
+> - Take average of each window
+> - Convert average to some value from an alphabet by exploiting Z-normalization
+
+Lecture 11: Exploiting unlabeled data
+-------------------------------------
+
+> Cotraining :=
+> Each instance has two feature vectors, learn from the first feature vector
+> and label the unlabeled instances with what we learned, then use those labels
+> to learn from the second feature vector with all data labeled with
+> the classification of the first learner. If the first learner is somewhat
+> accurate, the second learner will have useful information about unlabeled
+> data.
+
+> Passive learning := Receive a (labeled) dataset and learn from it.
+>
+> Active learning := Let the learner decide which examples should come next,
+> an oracle, e.g., a human, can then label these specific examples, this is
+> the new dataset the learner will use, this is then repeated.
+
+> Selective sampling :=
+> Learner receives a data stream of unlabeled data, with each element the
+> learner can decide to ask the oracle for a label or to ignore it.
