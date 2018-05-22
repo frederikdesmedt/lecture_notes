@@ -8,7 +8,15 @@ Try to not go to the exercise session of Wednesday (historically more crowded).
 
 Additional readings seem to be important.
 
-Exam: written, closed book
+Exam:
+
+- Written, closed book
+- Exercise session is very good practice for exam
+- Challenge questions in lectures are also very good practice
+- Exam will evaluate on two metrics:
+  - Basic understanding of all concepts;
+  - Deeper understanding, e.g., by applying concepts to a different context.
+- Time is not an issue
 
 Lecture 1: Introduction
 -----------------------
@@ -474,3 +482,47 @@ Lecture 11: Exploiting unlabeled data
 > Selective sampling :=
 > Learner receives a data stream of unlabeled data, with each element the
 > learner can decide to ask the oracle for a label or to ignore it.
+
+Lecture 12: Exploiting unlabeled data
+-------------------------------------
+
+> Query strategy := Given unlabeled examples, which one should be labeled?
+
+> Uncertainty sampling := Ask to label those examples for which probability
+> being positive is closest to 0.5, i.e., those of which we know the least.
+
+> Version space sampling idea := Choose a query that ideally cuts the size of
+> the version space in half (similar to binary search).
+>
+> Query-by-committee := Train $n$ classifiers and sample those that the
+> classifiers disagree with the most.
+
+Problem with **query-by-committee**: outliers are controversial, so they are
+often queried because many classifiers can disagree on them. How to solve this:
+density weighting.
+
+> **Density weighting** := Weight the uncertainty of an instance with a
+> *density term*, which is the average similarity to a all other points
+> (this is small for outliers).
+
+> **Expected model change** := Calculate the expected length of the gradient
+> if the label was provided and sample based on that.
+
+Sampling results in a biased supervised dataset, which means that you cannot use
+the supervised dataset in other projects.
+
+> Difference between active and semi-supervised learning :=
+> Both solve the same problem but active learning focuses on that which it does
+> not know, while semi-supervised learning focuses on what it does know
+> (about the unlabeled data).
+
+Lecture 12: Anomaly detection
+-----------------------------
+
+> Point anomaly := A datapoint that is an outlier in the dataset.
+>
+> Contextual anomaly := Context makes example anomalous, e.g., a function is
+> expected to move smoothly but is in fact jagged at some points in the graph.
+>
+> Grouped(?) anomaly := Some examples are anomalies because they are
+> significantly different from other related examples.
