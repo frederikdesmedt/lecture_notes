@@ -333,3 +333,17 @@ Advantages of CP-logic over Bayesian networks:
 - It's easier to recognize conditional independence.
 - CP-logic can, in general, more compactly represent probabilistic systems.
 - One can change some parts of a CP-logic without having to change everything else, this is much more difficult in BNs.
+
+Lecture 12: Non-logical KR systems
+----------------------------------
+
+Resolve conflicts <=> conflict resolution step.
+
+The $i$ in `REMOVE i` and `MODIFY i ...` represents the index of the condition
+in the head of the rule. So it is not the $i$th *WME* that satisfies the rule or
+something like that. Slide 18 clears this up.
+
+The Rete-network is similar to a decision tree, where a decision corresponds to
+a condition of your PRE being true. We keep tokens at specific nodes to specify
+that all the conditions in the parent are satisfied, this makes sure we don't
+have to keep checking conditions that we already know are true.
